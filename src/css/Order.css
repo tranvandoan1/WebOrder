@@ -1,0 +1,14 @@
+
+.ant-modal {
+  top: 50px !important;
+}
+
+table tr th {
+  font-size: 0.9rem !important;
+  text-align: center !important;
+}
+
+.ant-layout::-webkit-scrollbar{
+    width: 0 !important;
+    height: 0 !important;
+}

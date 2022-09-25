@@ -1,0 +1,55 @@
+.header {
+  border-bottom: 1px solid rgb(218, 218, 218);
+}
+.colLeft {
+  border-right: 1px solid rgb(218, 218, 218);
+  padding: 10px;
+}
+.span {
+  text-align: right;
+  color: rgba(53, 53, 53, 0.8);
+  text-transform: capitalize;
+  font-size: 0.9rem;
+}
+.listSpan {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+.user_image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.user_avatar {
+  border: 1px solid rgb(218, 218, 218);
+  border-radius: 100%;
+}
+.user_choose_photo {
+  border: 1px solid rgb(218, 218, 218);
+  margin-top: 10px;
+  cursor: pointer;
+}
+.choose_photo {
+  padding: 5px 20px;
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo_shop {
+  padding: 10px;
+  border-radius: 100%;
+}
+.input {
+  border: 0 !important;
+}
+.input:focus{
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}

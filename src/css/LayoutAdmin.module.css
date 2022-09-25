@@ -1,0 +1,38 @@
+.menu {
+  background-color: #fff !important;
+}
+.menu a {
+  color: black !important;
+}
+.icon {
+  color: black !important;
+}
+.title {
+  border-bottom: 1px solid rgb(233, 233, 233);
+  padding-bottom: 10px;
+}
+._option {
+  text-transform: capitalize;
+}
+.name {
+  color: black;
+}
+.sider {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+.avatar_header {
+  border-bottom: 1px solid rgb(240, 240, 240);
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.title_logo {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  text-transform: uppercase;
+}

@@ -1,0 +1,266 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "cơm sườn sốt chua ngọt",
+      "image": "https://alovoucher.com/wp-content/uploads/2018/07/33994839_1489171181188444_5885834345058402304_n.jpg",
+      "price": "49000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "1",
+      "time_new": "22-11-2021-9:36:34"
+    },
+    {
+      "id": "2",
+      "name": "Lẩu Cá Trình",
+      "image": "https://thuocthang.com.vn/vnt_upload/news/5-cong-thuc-nau-lau-ca-thom-ngon-ngay-cuoi-tuan.jpg",
+      "price": "280000",
+      "cate_id": "2",
+      "time": "3-4-2021-23:38:21",
+      "time_new": "10-4-2021-23:13:30"
+    },
+    {
+      "id": "3",
+      "name": "cơm sườn sốt chua ngọt",
+      "image": "https://songkhoe.medplus.vn/wp-content/uploads/2020/05/mon-com-tam-suon-bo-1.png",
+      "price": "49000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "3",
+      "time_new": "18-5-2021-11:54:16"
+    },
+    {
+      "id": "4",
+      "name": "Khoai Tây Chiên",
+      "image": "https://storage.googleapis.com/cdn-website.vinid.dev/uat/2019/09/khoai-t%C3%A2y-chi%C3%AAn.jpg",
+      "price": "35000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "4",
+      "time_new": "10-4-2021-23:27:36"
+    },
+    {
+      "id": "5",
+      "name": "mẹt gà mini",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwCVXRo1SiPfhfzilgG4k-1sclq5gxhSl7pjCtsVck9rRmvBAvwdI52nZR8_QEkM-xgeI&usqp=CAU",
+      "price": "400000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "1",
+      "time_new": "10-4-2021-23:27:50"
+    },
+    {
+      "id": "6",
+      "name": "lẩu cá năng",
+      "image": "https://yummyday.vn/uploads/images/cach-nau-lau-ca-lang-ngon.jpg",
+      "price": "680000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "2",
+      "time_new": "10-4-2021-23:28:9"
+    },
+    {
+      "id": "7",
+      "name": "cơm gà rang",
+      "image": "https://cdn.baogiaothong.vn/files/baogiay1/2016/08/05/com-ga-tam-duyen-hap-dan-0939.jpg",
+      "price": "42000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "3",
+      "time_new": "10-4-2021-23:30:14"
+    },
+    {
+      "id": "8",
+      "name": "cá sụn",
+      "image": "https://image-us.eva.vn/upload/1-2018/images/2018-01-10/trach-chien-la-lot-1515549868-994-width640height480.jpg",
+      "price": "89000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "4",
+      "time_new": "10-4-2021-23:30:36"
+    },
+    {
+      "id": "9",
+      "name": "cơm bò sốt tiêu đen",
+      "image": "https://paradisefood.vn/wp-content/uploads/2019/04/bo-xao-can-toi-1.jpg",
+      "price": "60000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "3",
+      "time_new": "10-4-2021-23:31:3"
+    },
+    {
+      "id": 0.41042494105826477,
+      "name": "coca",
+      "image": "https://image.bnews.vn/MediaUpload/Medium/2020/10/04/3clubofmozambique.jpg",
+      "price": "15000",
+      "cate_id": "0.8487253518378277",
+      "time": "11-4-2021-23:34:27"
+    },
+    {
+      "id": 0.6933335716065405,
+      "name": "rau cải xào",
+      "image": "https://firebasestorage.googleapis.com/v0/b/shop-e15e4.appspot.com/o/images%2Frau-cai-xao-toi1.jpg?alt=media&token=70d459e6-f44c-4f63-8b4f-0d7208e6324d",
+      "price": "39000",
+      "cate_id": "0.06038742536736508",
+      "time": "12-4-2021-11:11:44"
+    },
+    {
+      "id": 0.48774480291419287,
+      "name": "rau muống xào tỏi",
+      "image": "https://firebasestorage.googleapis.com/v0/b/shop-e15e4.appspot.com/o/images%2Fcach-lam-nuoc-sot-sieu-de-de-lam-rau-muong-xao-toi-5.jpg?alt=media&token=dd867b3f-a725-4c2d-a034-5140c9fde22b",
+      "price": "30000",
+      "time": "13-4-2021-11:48:26",
+      "cate_id": "0.06038742536736508",
+      "time_new": "13-4-2021-11:48:43"
+    },
+    {
+      "id": 0.5768718621212903,
+      "name": "mới sửa ",
+      "image": "https://firebasestorage.googleapis.com/v0/b/shop-e15e4.appspot.com/o/images%2Fkham-pha-nhat-ban_5_3_2018_10_14_32.png?alt=media&token=7312de35-ec50-4e89-90c0-eb15a9d08548",
+      "price": "30000",
+      "time": "27-1-2022-13:1:24",
+      "cate_id": "0.8487253518378277",
+      "time_new": "21-3-2022-15:43:11"
+    }
+  ],
+  "categoris": [
+    {
+      "id": "1",
+      "name": "món đặc biệt",
+      "time": "3-4-2021-23:38:21",
+      "time_new": "11-4-2021-9:16:9"
+    },
+    {
+      "id": "2",
+      "name": "món lẩu",
+      "time": "3-4-2021-23:38:21",
+      "time_new": "11-4-2021-9:16:29"
+    },
+    {
+      "id": "3",
+      "name": "Cơm Văn Phòng",
+      "time": "3-4-2021-23:38:21"
+    },
+    {
+      "id": "4",
+      "name": "Món ăn chơi",
+      "time": "3-4-2021-23:38:21",
+      "time_new": "11-4-2021-9:25:14"
+    },
+    {
+      "id": 0.06038742536736508,
+      "name": "món rau",
+      "time": "11-4-2021-9:25:32"
+    },
+    {
+      "id": 0.8487253518378277,
+      "name": "đồ uống",
+      "time": "11-4-2021-9:27:42"
+    },
+    {
+      "id": 0.8514450663585829,
+      "name": "danh mục mới",
+      "time": "12-2-2022-15:37:18"
+    }
+  ],
+  "saveoder": [
+    {
+      "id_oder": "0.8370057627437089",
+      "amount": "1",
+      "id_table": "7",
+      "id": "5",
+      "name": "mẹt gà mini",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwCVXRo1SiPfhfzilgG4k-1sclq5gxhSl7pjCtsVck9rRmvBAvwdI52nZR8_QEkM-xgeI&usqp=CAU",
+      "price": "400000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "1",
+      "time_new": "10-4-2021-23:27:50"
+    },
+    {
+      "id_oder": "0.5100825870998988",
+      "amount": "1",
+      "id_table": "4",
+      "id": "1",
+      "name": "cơm sườn sốt chua ngọt",
+      "image": "https://alovoucher.com/wp-content/uploads/2018/07/33994839_1489171181188444_5885834345058402304_n.jpg",
+      "price": "49000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "1",
+      "time_new": "22-11-2021-9:36:34"
+    },
+    {
+      "id_oder": "0.875796218453081",
+      "amount": "1",
+      "id_table": "9",
+      "id": "4",
+      "name": "Khoai Tây Chiên",
+      "image": "https://storage.googleapis.com/cdn-website.vinid.dev/uat/2019/09/khoai-t%C3%A2y-chi%C3%AAn.jpg",
+      "price": "35000",
+      "time": "3-4-2021-23:38:21",
+      "cate_id": "4",
+      "time_new": "10-4-2021-23:27:36"
+    },
+    {
+      "id_oder": "0.46929481342805923",
+      "amount": "1",
+      "id_table": "9",
+      "id": 0.48774480291419287,
+      "name": "rau muống xào tỏi",
+      "image": "https://firebasestorage.googleapis.com/v0/b/shop-e15e4.appspot.com/o/images%2Fcach-lam-nuoc-sot-sieu-de-de-lam-rau-muong-xao-toi-5.jpg?alt=media&token=dd867b3f-a725-4c2d-a034-5140c9fde22b",
+      "price": "30000",
+      "time": "13-4-2021-11:48:26",
+      "cate_id": "0.06038742536736508",
+      "time_new": "13-4-2021-11:48:43"
+    },
+    {
+      "id_oder": "0.469294813428059231",
+      "amount": "1",
+      "id_table": "91",
+      "id": 11,
+      "name": "rau muống xào tỏi",
+      "image": "https://firebasestorage.googleapis.com/v0/b/shop-e15e4.appspot.com/o/images%2Fcach-lam-nuoc-sot-sieu-de-de-lam-rau-muong-xao-toi-5.jpg?alt=media&token=dd867b3f-a725-4c2d-a034-5140c9fde22b",
+      "price": "30000",
+      "time": "13-4-2021-11:48:26",
+      "cate_id": "0.06038742536736508",
+      "time_new": "13-4-2021-11:48:43"
+    }
+  ],
+  "oder": [],
+  "oderdetail": [],
+  "table": [
+    {
+      "id": "1",
+      "name": "bàn 1"
+    },
+    {
+      "id": "2",
+      "name": "bàn 2"
+    },
+    {
+      "id": "3",
+      "name": "bàn 3"
+    },
+    {
+      "id": "4",
+      "name": "bàn 4"
+    },
+    {
+      "id": "5",
+      "name": "bàn 5"
+    },
+    {
+      "id": "6",
+      "name": "bàn 6"
+    },
+    {
+      "id": "7",
+      "name": "bàn 7"
+    },
+    {
+      "id": "8",
+      "name": "bàn 8"
+    },
+    {
+      "id": "9",
+      "name": "bàn 9"
+    },
+    {
+      "id": 0.5643316196061012,
+      "name": "bàn 10"
+    }
+  ],
+  "dataa": []
+}
