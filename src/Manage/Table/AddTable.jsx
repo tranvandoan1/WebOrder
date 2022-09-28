@@ -4,15 +4,12 @@ import styles from "../../css/LayoutAdmin.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addTable } from "./../../features/TableSlice/TableSlice";
-import { getFloor } from "./../../features/FloorSlice/FloorSlice";
 const AddTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    dispatch(getFloor());
-  }, []);
+
   const addCate = async (values) => {
     const newData = {
       name: values.name,

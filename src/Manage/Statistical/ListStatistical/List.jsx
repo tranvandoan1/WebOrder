@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "@ant-design/plots";
 import styles from "../../../css/CssAdmin.module.css";
-import {
-  BarChartOutlined,
-  EyeOutlined,
-  MinusOutlined,
-} from "@ant-design/icons";
+import { BarChartOutlined, EyeOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrder } from "../../../features/Order/Order";
-import { Modal, Row, Select, Statistic } from "antd";
+import { Modal, Row, Select, Spin, Statistic } from "antd";
 import Month from "./Month";
 import moment from "moment";
 import SelectTime from "./SelectTime";
@@ -22,8 +18,7 @@ const List = () => {
   const dispatch = useDispatch();
   const [check, setCheck] = useState("today");
   const [detailStatistic, setDetailStatistic] = useState(false);
-  const orders = useSelector((data) => data.order.value);
-  console.log(orders,'32wqsa')
+  const orders = useSelector((data) => data.order);
   useEffect(() => {
     dispatch(getAllOrder());
   }, []);
@@ -34,7 +29,7 @@ const List = () => {
   const list = () => {
     let order = [];
 
-    orders?.filter((item) => {
+    orders?.value.filter((item) => {
       if (item.user_id == user._id) {
         const time = new Date(item.createdAt);
         if (

@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { editTable, getAllTable } from "../../features/TableSlice/TableSlice";
 import styles from "../../css/LayoutAdmin.module.css";
 import { Button, Form, Input, message, Select, Spin } from "antd";
-import { openNotificationWithIcon } from "../../Notification";
-import { getFloor } from "./../../features/FloorSlice/FloorSlice";
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import OrderAPI, { add, remove, upload } from "../../API/Order";
-export const getAllOrder = createAsyncThunk("order/getAllOrder", async () => {
+async function getAll() {
   const { data: orders } = await OrderAPI.getAll();
   const user = JSON.parse(localStorage.getItem("user"));
   const dataOrder = [];
@@ -11,16 +11,19 @@ export const getAllOrder = createAsyncThunk("order/getAllOrder", async () => {
   }
 
   return dataOrder;
+}
+export const getAllOrder = createAsyncThunk("order/getAllOrder", async () => {
+  return getAll();
 });
 export const addOrder = createAsyncThunk("order/addOrder", async (data) => {
-  const { data: orders } = await add(data);
-  return orders;
+  await add(data);
+  return getAll();
 });
 export const uploadOrder = createAsyncThunk(
   "order/uploadOrder",
   async (data) => {
-    const { data: orders } = await upload(data.id, data.data);
-    return orders;
+    await upload(data.id, data.data);
+    return getAll();
   }
 );
 export const removeOrder = createAsyncThunk("order/removeOrder", async (id) => {
@@ -32,7 +35,6 @@ const orderSlice = createSlice({
   initialState: {
     value: [],
     checkData: false,
-
   },
   reducers: {},
   extraReducers: (builder) => {

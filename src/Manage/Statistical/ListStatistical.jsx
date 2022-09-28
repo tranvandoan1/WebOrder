@@ -14,9 +14,8 @@ const ListStatistical = () => {
   useEffect(() => {
     dispatch(getAll());
   }, []);
-
   const listOrder = () => {
-    if (allData.products !== undefined) {
+    if (allData?.orders !== undefined) {
       let orders = [];
       allData.orders.filter((item) => {
         const time = new Date(item.createdAt);
@@ -32,7 +31,7 @@ const ListStatistical = () => {
   };
   return (
     <div style={{ background: "#fff", height: "100vh" }}>
-      {allData?.products?.length == undefined ? (
+      {allData?.orders?.length == undefined ? (
         <div
           style={{
             flex: 1,
