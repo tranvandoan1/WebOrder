@@ -16,9 +16,7 @@ import styles from "../css/LayoutAdmin.module.css";
 import "../css/Order.css";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getProductAll } from "./../features/ProductsSlice/ProductSlice";
 import { getAllTable } from "../features/TableSlice/TableSlice";
-import { getCategori } from "./../features/Categoris/CategoriSlice";
 import { getUser } from "../features/User/UserSlice";
 import { uploadLogin } from "../API/Users";
 const { Header, Content, Footer, Sider } = Layout;
@@ -30,12 +28,8 @@ const LayoutAdmin = () => {
   useEffect(() => {
     dispatch(getUser());
   }, []);
-  const products = useSelector((data) => data.product.value);
   const tables = useSelector((data) => data.table.value);
-  const categoris = useSelector((data) => data.categori.value);
   useEffect(() => {
-    dispatch(getProductAll());
-    dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
   const key = JSON.parse(localStorage.getItem("key"));
@@ -83,13 +77,24 @@ const LayoutAdmin = () => {
             }}
           >
             <div className={styles.avatar_header}>
-              <Avatar
-                src={user.avatarRestaurant}
-                style={{ margin: "10px" }}
-                size={60}
-                alt=""
-              />
-              <span className={styles.title_logo}>{user.nameRestaurant}</span>
+              {String(user.nameRestaurant).length <= 0 &&
+              String(user.avatarRestaurant).length <= 0 ? (
+                <span style={{ padding: 10, color: "red", fontWeight: "500" }}>
+                  Hãy cài đặt tên Website của bạn
+                </span>
+              ) : (
+                <React.Fragment>
+                  <Avatar
+                    src={user.avatarRestaurant}
+                    style={{ margin: "10px" }}
+                    size={60}
+                    alt=""
+                  />
+                  <span className={styles.title_logo}>
+                    {user.nameRestaurant}
+                  </span>
+                </React.Fragment>
+              )}
             </div>
             <br />
 
@@ -98,21 +103,10 @@ const LayoutAdmin = () => {
               mode="inline"
               className={styles.menu}
               defaultSelectedKeys={
-                key == null
-                  ? [
-                      user?.loginWeb == 0 ||
-                      products?.length > 0 ||
-                      categoris?.length > 0 ||
-                      tables?.length > 0
-                        ? "1"
-                        : "1",
-                    ]
-                  : key
+                key == null ? [tables?.length > 0 ? "1" : "1"] : key
               }
               items={[
-                (products?.length > 0 ||
-                  categoris?.length > 0 ||
-                  tables?.length > 0) && {
+                tables?.length > 0 && {
                   key: "1",
                   icon: <BarChartOutlined />,
                   label: "Thông kê",
@@ -184,12 +178,10 @@ const LayoutAdmin = () => {
                   },
                 },
 
-                (tables?.length > 0 ||
-                  products?.length > 0 ||
-                  categoris?.length > 0) && {
+                {
                   key: "8",
                   icon: <RollbackOutlined />,
-                  label: "Quay lại",
+                  label: "Quay lại Order",
                   itemIcon: <NavLink to="/tables" />,
                   style: { color: "black" },
                   onClick: () => {

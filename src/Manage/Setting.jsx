@@ -1,14 +1,12 @@
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Form, Input, message, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { upload } from "../API/Users";
 import styles from "../css/Account.module.css";
-import { openNotificationWithIcon } from "../Notification";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { editUser, getUser } from "../features/User/UserSlice";
+import { editNameAvatarUser, getUser } from "../features/User/UserSlice";
 
 const Setting = () => {
   const dispatch = useDispatch();
@@ -40,15 +38,15 @@ const Setting = () => {
     };
     setLoading(true);
     message.warning("Đang tiến hành sửa !");
-    await dispatch(editUser(uploadUser))
+    await dispatch(editNameAvatarUser(uploadUser));
     setPhoto();
     setLoading(false);
     message.success("Sửa thành công");
   };
-  
+
   return (
     <div>
-      {Object.keys(user).length>0 && (
+      {Object.keys(user).length > 0 && (
         <>
           <div className={styles.header}>
             <h5>Cài đặt</h5>
@@ -119,28 +117,31 @@ const Setting = () => {
                 justifyContent: "center",
               }}
             >
-              <div className={styles.user_image}>
-                {String(user.avatarRestaurant).length <= 0 ? (
-                  <div className={styles.user_avatar}>
-                    <UserOutlined style={{ fontSize: 35, padding: 20 }} />
-                  </div>
-                ) : photo !== undefined ? (
-                  loading == true ? (
-                    <Spin size="large" />
+              {loading == true ? (
+                <Spin size="large" />
+              ) : (
+                <div className={styles.user_image}>
+                  {photo == undefined ? (
+                    String(user.avatarRestaurant).length <= 0 ? (
+                      <div className={styles.user_avatar}>
+                        <UserOutlined style={{ fontSize: 35, padding: 20 }} />
+                      </div>
+                    ) : (
+                      <Avatar size={200} src={user.avatarRestaurant} />
+                    )
                   ) : (
                     <Avatar size={200} src={photo} />
-                  )
-                ) : loading == true ? (
-                  <Spin size="large" />
-                ) : (
-                  <Avatar size={200} src={user.avatarRestaurant} />
-                )}
-                {loading !== true && (
-                  <label htmlFor="images" className={styles.user_choose_photo}>
-                    <div className={styles.choose_photo}>Chọn ảnh</div>
-                  </label>
-                )}
-              </div>
+                  )}
+                  {loading !== true && (
+                    <label
+                      htmlFor="images"
+                      className={styles.user_choose_photo}
+                    >
+                      <div className={styles.choose_photo}>Chọn ảnh</div>
+                    </label>
+                  )}
+                </div>
+              )}
               <Input
                 type="file"
                 name=""

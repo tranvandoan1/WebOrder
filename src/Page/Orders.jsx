@@ -5,7 +5,17 @@ import {
   addSaveOrder,
   uploadSaveOrderFind,
 } from "../features/saveorderSlice/saveOrderSlice";
-import { Menu, Input, Button, Modal, Row, Col, Form, message } from "antd";
+import {
+  Menu,
+  Input,
+  Button,
+  Modal,
+  Row,
+  Col,
+  Form,
+  message,
+  Spin,
+} from "antd";
 import { Link } from "react-router-dom";
 import { DoubleLeftOutlined } from "@ant-design/icons";
 import SelectedProduct from "./SelectedProduct";
@@ -13,6 +23,7 @@ import styles from "../css/Order.module.css";
 import { getProductAll } from "./../features/ProductsSlice/ProductSlice";
 import { getCategori } from "./../features/Categoris/CategoriSlice";
 import { getAllSaveOrder } from "./../features/saveorderSlice/saveOrderSlice";
+import Loading from "../Loading";
 const Orders = () => {
   const [productOrder, setProductOrder] = useState([]); //lấy sản phẩm ko có kg
   const [proSelect, setProSelect] = useState([]);
@@ -28,7 +39,7 @@ const Orders = () => {
   const [form] = Form.useForm();
 
   const saveorders = useSelector((data) => data.saveorder.value);
-  const products = useSelector((data) => data.product.value);
+  const products = useSelector((data) => data.product);
   const categoris = useSelector((data) => data.categori.value);
   useEffect(() => {
     dispatch(getProductAll());
@@ -126,14 +137,15 @@ const Orders = () => {
     if (id == "all") {
       setProSelect([]);
     } else {
-      const productFind = products.filter((item) => item.cate_id == id);
+      const productFind = products?.value?.filter((item) => item.cate_id == id);
       setProSelect(productFind);
     }
   };
-
   return (
     <div>
-      {products.length <= 0 ? (
+      {products?.value?.length <= 0 && products?.checkData == false ? (
+        <Loading />
+      ) : products?.value?.length <= 0 && products?.checkData == true ? (
         <div
           style={{
             display: "flex",
@@ -191,7 +203,7 @@ const Orders = () => {
             <Col xs={24} sm={24} md={12} lg={14} xl={14}>
               <div className="products" style={{ paddingBottom: 10 }}>
                 <Row>
-                  {(proSelect?.length >= 1 ? proSelect : products)?.map(
+                  {(proSelect?.length >= 1 ? proSelect : products?.value)?.map(
                     (item_pro) => {
                       return (
                         <Col

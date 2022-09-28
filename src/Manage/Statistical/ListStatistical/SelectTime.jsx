@@ -51,7 +51,6 @@ const SelectTime = () => {
         return item;
       }
     });
-    console.log(order);
     let sum = 0;
     for (let i = 0; i < order.length; i++) {
       sum += Math.ceil(order[i].sumPrice * ((100 - order[i].sale) / 100));

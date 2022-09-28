@@ -24,10 +24,14 @@ const floorSlice = createSlice({
   name: "floor",
   initialState: {
     value: [],
+    checkData: false,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getFloor.fulfilled, (state, action) => {
+      if (action.payload.length <= 0) {
+        state.checkData = true;
+      }
       state.value = action.payload;
     });
 

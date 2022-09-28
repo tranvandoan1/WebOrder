@@ -31,10 +31,15 @@ const orderSlice = createSlice({
   name: "order",
   initialState: {
     value: [],
+    checkData: false,
+
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllOrder.fulfilled, (state, action) => {
+      if (action.payload.length <= 0) {
+        state.checkData = true;
+      }
       state.value = action.payload;
     });
     builder.addCase(addOrder.fulfilled, (state, action) => {

@@ -211,53 +211,6 @@ tbody > tr > td {
   padding: 10px;
 }
 
-/* 
-@keyframes move {
-  0% {
-    transform: rotate(32deg);
-  }
-
-  10% {
-    transform: rotate(64deg);
-  }
-
-  20% {
-    transform: rotate(96deg);
-  }
-
-  30% {
-    transform: rotate(128deg);
-  }
-
-  40% {
-    transform: rotate(160deg);
-  }
-
-  50% {
-    transform: rotate(192deg);
-  }
-
-  60% {
-    transform: rotate(224deg);
-  }
-
-  80% {
-    transform: rotate(256deg);
-  }
-
-  80% {
-    transform: rotate(288deg);
-  }
-
-  90% {
-    transform: rotate(310deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-} */
-
 .example {
   position: absolute;
   bottom: 0px;

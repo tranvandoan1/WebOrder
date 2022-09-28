@@ -32,8 +32,17 @@ const ListStatistical = () => {
   };
   return (
     <div style={{ background: "#fff", height: "100vh" }}>
-      {allData?.products?.length ==undefined ? (
-        <Spin />
+      {allData?.products?.length == undefined ? (
+        <div
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Spin size="large" />
+        </div>
       ) : (
         <React.Fragment>
           <div className={styles.title}>

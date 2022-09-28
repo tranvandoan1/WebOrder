@@ -132,7 +132,10 @@ const LayoutWeb = () => {
         key="userInfo"
         onClick={() => (
           navigate("/manager/statistical"),
-          localStorage.setItem("key", JSON.stringify(["1"]))
+          localStorage.setItem(
+            "key",
+            JSON.stringify([tables.length <= 0 ? "2" : "1"])
+          )
         )}
       >
         <Button type="text" icon={<SettingOutlined />}>
@@ -263,13 +266,26 @@ const LayoutWeb = () => {
                   alignItems: "center",
                 }}
               >
-                <Avatar
-                  src="https://123design.org/wp-content/uploads/2020/07/LOGOLM0200-Chibi-%C4%90%E1%BB%87-nh%E1%BA%A5t-%C4%91%E1%BA%A7u-b%E1%BA%BFp-nh%C3%AD-Vua-%C4%91%E1%BA%A7u-b%E1%BA%BFp.jpg"
-                  style={{ margin: "10px" }}
-                  size={60}
-                  alt=""
-                />
-                <span style={{ fontSize: 20, fontWeight: "500" }}>BOM BOM</span>
+                {String(user.nameRestaurant).length <= 0 &&
+                String(user.avatarRestaurant).length <= 0 ? (
+                  <span
+                    style={{ padding: 10, color: "red", fontWeight: "500" }}
+                  >
+                    Hãy cài đặt tên Website của bạn
+                  </span>
+                ) : (
+                  <React.Fragment>
+                    <Avatar
+                      src={user?.avatarRestaurant}
+                      style={{ margin: "10px" }}
+                      size={60}
+                      alt=""
+                    />
+                    <span style={{ fontSize: 20, fontWeight: "500" }}>
+                      {user?.nameRestaurant}
+                    </span>
+                  </React.Fragment>
+                )}
               </div>
 
               {width.width < 960 ? (

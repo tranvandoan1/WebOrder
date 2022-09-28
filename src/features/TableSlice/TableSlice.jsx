@@ -65,10 +65,15 @@ const tableSlice = createSlice({
   name: "table",
   initialState: {
     value: [],
+    checkData: false,
+
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllTable.fulfilled, (state, action) => {
+      if (action.payload.length <= 0) {
+        state.checkData = true;
+      }
       state.value = action.payload;
     });
     builder.addCase(addTable.fulfilled, (state, action) => {

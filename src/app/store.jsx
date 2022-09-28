@@ -5,7 +5,6 @@ import floorSlice from "../features/FloorSlice/FloorSlice";
 import productSlice from "../features/ProductsSlice/ProductSlice";
 import categoriSlice from "../features/Categoris/CategoriSlice";
 import orderSlice from "../features/Order/Order";
-import orderdetailiSlice from "../features/OrderDetail/OrderDetail";
 import allDataSlice from "../features/AllDataSlice/AllDataSlice";
 import userSlice from "../features/User/UserSlice";
 export const store = configureStore({
@@ -15,7 +14,6 @@ export const store = configureStore({
     product: productSlice,
     categori: categoriSlice,
     order: orderSlice,
-    orderdetail: orderdetailiSlice,
     floor: floorSlice,
     allData: allDataSlice,
     user: userSlice,

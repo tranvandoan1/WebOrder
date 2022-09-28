@@ -24,247 +24,150 @@ import "./App.css";
 import Introduce from "./Introduce";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
-import { getProductAll } from "./features/ProductsSlice/ProductSlice";
-import { getCategori } from "./features/Categoris/CategoriSlice";
 import { getAllTable } from "./features/TableSlice/TableSlice";
 import Setting from "./Manage/Setting";
 import { getUser } from "./features/User/UserSlice";
-import Privateadmin from "./privateAdmin";
 import Notfound from "./Notfound";
+import PrivateLogin from "./CheckRole/privateLogin";
+import Loading from "./Loading";
+import PrivateData from "./CheckRole/privateData";
 function App() {
-  const user = useSelector((data) => data.user.value);
-
+  const userLoca = JSON.parse(localStorage.getItem("user"));
+  const user = useSelector((data) => data.user);
+  const dispatch = useDispatch();
+  const tables = useSelector((data) => data.table);
   useEffect(() => {
     dispatch(getUser());
-  }, []);
-  const dispatch = useDispatch();
-  const products = useSelector((data) => data.product.value);
-  const tables = useSelector((data) => data.table.value);
-  const categoris = useSelector((data) => data.categori.value);
-  useEffect(() => {
-    dispatch(getProductAll());
-    dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
+  const avatarWeb = document.getElementById("avatarWeb");
+  const nameWeb = document.getElementById("nameWeb");
+  avatarWeb.href =
+    String(user?.value.avatarRestaurant).length <= 0
+      ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+      : user?.value.avatarRestaurant;
+  nameWeb.innerHTML =
+    String(user?.value.nameRestaurant).length <= 0
+      ? "WebSite Order"
+      : user?.value.nameRestaurant;
   return (
     <BrowserRouter>
-      {/* {Object.keys(user).length > 0 ? ( */}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            user?.loginWeb == 0 ? (
-              tables?.length <= 0 ? (
-                <Navigate to="/intro" />
-              ) : user?.loginWeb == 0 && tables?.length > 0 ? (
-                <Navigate to="/tables" />
-              ) : (
-                <Signin />
-              )
-            ) : tables?.length <= 0 ? (
-              <Navigate to="/manager/table" />
-            ) : user?.loginWeb == 0 && tables?.length > 0 ? (
-              <Navigate to="/tables" />
-            ) : (
-              <Signin />
-            )
-          }
-        />
-
-        <Route
-          path="/signin"
-          element={
-            Object.keys(user)?.length > 0 ? (
-              <Navigate to="/tables" />
-            ) : (
-              <Signin />
-            )
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            Object.keys(user)?.length > 0 ? (
-              <Navigate to="/tables" />
-            ) : (
-              <PicturesWall />
-            )
-          }
-        />
-
-        <Route
-          path="/tables/"
-          element={
-            tables?.length <= 0 ? (
-              <Navigate to="/manager/table" />
-            ) : (
-              <LayoutWeb />
-            )
-          }
-        />
-
-        <Route
-          path="/order/table-name=:name&&:id"
-          element={
-            Object.keys(user)?.length <= 0 && user?.loginWeb !== 0 ? (
-              <Navigate to="/signin" />
-            ) : (
-              <Orders />
-            )
-          }
-        />
-
-        <Route
-          path="/manager/"
-          element={
-            // Object.keys(user)?.length <= 0 ? (
-            //   <Navigate to="/signin" />
-            // ) : (
-              <LayoutAdmin />
-            // )
-          }
-        >
-          {/* cate */}
-          <Route
-            path="categoris/"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <ListCate />
-              )
-            }
-          ></Route>
-          <Route
-            path="categoris/add"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <AddCate />
-              )
-            }
-          />
-          <Route
-            path="categoris/edit=:id"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <EditCate />
-              )
-            }
-          />
-          {/* pro */}
-          <Route
-            path="products"
-            element={
-              // Object.keys(user)?.length <= 0 ? (
-              //   <Navigate to="/signin" />
-              // ) : (
-                <ListPro />
-              // )
-            }
-          />
-          <Route
-            path="products/add"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <AddPro />
-              )
-            }
-          />
-          <Route
-            path="products/edit=:id"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <EditPro />
-              )
-            }
-          />
-
-          {/* bàn */}
-          <Route
-            path="table"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <ListTablee />
-              )
-            }
-          />
-          <Route
-            path="table/add"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <AddTable />
-              )
-            }
-          />
-          <Route
-            path="table/edit=:id"
-            element={
-              Object.keys(user)?.length <= 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <EditTable />
-              )
-            }
-          />
-          {/* thống kê */}
-          {(user?.loginWeb !== 0 || tables?.length > 0) && (
+      {userLoca !== null ? (
+        String(user.value).length <= 0 ? (
+          <Loading />
+        ) : (
+          <Routes>
             <Route
-              path="statistical"
+              path="/"
               element={
-                Object.keys(user)?.length <= 0 ? (
-                  <Navigate to="/signin" />
+                user?.value.loginWeb == 0 &&
+                tables.value.length <= 0 &&
+                tables.checkData == false ? (
+                  <Introduce />
+                ) : user?.value.loginWeb == 0 &&
+                  tables.value.length <= 0 &&
+                  tables.checkData == true ? (
+                  <Introduce />
+                ) : user?.value.loginWeb == 1 &&
+                  tables.value.length <= 0 &&
+                  tables.checkData == true ? (
+                  (localStorage.setItem("key", JSON.stringify(["2"])),
+                  (<Navigate to="/manager/table" />))
                 ) : (
-                  <ListStatistical />
+                  user?.value.loginWeb == 1 &&
+                  tables.value.length > 0 &&
+                  tables.checkData == false && <Navigate to="/tables" />
                 )
               }
             />
-          )}
 
-          <Route
-            path="account"
-            element={
-              Object.keys(user)?.length <= 0 && user?.loginWeb !== 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <Account />
-              )
-            }
-          />
+            <Route
+              path="/signin"
+              element={
+                userLoca !== null ? <Navigate to="/tables" /> : <Signin />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                userLoca !== null ? <Navigate to="/tables" /> : <PicturesWall />
+              }
+            />
 
-          <Route
-            path="order"
-            element={
-              Object.keys(user)?.length <= 0 && user?.loginWeb !== 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <ListOder />
-              )
-            }
-          />
-          <Route
-            path="setting"
-            element={
-              Object.keys(user)?.length <= 0 && user?.loginWeb !== 0 ? (
-                <Navigate to="/signin" />
-              ) : (
-                <Setting />
-              )
-            }
-          />
-        </Route>
-      </Routes>
+            <Route
+              path="/tables/"
+              element={
+                user?.value.loginWeb == 0 ? <Navigate to="/" /> : <LayoutWeb />
+              }
+            />
+
+            <Route path="/order/table-name=:name&&:id" element={<Orders />} />
+            <Route
+              path="/manager/"
+              element={
+                <PrivateData>
+                  <LayoutAdmin />
+                </PrivateData>
+              }
+            >
+              {/* cate */}
+              <Route path="categoris/" element={<ListCate />}></Route>
+              <Route path="categoris/add" element={<AddCate />} />
+              <Route path="categoris/edit=:id" element={<EditCate />} />
+              {/* pro */}
+              <Route path="products" element={<ListPro />} />
+              <Route path="products/add" element={<AddPro />} />
+              <Route path="products/edit=:id" element={<EditPro />} />
+
+              {/* bàn */}
+              <Route path="table" element={<ListTablee />} />
+              <Route path="table/add" element={<AddTable />} />
+              <Route path="table/edit=:id" element={<EditTable />} />
+              {/* thống kê */}
+              {(user?.value.loginWeb !== 0 || tables?.length > 0) && (
+                <Route path="statistical" element={<ListStatistical />} />
+              )}
+
+              <Route path="account" element={<Account />} />
+
+              <Route path="order" element={<ListOder />} />
+              <Route path="setting" element={<Setting />} />
+            </Route>
+          </Routes>
+        )
+      ) : (
+        <Routes>
+          <Route path="/" element={<Signin />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<PicturesWall />} />
+          <Route path="/tables/" element={<Notfound />} />
+
+          <Route path="/order/table-name=:name&&:id" element={<Notfound />} />
+          <Route path="/manager/" element={<Notfound />}>
+            {/* cate */}
+            <Route path="categoris/" element={<Notfound />}></Route>
+            <Route path="categoris/add" element={<Notfound />} />
+            <Route path="categoris/edit=:id" element={<Notfound />} />
+            {/* pro */}
+            <Route path="products" element={<Notfound />} />
+            <Route path="products/add" element={<Notfound />} />
+            <Route path="products/edit=:id" element={<Notfound />} />
+
+            {/* bàn */}
+            <Route path="table" element={<ListTablee />} />
+            <Route path="table/add" element={<Notfound />} />
+            <Route path="table/edit=:id" element={<Notfound />} />
+            {/* thống kê */}
+            <Route path="statistical" element={<Notfound />} />
+
+            <Route path="account" element={<Notfound />} />
+
+            <Route path="order" element={<Notfound />} />
+            <Route path="setting" element={<Notfound />} />
+          </Route>
+        </Routes>
+      )}
+
       {/* )
       //  : (
       //   <Routes>

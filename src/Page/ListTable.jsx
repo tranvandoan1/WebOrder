@@ -18,7 +18,7 @@ import MoveTable from "./MoveTable";
 const ListTable = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const tables = useSelector((data) => data.table.value);
+  const tables = useSelector((data) => data.table);
   const saveorders = useSelector((data) => data.saveorder.value);
   const [checkOrder, setCheckOrder] = useState();
   const [infoBookTable, setInfoBookTable] = useState();
@@ -31,7 +31,7 @@ const ListTable = (props) => {
 
   // mảng mới mà biết được bàn nào có người
   let checkSaveOrder = [];
-  tables?.map((element) => {
+  tables?.value.map((element) => {
     let arrFilter = saveorders?.filter((e) => {
       return e.id_table === element._id;
     });
@@ -128,8 +128,16 @@ const ListTable = (props) => {
     }
   };
   return (
-    <div className="group_home">
-      {tables.length <= 0 ? (
+    <div
+      className="group_home"
+      style={{
+        height:
+          tables.value.length <= 0 && tables.checkData == true
+            ? "100vh"
+            : "100%",
+      }}
+    >
+      {tables.value.length <= 0 && tables.checkData == false ? (
         <div
           style={{
             display: "flex",
@@ -140,6 +148,20 @@ const ListTable = (props) => {
           }}
         >
           <Spin size="large" />
+        </div>
+      ) : tables.value.length <= 0 && tables.checkData == true ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <span style={{ color: "red", fontSize:30, fontWeight: "500" }}>
+            Chưa có bàn nào !
+          </span>
         </div>
       ) : (
         <Row>

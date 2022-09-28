@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../src/css/Home.css";
 import { Avatar, Button, Form, Input, message, Spin } from "antd";
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import styles from "./css/Account.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { editUser, getUser } from "./features/User/UserSlice";
+import {
+  editLogin,
+  editNameAvatarUser,
+  getUser,
+} from "./features/User/UserSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "./firebase";
-import { getAll } from "./features/AllDataSlice/AllDataSlice";
-import { getProductAll } from "./features/ProductsSlice/ProductSlice";
 import { getAllTable } from "./features/TableSlice/TableSlice";
-import { getCategori } from "./features/Categoris/CategoriSlice";
 const Introduce = () => {
   const [check, setCheck] = useState(0);
   const dispatch = useDispatch();
@@ -22,23 +19,19 @@ const Introduce = () => {
   const [photo, setPhoto] = useState();
   const [value, setValue] = useState();
   const [validate, setValidate] = useState();
-  const products = useSelector((data) => data.product.value);
-  const categoris = useSelector((data) => data.categori.value);
   const tables = useSelector((data) => data.table.value);
+  const userLoca = JSON.parse(localStorage.getItem("user"));
 
   const user = useSelector((data) => data.user.value);
   useEffect(() => {
     dispatch(getUser());
-    dispatch(getProductAll());
     dispatch(getAllTable());
-    dispatch(getCategori());
   }, []);
+  const intro1 = document.getElementById("intro1");
+  const intro2 = document.getElementById("intro2");
+  const intro3 = document.getElementById("intro3");
+  const intro4 = document.getElementById("intro4");
   const checkIntro = async (values) => {
-    const intro1 = document.getElementById("intro1");
-    const intro2 = document.getElementById("intro2");
-    const intro3 = document.getElementById("intro3");
-    const intro4 = document.getElementById("intro4");
-
     if (
       check == 0 ||
       check == 1 ||
@@ -103,25 +96,6 @@ const Introduce = () => {
       setTimeout(() => {
         clearInterval(timerId1);
       }, 1000);
-    } else if (
-      String(user.nameRestaurant).length > 0 &&
-      String(user.avatarRestaurant).length > 0 &&
-      tables.length > 0
-    ) {
-      localStorage.setItem("key", JSON.stringify(["2"]));
-      alert("Chào mừng bạn đến mới Website Order !");
-      setPhoto();
-      setValue();
-      window.location.href = "/tables";
-    } else if (
-      String(user.nameRestaurant).length > 0 &&
-      String(user.avatarRestaurant).length > 0 &&
-      tables.length <= 0
-    ) {
-      alert("Hãy thiết lập thêm để bắt đầu nhé !");
-      setPhoto();
-      setValue();
-      window.location.href = "/manager/table";
     } else {
       if (photo == undefined || String(photo).length <= 0) {
         message.error("Bạn chưa chọn ảnh !");
@@ -138,7 +112,7 @@ const Introduce = () => {
               : photo,
         };
         setLoading(true);
-        await dispatch(editUser(uploadUser));
+        await dispatch(editNameAvatarUser(uploadUser));
         alert("Hãy thiết lập thêm để bắt đầu nhé !");
         setPhoto();
         setValue();
@@ -227,8 +201,40 @@ const Introduce = () => {
       });
     });
   };
+
+  const skip = async () => {
+    alert("Hãy thiết lập thêm để bắt đầu nhé !");
+    setPhoto();
+    setValue();
+    await dispatch(editLogin({ id: userLoca._id }));
+    localStorage.setItem("key", JSON.stringify(["2"]));
+    window.location.href = "/manager/table";
+  };
+
   return (
     <div className="intro_main">
+      <div
+        onClick={() => skip()}
+        style={{
+          position: "fixed",
+          top: 30,
+          right: 30,
+          zIndex: 100,
+          cursor: "pointer",
+        }}
+      >
+        <span
+          style={{
+            background: "red",
+            padding: "22px 10px",
+            borderRadius: 1000,
+            fontWeight: "500",
+            color: "#fff",
+          }}
+        >
+          Bỏ qua
+        </span>
+      </div>
       <div className="intro1" id="intro1">
         <img
           src={

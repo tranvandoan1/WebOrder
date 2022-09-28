@@ -72,10 +72,15 @@ const saveOrderSlice = createSlice({
   name: "table",
   initialState: {
     value: [],
+    checkData: false,
+
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllSaveOrder.fulfilled, (state, action) => {
+      if (action.payload.length <= 0) {
+        state.checkData = true;
+      }
       state.value = action.payload;
     });
     builder.addCase(addSaveOrder.fulfilled, (state, action) => {

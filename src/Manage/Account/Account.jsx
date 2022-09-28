@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../../css/Account.module.css";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase";
-import { editUser, getUser } from "../../features/User/UserSlice";
+import { editNameAvatarUser, getUser } from "../../features/User/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Account = () => {
@@ -37,7 +37,7 @@ const Account = () => {
     };
     setLoading(true);
     message.warning("Đang tiến hành sửa !");
-    await dispatch(editUser(uploadUser));
+    await dispatch(editNameAvatarUser(uploadUser));
     setPhoto();
     setLoading(false);
     message.success("Sửa thành công");

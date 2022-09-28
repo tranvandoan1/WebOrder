@@ -13,13 +13,14 @@
   height: 100%;
 }
 .back {
-  background: url(https://leenstory.com/wp-content/uploads/2020/11/hinh-anh-gif-khu-rung-tuyet-roi-dem-trang_053437398.gif) !important;
-  background-size: contain;
+  background: url(https://leenstory.com/wp-content/uploads/2020/11/hinh-anh-gif-khu-rung-tuyet-roi-dem-trang_053437398.gif);
+  background-size: calc(100%);
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-repeat: no-repeat;
 }
 .form-signin {
   width: 500px;

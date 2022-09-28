@@ -23,6 +23,7 @@ const List = () => {
   const [check, setCheck] = useState("today");
   const [detailStatistic, setDetailStatistic] = useState(false);
   const orders = useSelector((data) => data.order.value);
+  console.log(orders,'32wqsa')
   useEffect(() => {
     dispatch(getAllOrder());
   }, []);
@@ -31,223 +32,214 @@ const List = () => {
   const month = moment().month();
   const year = moment().year();
   const list = () => {
-    if (orders.length > 0) {
-      let order = [];
+    let order = [];
 
-      orders.filter((item) => {
-        if (item.user_id == user._id) {
-          const time = new Date(item.createdAt);
-          if (
-            check == "today"
-              ? date == time.getDate() &&
-                month + 1 == time.getMonth() + 1 &&
-                year == time.getFullYear()
-              : check == "thisMonth"
-              ? month + 1 == time.getMonth() + 1 && year == time.getFullYear()
-              : check == "thisYear"
-              ? year == time.getFullYear()
-              : check == "yesterDay"
-              ? date == time.getDate() - 1 &&
-                month + 1 == time.getMonth() + 1 &&
-                year == time.getFullYear()
-              : check == "lastMonth"
-              ? month == time.getMonth() + 1 && year == time.getFullYear()
-              : year - 1 == time.getFullYear()
-          ) {
-            order.push(item);
-          }
+    orders?.filter((item) => {
+      if (item.user_id == user._id) {
+        const time = new Date(item.createdAt);
+        if (
+          check == "today"
+            ? date == time.getDate() &&
+              month + 1 == time.getMonth() + 1 &&
+              year == time.getFullYear()
+            : check == "thisMonth"
+            ? month + 1 == time.getMonth() + 1 && year == time.getFullYear()
+            : check == "thisYear"
+            ? year == time.getFullYear()
+            : check == "yesterDay"
+            ? date == time.getDate() - 1 &&
+              month + 1 == time.getMonth() + 1 &&
+              year == time.getFullYear()
+            : check == "lastMonth"
+            ? month == time.getMonth() + 1 && year == time.getFullYear()
+            : year - 1 == time.getFullYear()
+        ) {
+          order.push(item);
         }
-      });
-      // tính tổng tiền
-      let sum = 0;
-      for (let i = 0; i < order.length; i++) {
-        sum += Math.ceil(order[i].sumPrice * ((100 - order[i].sale) / 100));
       }
+    });
+    // tính tổng tiền
+    let sum = 0;
+    for (let i = 0; i < order.length; i++) {
+      sum += Math.ceil(order[i].sumPrice * ((100 - order[i].sale) / 100));
+    }
 
-      const data = [
-        {
-          day:
-            check == "today"
-              ? "Hôm nay"
-              : check == "thisMonth"
-              ? "Tháng này"
-              : check == "thisYear"
-              ? "Năm nay"
-              : check == "yesterDay"
-              ? "Hôm qua"
-              : check == "lastMonth"
-              ? "Tháng trước"
-              : check == "lastYear"
-              ? "Năm trước"
-              : " ",
-          price: sum,
-        },
-      ];
+    const data = [
+      {
+        day:
+          check == "today"
+            ? "Hôm nay"
+            : check == "thisMonth"
+            ? "Tháng này"
+            : check == "thisYear"
+            ? "Năm nay"
+            : check == "yesterDay"
+            ? "Hôm qua"
+            : check == "lastMonth"
+            ? "Tháng trước"
+            : check == "lastYear"
+            ? "Năm trước"
+            : " ",
+        price: sum,
+      },
+    ];
 
-      const config = {
-        data,
-        xField: "price",
-        yField: "day",
-        barWidthRatio: 0.6,
-        legend: false,
-        seriesField: "",
-        meta: {
-          price: {
-            alias: "Tiền",
-          },
+    const config = {
+      data,
+      xField: "price",
+      yField: "day",
+      barWidthRatio: 0.6,
+      legend: false,
+      seriesField: "",
+      meta: {
+        price: {
+          alias: "Tiền",
         },
-        tooltip: {
-          customContent: (title, items) => {
-            return (
-              <>
-                <h6 style={{ marginTop: 10, fontSize: 13 }}>{title}</h6>
-                <ul style={{ paddingLeft: 0 }}>
-                  {items?.map((item, index) => {
-                    const { name, value, color } = item;
-                    return (
-                      <li
-                        key={item.year}
-                        className="g2-tooltip-list-item"
-                        data-index={index}
+      },
+      tooltip: {
+        customContent: (title, items) => {
+          return (
+            <>
+              <h6 style={{ marginTop: 10, fontSize: 13 }}>{title}</h6>
+              <ul style={{ paddingLeft: 0 }}>
+                {items?.map((item, index) => {
+                  const { name, value, color } = item;
+                  return (
+                    <li
+                      key={item.year}
+                      className="g2-tooltip-list-item"
+                      data-index={index}
+                      style={{
+                        marginBottom: 4,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span
+                        className="g2-tooltip-marker"
+                        style={{ backgroundColor: color }}
+                      ></span>
+                      <span
                         style={{
-                          marginBottom: 4,
-                          display: "flex",
-                          alignItems: "center",
+                          display: "inline-flex",
+                          flex: 1,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <span
-                          className="g2-tooltip-marker"
-                          style={{ backgroundColor: color }}
-                        ></span>
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            flex: 1,
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <span style={{ margiRight: 16 }}>
-                            Tiền :{" "}
-                            {value
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
-                            VNĐ
-                          </span>
+                        <span style={{ margiRight: 16 }}>
+                          Tiền :{" "}
+                          {value
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+                          VNĐ
                         </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </>
-            );
-          },
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          );
         },
-        label: {
-          content: (data) => {
-            return `${data.price.toLocaleString("vi-VN")} VNĐ`;
-          },
-          offset: 10,
-          position: "middle",
-
-          style: {
-            fill: "#FFFFFF",
-            opacity: 1,
-            fontWeight: "600",
-          },
+      },
+      label: {
+        content: (data) => {
+          return `${data.price.toLocaleString("vi-VN")} VNĐ`;
         },
-        minBarWidth: 20,
-        maxBarWidth: 20,
-      };
-      return (
-        <>
-          <Row>
-            <Statistic
-              title={
-                check == "today"
-                  ? "Hôm nay"
-                  : check == "thisMonth"
-                  ? "Tháng này"
-                  : check == "thisYear"
-                  ? "Năm nay"
-                  : check == "yesterDay"
-                  ? "Hôm qua"
-                  : check == "lastMonth"
-                  ? "Tháng trước"
-                  : check == "lastYear"
-                  ? "Năm trước"
-                  : " "
-              }
-              value={`${
-                check == "lastYear"
-                  ? `${moment().year() - 1} `
-                  : `${moment().year()}${check !== "thisYear" ? "-" : " "}`
-              }${
-                check == "today" || check == "thisMonth" || check == "yesterDay"
-                  ? `${
-                      String(moment().month() + 1).length == 1
-                        ? `0${moment().month() + 1}`
-                        : moment().month() + 1
-                    }${check !== "thisMonth" ? "-" : ""}`
-                  : ""
-              }${
-                check == "today"
-                  ? `${moment().date()}`
-                  : check == "yesterDay"
-                  ? `${moment().date() - 1}`
-                  : check == "lastMonth"
-                  ? `${
-                      String(moment().month()).length == 1
-                        ? `0${moment().month()}`
-                        : moment().month()
-                    }`
-                  : ""
-              }`}
-            />
-            <Statistic
-              title="Doanh thu"
-              value={`${sum}`}
-              suffix="VNĐ"
-              style={{
-                margin: "0 32px",
-              }}
-            />
-            {(check == "thisMonth" ||
-              check == "thisYear" ||
-              check == "lastMonth" ||
-              check == "lastYear") && (
-              <div className="detail">
-                <Statistic
-                  title="Xem chi tiết"
-                  value=""
-                  suffix={
-                    <span style={{ cursor: "pointer" }}>
-                      <EyeOutlined
-                        style={{ color: "yellowgreen" }}
-                        onClick={() => setDetailStatistic(true)}
-                      />
-                    </span>
-                  }
-                />
-              </div>
-            )}
-          </Row>
+        offset: 10,
+        position: "middle",
 
-          <br />
-          {sum == 0 ? (
-            <span className={styles.noData}>Chưa có doanh thu</span>
-          ) : (
-            <Bar {...config} style={{ height: 80 }} />
+        style: {
+          fill: "#FFFFFF",
+          opacity: 1,
+          fontWeight: "600",
+        },
+      },
+      minBarWidth: 20,
+      maxBarWidth: 20,
+    };
+    return (
+      <>
+        <Row>
+          <Statistic
+            title={
+              check == "today"
+                ? "Hôm nay"
+                : check == "thisMonth"
+                ? "Tháng này"
+                : check == "thisYear"
+                ? "Năm nay"
+                : check == "yesterDay"
+                ? "Hôm qua"
+                : check == "lastMonth"
+                ? "Tháng trước"
+                : check == "lastYear"
+                ? "Năm trước"
+                : " "
+            }
+            value={`${
+              check == "lastYear"
+                ? `${moment().year() - 1} `
+                : `${moment().year()}${check !== "thisYear" ? "-" : " "}`
+            }${
+              check == "today" || check == "thisMonth" || check == "yesterDay"
+                ? `${
+                    String(moment().month() + 1).length == 1
+                      ? `0${moment().month() + 1}`
+                      : moment().month() + 1
+                  }${check !== "thisMonth" ? "-" : ""}`
+                : ""
+            }${
+              check == "today"
+                ? `${moment().date()}`
+                : check == "yesterDay"
+                ? `${moment().date() - 1}`
+                : check == "lastMonth"
+                ? `${
+                    String(moment().month()).length == 1
+                      ? `0${moment().month()}`
+                      : moment().month()
+                  }`
+                : ""
+            }`}
+          />
+          <Statistic
+            title="Doanh thu"
+            value={`${sum}`}
+            suffix="VNĐ"
+            style={{
+              margin: "0 32px",
+            }}
+          />
+          {(check == "thisMonth" ||
+            check == "thisYear" ||
+            check == "lastMonth" ||
+            check == "lastYear") && (
+            <div className="detail">
+              <Statistic
+                title="Xem chi tiết"
+                value=""
+                suffix={
+                  <span style={{ cursor: "pointer" }}>
+                    <EyeOutlined
+                      style={{ color: "yellowgreen" }}
+                      onClick={() => setDetailStatistic(true)}
+                    />
+                  </span>
+                }
+              />
+            </div>
           )}
-        </>
-      );
-    } else {
-      return (
-        <span style={{ color: "red", fontSize: 18, fontWeight: "500" }}>
-          {" "}
-          Chưa có doanh số
-        </span>
-      );
-    }
+        </Row>
+
+        <br />
+        {sum == 0 ? (
+          <span className={styles.noData}>Chưa có doanh thu</span>
+        ) : (
+          <Bar {...config} style={{ height: 80 }} />
+        )}
+      </>
+    );
   };
   const handleChange = (value) => {
     setCheck(value);
