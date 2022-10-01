@@ -20,7 +20,7 @@ const Signin = () => {
       if (data?.user?.loginWeb == 0) {
         window.location.href = "/";
       } else {
-        window.location.href = "/tables";
+        window.location.href = "/";
       }
       setLoading(false);
     } catch (error) {

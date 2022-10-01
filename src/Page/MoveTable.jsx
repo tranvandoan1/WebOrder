@@ -21,7 +21,8 @@ const MoveTable = (props) => {
   }, []);
   // chuyển bàn
   const cancelReservation = async (item) => {
-    if (selectTransferTable == undefined) {
+      message.warning("Đang tiến hàng chuyển bàn, xin chờ đợi !");
+      if (selectTransferTable == undefined) {
       message.warning("Bạn chưa chọn bàn để chuyển !");
     } else {
       const id = [];
@@ -53,6 +54,7 @@ const MoveTable = (props) => {
           amountEnd: props?.bookTable.amount,
           nameUserEnd: props?.bookTable.nameUser,
         };
+        
         setLoading(true);
         await dispatch(changeTables(data));
         await dispatch(editMoveTable(uploadTable));
