@@ -41,7 +41,7 @@ const LayoutAdmin = () => {
       if (user?.loginWeb == 0) {
         await uploadLogin({ id: user?._id });
       }
-      window.location.href = "/signin";
+      window.location.href = "/";
       setLoading(false);
     }
   };

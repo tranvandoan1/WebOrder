@@ -71,7 +71,7 @@ const LayoutWeb = () => {
     if (confirm("Bạn có muốn đăng xuất không !")) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      window.location.href = "/signin";
+      window.location.href = "/";
       if (user?.loginWeb == 0) {
         await uploadLogin({ id: user?._id });
       }
