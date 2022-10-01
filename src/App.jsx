@@ -47,7 +47,7 @@ function App() {
       ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
       : user?.value.avatarRestaurant;
   nameWeb.innerHTML =
-    String(user?.value.nameRestaurant).length <= 0
+    user?.value.nameRestaurant == undefined
       ? "WebSite Order"
       : user?.value.nameRestaurant;
   return (
