@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Descriptions, Empty, Pagination, Spin } from "antd";
+import { Collapse, Descriptions, Empty, message, Pagination, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllOrder, removeOrder } from "../features/Order/Order";
@@ -18,9 +18,11 @@ const ListOder = () => {
     dispatch(getAllOrder());
     dispatch(getAllTable());
   }, []);
-  const deleteOrder = async (item) => {
+  const deleteOrder = async (id) => {
     if (confirm("Bạn có muốn xóa không ?")) {
-      await dispatch(removeOrder(item._id));
+      message.warning("Đang tiến hành xóa !");
+      await dispatch(removeOrder({ id: id }));
+      message.success("Xóa thành công");
     }
   };
   return (
@@ -29,23 +31,8 @@ const ListOder = () => {
         className="srcoll"
         style={{ position: "relative", overflow: "hidden" }}
       >
-        {/* {orders.length <= 0 && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0,0,0,0.1)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Spin />
-          </div>
-        )} */}
+        <h4>Hóa đơn</h4>
+        <hr style={{ background: "rgba(0,0,0,.3)" }} />
         {orders?.length > 0 ? (
           <Collapse accordion>
             {orders

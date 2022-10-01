@@ -27,8 +27,8 @@ export const uploadOrder = createAsyncThunk(
   }
 );
 export const removeOrder = createAsyncThunk("order/removeOrder", async (id) => {
-  const { data: orders } = await remove(id);
-  return orders;
+  await remove(id);
+  return getAll();
 });
 const orderSlice = createSlice({
   name: "order",
