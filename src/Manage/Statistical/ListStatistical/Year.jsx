@@ -170,7 +170,6 @@ const Year = (props) => {
           <div
             style={{
               height: "100%",
-              overflow: "scroll",
             }}
             className={styles.statisticsMonth}
           >
