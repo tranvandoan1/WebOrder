@@ -59,7 +59,7 @@ const Signup = () => {
       await UserAPI.signup(user);
       setLoading(false);
       alert("Đăng ký thành công. Hãy đăng nhập");
-      window.location.href = "/signin";
+      window.location.href = "/";
     }
   };
   return (
