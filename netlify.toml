@@ -8,7 +8,7 @@
 
 ## This rule redirects to an external API, signing requests with a secret
 [[redirects]]
-  from = "/search"
+  from = "/api"
   to = "https://back-end-order.vercel.app/api"
   status = 200
   force = true # COMMENT: ensure that we always redirect
