@@ -117,7 +117,7 @@ const Introduce = () => {
         setPhoto();
         setValue();
         setLoading(false);
-        window.location.href = "/manager/table";
+        window.location.href = "/";
       }
     }
   };
@@ -208,7 +208,7 @@ const Introduce = () => {
     setValue();
     await dispatch(editLogin({ id: userLoca._id }));
     localStorage.setItem("key", JSON.stringify(["2"]));
-    window.location.href = "/manager/table";
+    window.location.href = "/";
   };
 
   return (
