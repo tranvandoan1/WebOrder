@@ -106,7 +106,7 @@ const LayoutAdmin = () => {
                 key == null ? [tables?.length > 0 ? "1" : "1"] : key
               }
               items={[
-                tables?.length > 0 && {
+                {
                   key: "1",
                   icon: <BarChartOutlined />,
                   label: "Thông kê",

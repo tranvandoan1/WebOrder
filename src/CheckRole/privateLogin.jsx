@@ -16,16 +16,18 @@ const PrivateLogin = ({ children }) => {
     tables?.value.length <= 0 &&
     tables?.checkData == false ? (
     <Introduce />
-  ) : user?.value.loginWeb == 1 &&
-    tables?.value.length <= 0 &&
-    tables?.checkData == true ? (
-    (localStorage.setItem("key", JSON.stringify(["2"])),
-    (<Navigate to="/manager/table" />))
-  ) : user?.value.loginWeb == 0 &&
-    tables?.value.length <= 0 &&
-    tables?.checkData == true ? (
-    <Navigate to="/" />
-  ) : (
+  ) 
+  // : user?.value.loginWeb == 1 &&
+  //   tables?.value.length <= 0 &&
+  //   tables?.checkData == true ? (
+  //   (localStorage.setItem("key", JSON.stringify(["2"])),
+  //   (<Navigate to="/manager/table" />))
+  // ) : user?.value.loginWeb == 0 &&
+  //   tables?.value.length <= 0 &&
+  //   tables?.checkData == true ? (
+  //   <Navigate to="/" />
+  // ) 
+  : (
     children
   );
 };

@@ -28,22 +28,22 @@ export const getAllSaveOrder = createAsyncThunk(
 export const addSaveOrder = createAsyncThunk(
   "saveorder/addSaveOrder",
   async (data) => {
-    const { data: saveorders } = await add(data);
-    return saveorders;
+    await add(data);
+    return getAll();
   }
 );
 export const uploadSaveOrder = createAsyncThunk(
   "saveorder/uploadSaveOrder",
   async (data) => {
-    const { data: saveorders } = await upload(data.id, data.data);
-    return saveorders;
+    await upload(data.id, data.data);
+    return getAll();
   }
 );
 export const removeSaveOrder = createAsyncThunk(
   "saveorder/removeSaveOrder",
   async (id) => {
-    const { data: saveorders } = await remove(id);
-    return saveorders;
+    await remove(id);
+    return getAll();
   }
 );
 export const uploadSaveOrderFind = createAsyncThunk(
@@ -73,7 +73,6 @@ const saveOrderSlice = createSlice({
   initialState: {
     value: [],
     checkData: false,
-
   },
   reducers: {},
   extraReducers: (builder) => {
