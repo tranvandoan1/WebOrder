@@ -31,97 +31,100 @@ const ListStatistical = () => {
   };
   return (
     <div style={{ background: "#fff", height: "100vh" }}>
-      {allData?.orders?.length == undefined ? (
-        <div
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin size="large" />
+      <React.Fragment>
+        <div className={styles.title}>
+          <h5 style={{ display: "flex", alignItems: "center", fontSize: 18 }}>
+            <HddOutlined
+              style={{ fontSize: 30, color: "chocolate", marginRight: 10 }}
+            />{" "}
+            Thống kê
+          </h5>
         </div>
-      ) : (
-        <React.Fragment>
-          <div className={styles.title}>
-            <h5 style={{ display: "flex", alignItems: "center", fontSize: 18 }}>
-              <HddOutlined
-                style={{ fontSize: 30, color: "chocolate", marginRight: 10 }}
-              />{" "}
-              Thống kê
-            </h5>
-          </div>
-          <hr style={{ background: "rgb(161, 161, 161)", height: 0.5 }} />
+        <hr style={{ background: "rgb(161, 161, 161)", height: 0.5 }} />
 
-          <div className="list">
-            <Row>
-              <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-                <Link to="/manager/table">
-                  <div className={styles.list_cate}>
-                    <FileTextOutlined
-                      style={{
-                        marginRight: 10,
-                        fontSize: 30,
-                        color: "chocolate",
-                      }}
-                    />{" "}
-                    Danh mục :{" "}
-                    {allData.categoris !== undefined &&
-                      allData.categoris.length}
-                  </div>
-                </Link>
-              </Col>
-              <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-                <Link to="/manager/products">
-                  <div className={styles.list_cate}>
-                    <FaProductHunt
-                      style={{
-                        color: "chocolate",
-                        fontSize: 30,
-                        marginRight: 10,
-                      }}
-                    />
-                    Sản phẩm :{" "}
-                    {allData.products !== undefined && allData.products.length}
-                  </div>
-                </Link>
-              </Col>
-              <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-                <Link to="/manager/order">
-                  <div className={styles.list_cate}>
-                    <FaOpencart
-                      style={{
-                        color: "chocolate",
-                        fontSize: 30,
-                        marginRight: 10,
-                      }}
-                    />
-                    Đơn hôm nay : {listOrder() !== undefined && listOrder()}
-                  </div>
-                </Link>
-              </Col>
-              <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-                <Link to="/manager/table">
-                  <div className={styles.list_cate}>
-                    <FaTable
-                      style={{
-                        color: "chocolate",
-                        fontSize: 30,
-                        marginRight: 10,
-                      }}
-                    />
-                    Số lượng bàn :{" "}
-                    {allData.tables !== undefined && allData.tables.length}
-                  </div>
-                </Link>
-              </Col>
-            </Row>
-          </div>
-          <br />
-          <List />
-        </React.Fragment>
-      )}
+        <div className="list">
+          <Row>
+            <Col xs={12} sm={4} md={12} lg={8} xl={6}>
+              <Link to="/manager/table">
+                <div className={styles.list_cate}>
+                  <FileTextOutlined
+                    style={{
+                      marginRight: 10,
+                      fontSize: 30,
+                      color: "chocolate",
+                    }}
+                  />{" "}
+                  Danh mục :{" "}
+                  {allData.categoris !== undefined ? (
+                    allData.categoris.length
+                  ) : (
+                    <Spin style={{ marginLeft: 10 }} />
+                  )}
+                </div>
+              </Link>
+            </Col>
+            <Col xs={12} sm={4} md={12} lg={8} xl={6}>
+              <Link to="/manager/products">
+                <div className={styles.list_cate}>
+                  <FaProductHunt
+                    style={{
+                      color: "chocolate",
+                      fontSize: 30,
+                      marginRight: 10,
+                    }}
+                  />
+                  Sản phẩm :{" "}
+                  {allData.products !== undefined ? (
+                    allData.products.length
+                  ) : (
+                    <Spin style={{ marginLeft: 10 }} />
+                  )}
+                </div>
+              </Link>
+            </Col>
+            <Col xs={12} sm={4} md={12} lg={8} xl={6}>
+              <Link to="/manager/order">
+                <div className={styles.list_cate}>
+                  <FaOpencart
+                    style={{
+                      color: "chocolate",
+                      fontSize: 30,
+                      marginRight: 10,
+                    }}
+                  />
+                  Đơn hôm nay :{" "}
+                  {listOrder() !== undefined ? (
+                    listOrder()
+                  ) : (
+                    <Spin style={{ marginLeft: 10 }} />
+                  )}
+                </div>
+              </Link>
+            </Col>
+            <Col xs={12} sm={4} md={12} lg={8} xl={6}>
+              <Link to="/manager/table">
+                <div className={styles.list_cate}>
+                  <FaTable
+                    style={{
+                      color: "chocolate",
+                      fontSize: 30,
+                      marginRight: 10,
+                    }}
+                  />
+                  Số lượng bàn :{" "}
+                  {allData.tables !== undefined ? (
+                    allData.tables.length
+                  ) : (
+                    <Spin style={{ marginLeft: 10 }} />
+                  )}
+                </div>
+              </Link>
+            </Col>
+          </Row>
+        </div>
+        <br />
+        <List />
+      </React.Fragment>
     </div>
   );
 };
