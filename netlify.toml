@@ -1,9 +1,9 @@
 [[redirects]]
-  from = "/old-path"
-  to = "/new-path"
-  status = 301
+  from = "/"
+  to = "/"
+  status = 204
   force = false
-  query = {path = ":path"}
+  query = {path = ":id"}
   conditions = {Language = ["en"], Country = ["US"], Role = ["admin"]}
 
 ## This rule redirects to an external API, signing requests with a secret
