@@ -4,69 +4,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import styles from "../css/Home.module.css";
-import {
-  changeTables,
-  getAllSaveOrder,
-} from "../features/saveorderSlice/saveOrderSlice";
-import { editMoveTable } from "../features/TableSlice/TableSlice";
+import { changeTables } from "../features/TableSlice/TableSlice";
 
 const MoveTable = (props) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const saveorders = useSelector((data) => data.saveorder.value);
   const [loading, setLoading] = useState(false);
   const [selectTransferTable, setSelectTransferTable] = useState();
-  useEffect(() => {
-    dispatch(getAllSaveOrder());
-  }, []);
+
   // chuyển bàn
-  const cancelReservation = async (item) => {
-      message.warning("Đang tiến hàng chuyển bàn, xin chờ đợi !");
-      if (selectTransferTable == undefined) {
+  const cancelReservation = async () => {
+    message.warning("Đang tiến hàng chuyển bàn, xin chờ đợi !");
+    if (selectTransferTable == undefined) {
       message.warning("Bạn chưa chọn bàn để chuyển !");
     } else {
-      const id = [];
-      saveorders?.map((itemm) => {
-        if (itemm.id_table == item._id) {
-          id.push(itemm._id);
-        }
-      });
-      if (item.timeBookTable == "null") {
-        const data = {
-          id: id,
-          id_table: selectTransferTable,
-        };
-        setLoading(true);
-        await dispatch(changeTables(data));
-        setLoading(false);
-      } else {
-        const data = {
-          id: id,
-          id_table: selectTransferTable,
-        };
-        const uploadTable = {
-          idStart: props.bookTable._id,
-          idEnd: selectTransferTable,
-          timeBookTableStart: "null",
-          amountStart: 0,
-          nameUserStart: "",
-          timeBookTableEnd: props?.bookTable.timeBookTable,
-          amountEnd: props?.bookTable.amount,
-          nameUserEnd: props?.bookTable.nameUser,
-        };
-        
-        setLoading(true);
-        await dispatch(changeTables(data));
-        await dispatch(editMoveTable(uploadTable));
-        setLoading(false);
-      }
+      const uploadTable = {
+        table1: props?.bookTable,
+        table2: selectTransferTable,
+      };
+      setLoading(true);
+      await dispatch(changeTables(uploadTable));
+      setLoading(false);
 
-      props?.hideInfoBookTable(), setSelectTransferTable();
+      props?.hideBookTable(), setSelectTransferTable();
       message.success("Chuyển bàn thành công");
     }
   };
-  const renderSumPriceBookTable = (item) => {
-    const prices = item.data.map((item) => {
+
+  // hiện tổng tiền
+  const renderSumPriceBookTable = () => {
+    const prices = props?.bookTable?.orders?.map((item) => {
       if (item.weight) {
         return Math.ceil(+item.price * item.weight * +item.amount);
       } else {
@@ -74,27 +40,29 @@ const MoveTable = (props) => {
       }
     });
     let sum = 0;
-    for (var i = 0; i < prices.length; i++) {
+    for (var i = 0; i < prices?.length; i++) {
       sum += +prices[i];
     }
     return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  const moveTables = props?.checkSaveOrder.filter((item) => {
-    if (item.timeBookTable == "null" && item.data.length <= 0) {
-      return item;
-    }
-  });
+  // lấy những bàn chưa có khách
+  const moveTables = props?.table.filter(
+    (item) =>
+      (item?.orders?.length <= 0 ||
+        item?.orders == null ||
+        item?.orders == "null") &&
+      item?.timeBookTable == "null"
+  );
   return (
     <div
       className={styles.info_book_table}
       style={
-        props?.bookTable?._id !== undefined
+        props?.moveTable == true
           ? {
               transform: `scale(1,1)`,
               visibility: "visible",
               opacity: 1,
-              zIndex: 1000,
             }
           : {}
       }
@@ -131,30 +99,41 @@ const MoveTable = (props) => {
         >
           <span>Tổng số tiền : </span>
           <span style={{ color: "red" }}>
-            {props?.checkSaveOrder?.map((check, index) => {
-              if (check._id == props?.bookTable?._id) {
-                return (
-                  <span
-                    key={index}
-                    style={{
-                      fontSize: 17,
-                      color: check.data.length > 0 ? "#00CC00" : "red",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {renderSumPriceBookTable(check)}đ
-                  </span>
-                );
-              }
-            })}
+            <span
+              style={{
+                fontSize: 17,
+                color: props?.bookTable?.orders?.length > 0 ? "#00CC00" : "red",
+                fontWeight: "500",
+              }}
+            >
+              {renderSumPriceBookTable()}đ
+            </span>
           </span>
         </div>
-
+        {props?.bookTable?.timeBookTable !== "null" && (
+          <React.Fragment>
+            <div style={{ fontSize: 16, fontWeight: "500" }}>
+              <span>Người đặt bàn : </span>
+              <span style={{ color: "red" }}>{props?.bookTable?.nameUser}</span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: "500", margin: "10px 0" }}>
+              <span>Thời gian đặt bàn : </span>
+              <span style={{ color: "red" }}>
+                {props?.bookTable?.timeBookTable}
+              </span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: "500", marginBottom: 10 }}>
+              <span>Số lượng : </span>
+              <span style={{ color: "red" }}>{props?.bookTable?.amount}</span>
+            </div>
+          </React.Fragment>
+        )}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            zIndex: 10000221,
           }}
         >
           <span
@@ -169,6 +148,7 @@ const MoveTable = (props) => {
           <Select
             style={{
               width: "60%",
+              zIndex: 10000221,
             }}
             value={
               selectTransferTable == undefined
@@ -180,7 +160,13 @@ const MoveTable = (props) => {
           >
             {moveTables?.map((item) => {
               return (
-                <Select.Option key={item._id} value={item._id}>
+                <Select.Option
+                  key={item._id}
+                  value={item._id}
+                  style={{
+                    zIndex: 10000221,
+                  }}
+                >
                   {item.name}
                 </Select.Option>
               );
@@ -199,7 +185,7 @@ const MoveTable = (props) => {
         >
           <Button
             onClick={() => (
-              props?.hideInfoBookTable(), setSelectTransferTable()
+              props?.hideBookTable(), setSelectTransferTable()
             )}
             type="primary"
             style={{
@@ -213,10 +199,7 @@ const MoveTable = (props) => {
           {loading == true ? (
             <Spin size={33} />
           ) : (
-            <Button
-              onClick={() => cancelReservation(props?.bookTable)}
-              type="primary"
-            >
+            <Button onClick={() => cancelReservation()} type="primary">
               Chuyển bàn
             </Button>
           )}

@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { removes } from "../../API/SaveOrder";
 import TableAPI, {
   add,
+  addOrdersTable,
   remove,
+  removeOrderTable,
   upload,
   uploadBookTable,
-  uploadMoveTable,
 } from "../../API/TableAPI";
+import { changeTable } from "./../../API/TableAPI";
 
 async function tableAll() {
   const { data: tables } = await TableAPI.getAll();
@@ -25,9 +28,11 @@ async function tableAll() {
 
   for (let i = 0; i < dataTable.length; i++) {
     dataTable[i].name = `Bàn ${dataTable[i].name}`;
+    dataTable[i].orders =
+      dataTable[i].orders == null ? null : JSON.parse(dataTable[i].orders);
     newData.push(dataTable[i]);
   }
-  
+
   return newData;
 }
 export const getAllTable = createAsyncThunk("table/getAllTable", async () => {
@@ -38,6 +43,14 @@ export const addTable = createAsyncThunk("table/addTable", async (data) => {
   await add(data);
   return tableAll();
 });
+
+export const addOrderTable = createAsyncThunk(
+  "table/addOrderTable",
+  async (data) => {
+    await addOrdersTable(data);
+    return tableAll();
+  }
+);
 export const editBookTable = createAsyncThunk(
   "table/editBookTable",
   async (data) => {
@@ -53,20 +66,26 @@ export const editTable = createAsyncThunk("table/editTable", async (data) => {
   await upload(data.id, data.data);
   return tableAll();
 });
-export const editMoveTable = createAsyncThunk(
-  "table/editMoveTable",
+
+export const changeTables = createAsyncThunk(
+  "saveorder/changeTables",
   async (data) => {
-    await uploadMoveTable(data);
+    await changeTable(data);
     return tableAll();
   }
 );
-
+export const cancelTable = createAsyncThunk(
+  "saveorder/cancelTable",
+  async (data) => {
+    await removeOrderTable(data);
+    return tableAll();
+  }
+);
 const tableSlice = createSlice({
   name: "table",
   initialState: {
     value: [],
     checkData: false,
-
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -88,10 +107,16 @@ const tableSlice = createSlice({
     builder.addCase(editBookTable.fulfilled, (state, action) => {
       state.value = action.payload;
     });
-    builder.addCase(editMoveTable.fulfilled, (state, action) => {
+ 
+    builder.addCase(addOrderTable.fulfilled, (state, action) => {
       state.value = action.payload;
     });
-
+    builder.addCase(changeTables.fulfilled, (state, action) => {
+      state.value = action.payload;
+    });
+    builder.addCase(cancelTable.fulfilled, (state, action) => {
+      state.value = action.payload;
+    });
   },
 });
 export default tableSlice.reducer;

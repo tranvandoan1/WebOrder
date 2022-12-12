@@ -5,7 +5,6 @@ import SaveorderAPI, {
   remove,
   updateFind,
   removes,
-  changeTable,
 } from "../../API/SaveOrder";
 async function getAll() {
   const { data: saveorders } = await SaveorderAPI.getAll();
@@ -60,14 +59,7 @@ export const removeSaveOrderAll = createAsyncThunk(
     return getAll();
   }
 );
-export const changeTables = createAsyncThunk(
-  "saveorder/changeTables",
-  async (data) => {
-    await changeTable(data);
 
-    return getAll();
-  }
-);
 const saveOrderSlice = createSlice({
   name: "table",
   initialState: {
@@ -97,9 +89,7 @@ const saveOrderSlice = createSlice({
     builder.addCase(uploadSaveOrderFind.fulfilled, (state, action) => {
       state.value = action.payload;
     });
-    builder.addCase(changeTables.fulfilled, (state, action) => {
-      state.value = action.payload;
-    });
+  
   },
 });
 export default saveOrderSlice.reducer;

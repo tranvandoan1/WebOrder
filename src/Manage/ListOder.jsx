@@ -26,11 +26,16 @@ const ListOder = () => {
     }
   };
   return (
-    <div style={{ height: "100vh", background: "#fff", overflow: "hidden" }}>
-      <div
-        className="srcoll"
-        style={{ position: "relative", overflow: "hidden" }}
-      >
+    <div
+      style={{
+        height: "100vh",
+        background: "#fff",
+        overflow: "scroll",
+        flex: 1,
+      }}
+      className="unScroll"
+    >
+      <div>
         <h4>Hóa đơn</h4>
         <hr style={{ background: "rgba(0,0,0,.3)" }} />
         {orders?.length > 0 ? (
@@ -152,17 +157,15 @@ const ListOder = () => {
                             style={{ fontWeight: "400", fontSize: 16 }}
                           >
                             <Descriptions.Item label="Sản phẩm">
-                              {itemDetail.name_pro} (
+                              {itemDetail.name} (
                               <span style={{ color: "red", fontWeight: "600" }}>
                                 x{itemDetail.amount}
                               </span>
-                              ) :
-                              {itemDetail.price
-                                .toString()
+                              ) :{Number(itemDetail?.price).toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                              {itemDetail.weight ? "VND/KG" : "VND"}
+                              {itemDetail?.weight ? "VND/KG" : "VND"}
                               <br />
-                              {itemDetail.weight > 1 && (
+                              {itemDetail?.weight > 1 && (
                                 <>Cân nặng : {itemDetail.weight} KG</>
                               )}
                             </Descriptions.Item>

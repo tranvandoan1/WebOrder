@@ -12,31 +12,25 @@ import {
   message,
   Spin,
 } from "antd";
-import {
-  removeSaveOrder,
-  getAllSaveOrder,
-  uploadSaveOrderFind,
-  removeSaveOrderAll,
-} from "../features/saveorderSlice/saveOrderSlice";
 import { getProduct } from "../features/ProductsSlice/ProductSlice";
 import { getCategori } from "../features/Categoris/CategoriSlice";
 import "../css/Order.css";
 import { openNotificationWithIcon } from "../Notification";
 import moment from "moment";
-import { editBookTable } from "../features/TableSlice/TableSlice";
+import {
+  addOrderTable,
+} from "../features/TableSlice/TableSlice";
 import { getAllTable } from "./../features/TableSlice/TableSlice";
 import { addOrder } from "../features/Order/Order";
+import { removeOrderTable } from "../API/TableAPI";
 const SelectedProduct = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const { name, id } = useParams();
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
-  const saveorders = useSelector((data) => data.saveorder.value);
   const tables = useSelector((data) => data.table.value);
   const tableFind = tables?.find((item) => item._id == id);
-  const saveOrdersFind = saveorders?.filter((item) => item.id_table == id);
-
   const [value, setValue] = useState(0);
   const [valueSale, setValueSale] = useState(0);
   const [valueAmount, setValueAmount] = useState({
@@ -49,14 +43,13 @@ const SelectedProduct = (props) => {
 
   // call dữ liệu
   useEffect(() => {
-    dispatch(getAllSaveOrder());
     dispatch(getProduct());
     dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
 
   // tính tổng tiền
-  const prices = saveOrdersFind?.map((item) => {
+  const prices = tableFind?.orders?.map((item) => {
     if (item.weight) {
       return Math.ceil(+item.price * item.weight * +item.amount);
     } else {
@@ -64,12 +57,12 @@ const SelectedProduct = (props) => {
     }
   });
   let sum = 0;
-  for (var i = 0; i < prices.length; i++) {
+  for (var i = 0; i < prices?.length; i++) {
     sum += +prices[i];
   }
 
   const showModal = () => {
-    saveOrdersFind?.length >= 1
+    tableFind?.orders?.length >= 1
       ? setIsModalVisible(true)
       : message.warning("Bạn chưa chọn món");
   };
@@ -82,39 +75,52 @@ const SelectedProduct = (props) => {
 
   //tăng giảm số lượng
   const quantityChange = async (item) => {
-    const upSaveOrder = {
-      amount:
-        item.check == "reduce"
-          ? +item.item.amount - +1
-          : +item.item.amount + +1,
-    };
-    if (item.item.amount >= 2) {
-      setLoading(true);
+    const newData = [];
+    const handle = async () => {
+      tableFind?.orders?.map((itemOrder) => {
+        if (itemOrder.id == item.item.id) {
+          newData.push({
+            ...itemOrder,
+            amount:
+              item.check == "reduce"
+                ? +item.item.amount - +1
+                : +item.item.amount + +1,
+          });
+        } else {
+          newData.push(itemOrder);
+        }
+      });
       await dispatch(
-        uploadSaveOrderFind({ id: item.item._id, data: upSaveOrder })
+        addOrderTable({
+          data: newData,
+          id_table: id,
+        })
       );
-      setLoading(false);
-    } else if (item.item.amount <= 1) {
+    };
+    if (item.item.amount == 1) {
       if (item.check == "reduce") {
-        setLoading(true);
-        await dispatch(removeSaveOrder(item.item._id));
-        setLoading(false);
-      } else {
-        setLoading(true);
-        await dispatch(
-          uploadSaveOrderFind({ id: item.item._id, data: upSaveOrder })
+        const newDataOrder = tableFind?.orders.filter(
+          (itemOrder) => itemOrder.id !== item.item.id
         );
-        setLoading(false);
+        await dispatch(
+          addOrderTable({
+            data: newDataOrder,
+            id_table: id,
+          })
+        );
+      } else {
+        handle();
       }
+    } else {
+      handle();
     }
   };
 
   //thanh toán
-  const date = new Date(saveOrdersFind[0]?.createdAt);
 
   const comfirm = async () => {
     const order = [];
-    saveOrdersFind.map((item) =>
+    tableFind?.orders?.map((item) =>
       order.push({
         _id: item.id_pro,
         name_pro: item.name,
@@ -130,7 +136,7 @@ const SelectedProduct = (props) => {
           ? "Admin"
           : customerName,
       user_id: user._id,
-      orders: order,
+      orders: tableFind?.orders,
       bookTable: {
         nameUser: tableFind?.nameUser,
         timeBookTable: tableFind?.timeBookTable,
@@ -140,15 +146,7 @@ const SelectedProduct = (props) => {
       sale: value == undefined ? 0 : Number(value),
       sumPrice: sum,
       table_id: id,
-      start_time: `${
-        String(date.getHours()).length == 1
-          ? `0${date.getHours()}`
-          : date.getHours()
-      }:${
-        String(date.getMinutes()).length == 1
-          ? `0${date.getMinutes()}`
-          : date.getMinutes()
-      }`,
+      start_time: tableFind?.time_start,
       end_time: `${
         String(moment().hours()).length == 1
           ? `0${moment().hours()}`
@@ -159,22 +157,9 @@ const SelectedProduct = (props) => {
           : moment().minutes()
       }`,
     };
-    const idDelete = [];
-    saveOrdersFind.map((item) => idDelete.push(item._id));
     setLoading(true);
     await dispatch(addOrder(data));
-    await dispatch(removeSaveOrderAll(idDelete));
-    if (tableFind?.timeBookTable !== "null") {
-      await dispatch(
-        editBookTable({
-          id: id,
-          nameUser: "",
-          timeBookTable: "null",
-          amount: 0,
-          phone: "null",
-        })
-      );
-    }
+    await removeOrderTable({ id: id });
     setSuccess(true);
     setIsModalVisible(false);
     setLoading(false);
@@ -235,36 +220,57 @@ const SelectedProduct = (props) => {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
   ];
+  // thay đổi số lượng từ ô input
   const changeAmountInput = async (item) => {
+    setLoading(true);
     if (isNaN(valueAmount?.amount) == false) {
       if (valueAmount?.amount == 0 || String(valueAmount?.amount).length <= 0) {
-        setLoading(true);
-        await dispatch(removeSaveOrder(item._id));
-        setLoading(false);
-      } else {
-        const upSaveOrder = {
-          amount:
-            valueAmount?.amount == undefined
-              ? item.amount
-              : valueAmount?.amount,
-        };
-        setLoading(true);
-        await dispatch(
-          uploadSaveOrderFind({ id: item._id, data: upSaveOrder })
+        const newDataOrder = tableFind?.orders.filter(
+          (itemOrder) => itemOrder.id !== item.id
         );
-        setLoading(false);
+        await dispatch(
+          addOrderTable({
+            data: newDataOrder,
+            id_table: id,
+          })
+        );
+      } else {
+        const newData = [];
+        tableFind?.orders?.map((itemOrder) => {
+          if (itemOrder.id == item.id) {
+            newData.push({
+              ...itemOrder,
+              amount: Number(
+                valueAmount?.amount == undefined
+                  ? item.amount
+                  : valueAmount?.amount
+              ),
+            });
+          } else {
+            newData.push(itemOrder);
+          }
+        });
+        await dispatch(
+          addOrderTable({
+            data: newData,
+            id_table: id,
+          })
+        );
       }
-      setValueAmount();
     } else {
-      message.warning("Hãy nhập số !");
-      setValueAmount();
+      if (valueAmount?.amount !== undefined) {
+        message.warning("Hãy nhập số !");
+        setValueAmount();
+      }
     }
+    setValueAmount();
+    setLoading(false);
   };
   return (
     <div>
       <div className="order">
         <div className="order_pro">Sản phẩm đã chọn</div>
-        {saveOrdersFind.length <= 0 ? (
+        {tableFind?.orders?.length <= 0 || tableFind?.orders == null ? (
           <div
             style={{
               display: "flex",
@@ -279,24 +285,42 @@ const SelectedProduct = (props) => {
           </div>
         ) : (
           <React.Fragment>
-            <div className="box-order">
-              {saveOrdersFind?.map((item, index) => {
+            <div
+              className="box-order"
+              style={{ overflowX: "scroll", height: "60%" }}
+            >
+              {tableFind?.orders?.map((item, index) => {
                 return (
                   <Row key={index} className="row-order">
-                    <Col xs={4} sm={2} md={12} lg={3} xl={3}>
+                    <Col
+                      xs={0}
+                      sm={0}
+                      md={props?.isModalOpen == true ? 0 : 3}
+                      lg={3}
+                      xl={3}
+                    >
                       <span className="stt">{index + 1}</span>
                     </Col>
-                    <Col xs={4} sm={18} md={12} lg={13} xl={13}>
+                    <Col
+                      xs={4}
+                      sm={18}
+                      md={props?.isModalOpen == true ? 12 : 13}
+                      lg={props?.isModalOpen == true ? 3 : 12}
+                      xl={13}
+                    >
                       <span className="name_ode">{item.name}</span>
-                      <span>{item.weight && item.weight + "kg"}</span>
+                      {item.weight > 0 && (
+                        <span>{item.weight && item.weight + "kg"}</span>
+                      )}
                     </Col>
-                    <Col xs={12} sm={4} md={12} lg={8} xl={8}>
+                    <Col
+                      xs={12}
+                      sm={4}
+                      md={props?.isModalOpen == true ? 9 : 8}
+                      lg={8}
+                      xl={8}
+                    >
                       <span className="quantity buttons_added">
-                        {/* <input
-                          type="button"
-                          value="-"
-                          className="minus button is-form"
-                        /> */}
                         <Button
                           style={{
                             background: "rgb(211, 211, 211)",
@@ -316,17 +340,17 @@ const SelectedProduct = (props) => {
                           value={
                             valueAmount?.amount == undefined
                               ? item.amount
-                              : item._id == valueAmount?.id
+                              : item.id == valueAmount?.id
                               ? valueAmount?.amount
                               : item.amount
                           }
                           style={{ textAlign: "center" }}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setValueAmount({
-                              id: item._id,
+                              id: item.id,
                               amount: e.target.value,
-                            })
-                          }
+                            });
+                          }}
                           onBlur={() => changeAmountInput(item)}
                         />
                         <Button
@@ -420,7 +444,7 @@ const SelectedProduct = (props) => {
                 visible={isModalVisible}
                 onCancel={handleCancel}
               >
-                <div className="row">
+                <div className="row payment_confirmation">
                   <div className="col-4">
                     <div className="jidrr">
                       <div className="buyer_information">
@@ -447,12 +471,12 @@ const SelectedProduct = (props) => {
                   <div className="col-8">
                     <div className="tablee_xn">
                       <div className="information">sản phẩm đã thêm</div>
-                      {saveOrdersFind.length < 8 ? (
+                      {tableFind?.orders?.length < 8 ? (
                         <Table
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={saveOrdersFind}
+                          dataSource={tableFind?.orders}
                           pagination={false}
                           rowKey={(item) => item._id}
                         />
@@ -461,7 +485,7 @@ const SelectedProduct = (props) => {
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={saveOrdersFind}
+                          dataSource={tableFind?.orders}
                           pagination={false}
                           scroll={{ y: 300 }}
                           rowKey={(item) => item._id}

@@ -4,9 +4,8 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: 100;
+  z-index: 20;
   box-shadow: 0 0 5px rgb(188, 188, 188);
-  height: auto !important;
 }
 .name {
   color: black;

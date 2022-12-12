@@ -27,12 +27,30 @@
 .list_pro {
   position: relative;
 }
+.list_pro:hover .img > img {
+  /* transform: scale(2, 2);
+  transition: 1s ease-in initial; */
+  animation: intro1 1s ease-in infinite;
+
+}
+@keyframes intro1 {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.2, 1.2);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
 
 .img {
   width: 100%;
   height: 200px;
   position: relative;
   overflow: hidden;
+  transition: 0.3s initial ease-in;
 }
 
 .img > img {
@@ -290,7 +308,7 @@ tbody > tr > td {
 .discount {
   position: absolute;
   bottom: 20px;
-  height: 150px;
+  height: 25%;
   width: 100%;
   background-color: #fff;
 }
@@ -319,7 +337,6 @@ form > input:focus {
 .image-intro {
   animation: intro 2s ease-in infinite;
   display: block !important;
-  
 }
 @keyframes intro {
   0% {
@@ -378,7 +395,6 @@ form > input:focus {
   height: 100%;
   border-radius: 3;
   opacity: 0;
-
 }
 .image-intro2 {
   animation: intro2 3s ease-in infinite;
@@ -408,7 +424,6 @@ form > input:focus {
   transform: scale(1, 1) translate(0%);
   transition: 1s ease-in;
   opacity: 1;
-
 }
 .intro3 {
   transition: 1s ease-in;
@@ -422,7 +437,6 @@ form > input:focus {
   height: 100%;
   border-radius: 3;
   opacity: 0;
-
 }
 .image-intro3 {
   animation: intro3 2s ease-in infinite;
@@ -456,12 +470,10 @@ form > input:focus {
   height: 100%;
   border-radius: 3;
   opacity: 0;
-
 }
 .image-intro4 {
   animation: intro4 2s ease-in infinite;
   display: block !important;
-  
 }
 .intro-active4 {
   transform: scale(1, 1) translate(0%);
@@ -482,10 +494,10 @@ form > input:focus {
 .content {
   font-family: "Poppins", sans-serif;
 }
-.intro-hello{
+.intro-hello {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width:100%;
+  width: 100%;
 }
