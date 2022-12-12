@@ -23,8 +23,11 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import ListTable from "./ListTable";
-import { getAllTable } from "../features/TableSlice/TableSlice";
-import { getAllSaveOrder } from "../features/saveorderSlice/saveOrderSlice";
+import { cancelTable, getAllTable } from "../features/TableSlice/TableSlice";
+import {
+  getAllSaveOrder,
+  removeSaveOrderAll,
+} from "../features/saveorderSlice/saveOrderSlice";
 import { editBookTable } from "../features/TableSlice/TableSlice";
 import { Size } from "../size";
 import { uploadLogin } from "../API/Users";
@@ -43,6 +46,9 @@ const LayoutWeb = () => {
   const [loading, setLoading] = useState(false);
   const [statusTable, setStatusTable] = useState();
   const [checkResponsive, setCheckResponsive] = useState(false);
+  const [bookTable, setBookTable] = useState();
+  const [showMenu, setShowMenu] = useState(false); //hiện menu khi bàn có khách hoặc bàn đặt
+  const [moveTable, setMoveTable] = useState(false); //hiện chuyển bàn
   const tables = useSelector((data) => data.table.value);
   const saveorders = useSelector((data) => data.saveorder.value);
   const [form] = Form.useForm();
@@ -243,10 +249,21 @@ const LayoutWeb = () => {
       </Dropdown>
     </div>
   );
+  // hủy bàn
+  const onclickCancelTable = async () => {
+    if (confirm("Bạn có muốn hủy bàn này không ?")) {
+      message.warning("Đang tiến hàng chuyển bàn, xin chờ đợi !");
 
+      await dispatch(cancelTable({ id: bookTable._id }));
+      setShowMenu(false); //hiện menu chuyển bàn, xóa bàn, order
+      setMoveTable(false);
+      setBookTable(); //bàn chọn
+      message.success("Chuyển bàn thành công");
+    }
+  };
   return (
     <div
-      style={{ backgroundColor: "rgb(243, 243, 243)" }}
+      style={{ backgroundColor: "rgb(243, 243, 243)", position: "relative" }}
       className={styles.main}
     >
       <Layout>
@@ -254,10 +271,14 @@ const LayoutWeb = () => {
           <Header className={styles.header}>
             <div
               style={{
-                padding: "0 20px",
+                padding: "10px 20px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                height:'100%',
+                boxShadow:'0 0 15px rgb(188, 188, 188)',
+                borderBottom:'1px solid rgb(235, 235, 235)',
+                zIndex:10
               }}
             >
               <div
@@ -299,7 +320,20 @@ const LayoutWeb = () => {
             </div>
           </Header>
           <Content className={styles.content}>
-            <ListTable statusTable={statusTable} />
+            <ListTable
+              statusTable={statusTable}
+              callBack={(e) => {
+                setShowMenu(true), setBookTable(e);
+              }}
+              bookTable={bookTable}
+              moveTable={moveTable}
+              showMenu={showMenu}
+              hideBookTable={() => {
+                setShowMenu(false); //hiện menu chuyển bàn, xóa bàn, order
+                setMoveTable(false);
+                setBookTable(); //bàn chọn
+              }}
+            />
           </Content>
         </Layout>
       </Layout>
@@ -556,6 +590,144 @@ const LayoutWeb = () => {
           </div>
         </Drawer>
       </div>
+
+      {/* hiện menu chọn khi bàn có khách */}
+      {showMenu == true && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.6)",
+            zIndex: 100,
+            height: "100%",
+          }}
+          className="box-show-menu"
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                width: 400,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-around",
+                padding: "20px 30px",
+                borderRadius: 5,
+                position: "relative",
+              }}
+            >
+              <CloseCircleOutlined
+                onClick={() => {
+                  setShowMenu(false);
+                  setBookTable(undefined);
+                }}
+                style={{
+                  position: "absolute",
+                  top: -10,
+                  right: -10,
+                  color: "red",
+                  cursor: "pointer",
+                  fontSize: 25,
+                  background: "#fff",
+                  borderRadius: "100%",
+                }}
+              />
+              <div
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  borderBottom: "1px solid rgb(196, 196, 196)",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 22,
+                    color: "black",
+                    fontWeight: "500",
+                  }}
+                >
+                  {bookTable?.name}{' '}
+                  <span style={{ color: "red", fontWeight: "500" }}>
+                    {bookTable?.timeBookTable !== "null" ? "( Bàn đặt )" : ""}
+                  </span>
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  position: "relative",
+                  marginTop: 50,
+                }}
+              >
+                <div
+                  className="select-option"
+                  style={{
+                    boxShadow: "0px 0px 30px 0px rgb(0, 24, 145)",
+                  }}
+                  onClick={() => {
+                    setShowMenu(false);
+                    setMoveTable(true);
+                  }}
+                >
+                  <span
+                    style={{ color: "black", fontSize: 13, fontWeight: 600 }}
+                  >
+                    Chuyển bàn
+                  </span>
+                </div>
+                <div
+                  className="select-option-center"
+                  style={{
+                    margin: "0 30px",
+                    borderRadius: "100%",
+                    boxShadow: "0px 0px 30px 0px red",
+                  }}
+                  onClick={() => onclickCancelTable()}
+                >
+                  <span
+                    style={{ color: "black", fontSize: 16, fontWeight: 600 }}
+                  >
+                    Hủy bàn
+                  </span>
+                </div>
+                <div
+                  className="select-option"
+                  style={{
+                    boxShadow: "0px 0px 30px 0px rgb(204, 255, 0)",
+                  }}
+                  onClick={() =>
+                    navigate(
+                      `/order/table-name=${bookTable.name}&&${bookTable._id}`
+                    )
+                  }
+                >
+                  <span
+                    style={{ color: "black", fontSize: 16, fontWeight: 600 }}
+                  >
+                    Order
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
