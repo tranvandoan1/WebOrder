@@ -88,7 +88,7 @@
     border-radius: 0;
   }
   100% {
-    transform: translateY(-1000px) rotate(720deg);
+    transform: translateY(-1600px) rotate(750deg);
     opacity: 0;
     border-radius: 50%;
   }
@@ -190,4 +190,11 @@
   height: 192px;
   bottom: -192px;
   animation-delay: 43s;
+}
+
+.avavtar-div >.ant-form-item{
+  margin-bottom: 0 !important;
+}
+.back .ant-form-item{
+  margin-bottom: 10px !important;
 }

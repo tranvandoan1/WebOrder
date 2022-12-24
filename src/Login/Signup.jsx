@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Upload, Modal, message, Spin } from "antd";
 import {
   UserOutlined,
@@ -7,13 +7,13 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import "../css/Signin.css";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import UserAPI from "../API/Users";
+import UserAPI, { getUserCheckLogIn } from "../API/Users";
 import styles from "../css/Home.module.css";
 import { Size } from "./../size";
-import { validatePhone } from "../components/Validate";
+import { validateEmail, validatePhone } from "../components/Validate";
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState();
@@ -25,55 +25,66 @@ const Signup = () => {
     setLoading(false);
   };
   const signup = async (values) => {
-    const checkValidate1 = values.email.indexOf("@");
-    const checkValidate2 = values.email.lastIndexOf(".");
     try {
-      if (checkValidate1 < 1 || checkValidate2 < checkValidate1 + 2) {
-        message.warning("Định dạng email chưa đúng !");
-      } else if (validatePhone(values.phone) == false) {
-        message.warning("Số điện thoại chưa đúng !");
-      } else if (isNaN(values.name) == false) {
-        message.warning("Tên khách phải là chữ !");
-      } else {
-        setLoading(true);
-        if (image == undefined) {
-          const user = {
-            email: values.email,
-            avatar:
-              "https://png.pngtree.com/png-vector/20170805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg",
-            name: values.name,
-            phone: values.phone,
-            password: values.password,
-            nameRestaurant: "",
-            avatarRestaurant: "",
-            accountType: 0,
-          };
-          await UserAPI.signup(user);
-          setLoading(false);
-          alert("Đăng ký thành công. Hãy đăng nhập");
-          window.location.href = "/";
+      await getUserCheckLogIn({
+        phone: values.phone,
+        email: values.email,
+      });
+
+      try {
+        if (validateEmail(values.email) == false) {
+          message.warning("Định dạng email chưa đúng !");
+        } else if (validatePhone(values.phone) == false) {
+          message.warning("Số điện thoại chưa đúng !");
+        } else if (isNaN(values.name) == false) {
+          message.warning("Tên khách phải là chữ !");
         } else {
           setLoading(true);
-          const imageRef = ref(storage, `images/${image.file.name}`);
-          uploadBytes(imageRef, image.file).then(() => {
-            getDownloadURL(imageRef).then(async (url) => {
-              const user = {
-                email: values.email,
-                avatar: url,
-                name: values.name,
-                phone: values.phone,
-                password: values.password,
-                nameRestaurant: "",
-                avatarRestaurant: "",
-                accountType: 0,
-              };
-              await UserAPI.signup(user);
-              setLoading(false);
-              alert("Đăng ký thành công. Hãy đăng nhập");
-              window.location.href = "/";
+          if (image == undefined) {
+            const user = {
+              email: values.email,
+              avatar:
+                "https://png.pngtree.com/png-vector/20170805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg",
+              name: values.name,
+              phone: values.phone,
+              password: values.password,
+              nameRestaurant: "",
+              avatarRestaurant: "",
+              accountType: 0,
+              count: 0,
+            };
+            await UserAPI.signup(user);
+            setLoading(false);
+            alert("Đăng ký thành công. Hãy đăng nhập");
+            window.location.href = "/";
+          } else {
+            setLoading(true);
+            const imageRef = ref(storage, `images/${image.file.name}`);
+            uploadBytes(imageRef, image.file).then(() => {
+              getDownloadURL(imageRef).then(async (url) => {
+                const user = {
+                  email: values.email,
+                  avatar: url,
+                  name: values.name,
+                  phone: values.phone,
+                  password: values.password,
+                  nameRestaurant: "",
+                  avatarRestaurant: "",
+                  accountType: 0,
+                  count: 0,
+                };
+                await UserAPI.signup(user);
+                setLoading(false);
+                alert("Đăng ký thành công. Hãy đăng nhập");
+                window.location.href = "/";
+              });
             });
-          });
+          }
         }
+      } catch (error) {
+        const errorLogin = error.response.data.error;
+        message.error(errorLogin);
+        setLoading(false);
       }
     } catch (error) {
       const errorLogin = error.response.data.error;
@@ -99,20 +110,26 @@ const Signup = () => {
         <div
           className="form-signin"
           style={{
-            width: sizes.width < 1024 ? 500 : sizes.width == 1024 ? 500 : 600,
+            width:
+              sizes.width < 1024
+                ? sizes.width < 512
+                  ? sizes.width < 321
+                    ? 300
+                    : 350
+                  : 500
+                : sizes.width == 1024
+                ? 600
+                : 600,
           }}
         >
-          <div
-            className="logo"
-            style={{ textAlign: "center", marginBottom: "20px" }}
-          >
+          <div className="logo" style={{ textAlign: "center" }}>
             <img
               src="https://123design.org/wp-content/uploads/2020/07/LOGOLM0200-Chibi-%C4%90%E1%BB%87-nh%E1%BA%A5t-%C4%91%E1%BA%A7u-b%E1%BA%BFp-nh%C3%AD-Vua-%C4%91%E1%BA%A7u-b%E1%BA%BFp.jpg"
               alt=""
             />
           </div>
           <h3
-            style={{ textAlign: "center", margin: "20px 0", color: "#ee4d2d" }}
+            style={{ textAlign: "center", margin: "10px 0", color: "#ee4d2d" }}
           >
             Đăng ký
           </h3>
@@ -187,7 +204,10 @@ const Signup = () => {
               />
             </Form.Item>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ position: "relative", width: 200 }}>
+              <div
+                style={{ position: "relative", width: 200 }}
+                className="avavtar-div"
+              >
                 <Form.Item label="Avatar">
                   <Upload
                     listType="picture-card"
