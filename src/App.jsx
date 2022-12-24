@@ -52,7 +52,7 @@ function App() {
     String(user?.value.nameRestaurant).length < 0
       ? "WebSite Order"
       : user?.value.nameRestaurant;
-  console.log(tables, "tables");
+  console.log(user?.value.count, "ser?.value.count");
   console.log(String(user.value).length, "user");
   const key = JSON.parse(localStorage.getItem("key"));
   return (
@@ -80,11 +80,11 @@ function App() {
                     ? localStorage.setItem("key", JSON.stringify(["2"]))
                     : null,
                   (<Navigate to="/manager/table" />))
-                ) : (
-                  user?.value.count == 1 &&
+                ) : user?.value.count == 1 &&
                   tables.value.length > 0 &&
-                  tables.checkData == false && <Navigate to="/tables" />
-                )
+                  tables.checkData == false ? (
+                  <LayoutWeb />
+                ) : null
               }
             />
 
