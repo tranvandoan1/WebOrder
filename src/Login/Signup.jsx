@@ -3,69 +3,105 @@ import { Form, Input, Button, Upload, Modal, message, Spin } from "antd";
 import {
   UserOutlined,
   LockOutlined,
-  UploadOutlined,
   PlusCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import "../css/Signin.css";
-import { Link, useNavigate } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import UserAPI from "../API/Users";
 import styles from "../css/Home.module.css";
+import { Size } from "./../size";
+import { validatePhone } from "../components/Validate";
 const Signup = () => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState("");
-
+  const [image, setImage] = useState();
+  const sizes = Size();
   const UploadAvatatr = (file) => {
-    const imageRef = ref(storage, `images/${file.name}`);
-    setLoading(true);
-    uploadBytes(imageRef, file).then(() => {
-      getDownloadURL(imageRef).then(async (url) => {
-        await setImage(url);
-        setLoading(false);
-      });
-    });
+    setLoading(false);
+    const src = URL.createObjectURL(file);
+    setImage({ url: src, file: file });
+    setLoading(false);
   };
   const signup = async (values) => {
-    const isphone =
-      /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
-        values.phone
-      );
     const checkValidate1 = values.email.indexOf("@");
     const checkValidate2 = values.email.lastIndexOf(".");
-
-    if (checkValidate1 < 1 || checkValidate2 < checkValidate1 + 2) {
-      message.warning("Định dạng email chưa đúng !");
-    } else if (isphone == false) {
-      message.warning("Số điện thoại chưa đúng !");
-    } else if (isNaN(values.name) == false) {
-      message.warning("Tên khách phải là chữ !");
-    } else {
-      const user = {
-        email: values.email,
-        avatar:
-          String(image).length <= 0
-            ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
-            : image,
-        name: values.name,
-        phone: values.phone,
-        password: values.password,
-        nameRestaurant: "",
-        avatarRestaurant: "",
-        loginApp: 0,
-        loginWeb: 0,
-      };
-      setLoading(true);
-      await UserAPI.signup(user);
+    try {
+      if (checkValidate1 < 1 || checkValidate2 < checkValidate1 + 2) {
+        message.warning("Định dạng email chưa đúng !");
+      } else if (validatePhone(values.phone) == false) {
+        message.warning("Số điện thoại chưa đúng !");
+      } else if (isNaN(values.name) == false) {
+        message.warning("Tên khách phải là chữ !");
+      } else {
+        setLoading(true);
+        if (image == undefined) {
+          const user = {
+            email: values.email,
+            avatar:
+              "https://png.pngtree.com/png-vector/20170805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg",
+            name: values.name,
+            phone: values.phone,
+            password: values.password,
+            nameRestaurant: "",
+            avatarRestaurant: "",
+            accountType: 0,
+          };
+          await UserAPI.signup(user);
+          setLoading(false);
+          alert("Đăng ký thành công. Hãy đăng nhập");
+          window.location.href = "/";
+        } else {
+          setLoading(true);
+          const imageRef = ref(storage, `images/${image.file.name}`);
+          uploadBytes(imageRef, image.file).then(() => {
+            getDownloadURL(imageRef).then(async (url) => {
+              const user = {
+                email: values.email,
+                avatar: url,
+                name: values.name,
+                phone: values.phone,
+                password: values.password,
+                nameRestaurant: "",
+                avatarRestaurant: "",
+                accountType: 0,
+              };
+              await UserAPI.signup(user);
+              setLoading(false);
+              alert("Đăng ký thành công. Hãy đăng nhập");
+              window.location.href = "/";
+            });
+          });
+        }
+      }
+    } catch (error) {
+      const errorLogin = error.response.data.error;
+      message.error(errorLogin);
       setLoading(false);
-      alert("Đăng ký thành công. Hãy đăng nhập");
-      window.location.href = "/";
     }
   };
   return (
     <div className="backgroundd">
-      <div className="back">
-        <div className="form-signin">
+      <div className="back" style={{ overflow: "scroll" }}>
+        <ul className="background-body">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        <div
+          className="form-signin"
+          style={{
+            width: sizes.width < 1024 ? 500 : sizes.width == 1024 ? 500 : 600,
+          }}
+        >
           <div
             className="logo"
             style={{ textAlign: "center", marginBottom: "20px" }}
@@ -93,6 +129,11 @@ const Signup = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Họ và Tên"
+                style={{
+                  borderRadius: 5,
+                  fontSize:
+                    sizes.width < 1024 ? 12 : sizes.width == 1024 ? 13 : 15,
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -102,6 +143,12 @@ const Signup = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
+                style={{
+                  borderRadius: 5,
+                  fontSize:
+                    sizes.width < 1024 ? 12 : sizes.width == 1024 ? 13 : 15,
+                }}
+                type="email"
               />
             </Form.Item>
 
@@ -115,6 +162,11 @@ const Signup = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                style={{
+                  borderRadius: 5,
+                  fontSize:
+                    sizes.width < 1024 ? 12 : sizes.width == 1024 ? 13 : 15,
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -127,70 +179,112 @@ const Signup = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="phone"
                 placeholder="Số điện thoại"
+                style={{
+                  borderRadius: 5,
+                  fontSize:
+                    sizes.width < 1024 ? 12 : sizes.width == 1024 ? 13 : 15,
+                }}
               />
             </Form.Item>
-            <Form.Item name="avatar" label="Avatar">
-              {/* <label
-                htmlFor="photo"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <UploadOutlined style={{ cursor: "pointer" }} />
-                <img src={image} alt="" />
-              </label>
-              <input
-                type="file"
-                style={{ display: "none" }}
-                id="photo"
-                onClick={() => Upload5()}
-              /> */}
-              <Upload
-                listType="picture-card"
-                showUploadList={false}
-                beforeUpload={UploadAvatatr}
-              >
-                {image ? (
-                  <div className={styles.box_image}>
-                    <img src={image} className="image" />
-                  </div>
-                ) : (
-                  <div>
-                    <div
-                      style={{
-                        marginTop: 8,
-                      }}
-                    >
-                      {loading == true ? (
-                        <Spin />
-                      ) : (
-                        <PlusCircleOutlined
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ position: "relative", width: 200 }}>
+                <Form.Item label="Avatar">
+                  <Upload
+                    listType="picture-card"
+                    showUploadList={false}
+                    beforeUpload={UploadAvatatr}
+                  >
+                    {image ? (
+                      <div className={styles.box_image}>
+                        <img src={image.url} className="image" />
+                      </div>
+                    ) : (
+                      <div>
+                        <div
                           style={{
-                            fontSize: 30,
-                            opacity: 0.3,
-                            color: "blue",
+                            marginTop: 8,
                           }}
-                        />
-                      )}
-                    </div>
-                  </div>
+                        >
+                          {loading == true ? (
+                            <Spin />
+                          ) : (
+                            <PlusCircleOutlined
+                              style={{
+                                fontSize: 30,
+                                opacity: 0.3,
+                                color: "blue",
+                              }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </Upload>
+                </Form.Item>
+                {image !== undefined && (
+                  <CloseCircleOutlined
+                    onClick={() => setImage()}
+                    style={{
+                      fontSize: 15,
+                      position: "absolute",
+                      color: "red",
+                      top: -10,
+                      right: -25,
+                      zIndex: 1000,
+                    }}
+                  />
                 )}
-              </Upload>
-            </Form.Item>
-            {loading == true ? (
-              <Spin />
-            ) : (
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="login-form-button"
-                >
-                  Đăng ký
-                </Button>
-                <Link style={{ marginLeft: "10px" }} to="/signin">
-                  Đăng nhập
-                </Link>
-              </Form.Item>
-            )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                  width: "100%",
+                  flexDirection: "column",
+                  height: "100%",
+                  marginTop: 55,
+                }}
+              >
+                {loading == true ? (
+                  <Spin />
+                ) : (
+                  <Form.Item>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <Link
+                        style={{
+                          fontSize: 14,
+                          padding: 5,
+                          margin: 0,
+                        }}
+                        to="/signin"
+                      >
+                        Đăng nhập
+                      </Link>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="login-form-button"
+                        style={{
+                          fontSize: 16,
+                          padding: "5px 5px",
+                          margin: 0,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontWeight: "400",
+                          borderRadius: 4,
+                          height: 30,
+                          width: 100,
+                        }}
+                      >
+                        Đăng ký
+                      </Button>
+                    </div>
+                  </Form.Item>
+                )}
+              </div>
+            </div>
           </Form>
         </div>
       </div>

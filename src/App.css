@@ -40,15 +40,47 @@
 button {
   font-size: calc(10px + 2vmin);
 } */
+body {
+  flex: 1;
+}
 body::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 .loading {
-  background-image: url('https://i.pinimg.com/originals/ca/89/fb/ca89fbce5e5c68f46d5330946c58ddc6.gif');
+  background-image: url("https://i.pinimg.com/originals/ca/89/fb/ca89fbce5e5c68f46d5330946c58ddc6.gif");
   background-repeat: no-repeat;
   background-color: #fff;
   width: 100%;
   height: 100%;
   background-size: calc(100%);
+}
+
+@media (min-width: 1024px) {
+}
+@media (width: 1024px) {
+  .list_pro > .img {
+    height: 170px;
+  }
+}
+@media (min-width: 739px) and (max-width: 1023px) {
+  .list_pro > .img {
+    height: 180px;
+  }
+}
+
+@media (min-width: 539px) and (max-width: 739px) {
+  .list_pro > .img {
+    height: 170px;
+  }
+}
+@media (min-width: 396px) and (max-width: 538px) {
+  .list_pro > .img {
+    height: 170px;
+  }
+}
+@media (max-width: 395px) {
+  .list_pro > .img {
+    height: 150px;
+  }
 }

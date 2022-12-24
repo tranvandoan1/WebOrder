@@ -6,7 +6,7 @@ import styles from "./css/Account.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editLogin,
-  editNameAvatarUser,
+  editInfoUser,
   getUser,
 } from "./features/User/UserSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -19,7 +19,6 @@ const Introduce = () => {
   const [photo, setPhoto] = useState();
   const [value, setValue] = useState();
   const [validate, setValidate] = useState();
-  const tables = useSelector((data) => data.table.value);
   const userLoca = JSON.parse(localStorage.getItem("user"));
 
   const user = useSelector((data) => data.user.value);
@@ -36,7 +35,7 @@ const Introduce = () => {
       check == 0 ||
       check == 1 ||
       (String(user.nameRestaurant).length <= 0 &&
-        String(user.avatarRestaurant).length <= 0 &&
+       ( String(user.avatarRestaurant).length <= 0 ||user.avatarRestaurant==null)&&
         check == 2)
     ) {
       (check == 0
@@ -46,7 +45,7 @@ const Introduce = () => {
         : check == 2
         ? intro3
         : String(user.nameRestaurant).length <= 0 &&
-          String(user.avatarRestaurant).length <= 0
+        ( String(user.avatarRestaurant).length <= 0 ||user.avatarRestaurant==null)
         ? intro4
         : ""
       ).classList.remove(
@@ -112,7 +111,7 @@ const Introduce = () => {
               : photo,
         };
         setLoading(true);
-        await dispatch(editNameAvatarUser(uploadUser));
+        await dispatch(editInfoUser(uploadUser));
         alert("Hãy thiết lập thêm để bắt đầu nhé !");
         setPhoto();
         setValue();

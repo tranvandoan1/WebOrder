@@ -1,12 +1,12 @@
 .products {
   overflow-y: scroll;
-  height: 100vh;
   border-right: 3px solid rgb(238, 238, 238);
   border-left: 1px solid rgb(238, 238, 238);
 }
 
 .products::-webkit-scrollbar {
   width: 0;
+  height: 0;
 }
 
 .products::-webkit-scrollbar-thumb {
@@ -31,7 +31,6 @@
   /* transform: scale(2, 2);
   transition: 1s ease-in initial; */
   animation: intro1 1s ease-in infinite;
-
 }
 @keyframes intro1 {
   0% {
@@ -96,12 +95,6 @@
   cursor: pointer;
 }
 
-.order {
-  overflow-y: scroll;
-  height: 100vh;
-  position: relative;
-}
-
 .order_pro {
   background-color: blue;
   padding: 10px;
@@ -115,12 +108,11 @@
 }
 
 .stt {
-  font-size: 1rem;
-  padding: 0 6px;
-  border-radius: 100%;
+  padding: 0 2px;
   margin-left: 5px;
   background-color: white;
   border: 1px solid rgb(225, 225, 225);
+  font-weight: 600;
 }
 
 .row-order {
@@ -134,7 +126,6 @@
 }
 
 .name_ode {
-  font-size: 1rem;
   text-transform: capitalize;
   font-weight: 500;
   text-overflow: ellipsis;
@@ -149,12 +140,6 @@
 .quantity {
   display: flex;
   align-items: center;
-  margin-right: 10px;
-}
-
-.quantity input {
-  padding-left: 0;
-  padding-right: 0;
 }
 
 .inpkk {
@@ -175,14 +160,11 @@
 /* Tổng tiền */
 
 .sum {
-  font-size: 1.2rem;
   font-weight: 900;
-  padding: 10px;
   text-align: right;
 }
 
 .sum_price {
-  font-size: 1.2rem;
   font-weight: 500;
 }
 
@@ -261,17 +243,13 @@ tbody > tr > td {
   margin: 16px 0 16px 24px;
 }
 
-.group_home {
-  background-color: #fff;
-}
-
 .ant-layout-header {
   padding: 0 0px !important;
 }
 
 .box-table {
   /* border: 1px solid blue; */
-  box-shadow: 0 0 7px rgb(171, 171, 246);
+  box-shadow: 0 0 7px #ababf6;
   border-radius: 10px;
   position: relative;
   overflow: hidden;
@@ -296,28 +274,21 @@ tbody > tr > td {
   margin: 16px;
   background: rgba(255, 255, 255, 0.2);
 }
-
+.site-layout {
+  flex: 1;
+}
 .site-layout .site-layout-background {
   background: #fff;
 }
 
-.order {
-  overflow: hidden;
-}
-
 .discount {
-  position: absolute;
-  bottom: 20px;
-  height: 25%;
+  /* position: absolute; */
+  /* bottom: 20px; */
+  /* height: 170px; */
   width: 100%;
   background-color: #fff;
 }
 
-.payy {
-  position: absolute;
-  bottom: -25px;
-  width: 100%;
-}
 .ant-layout-sider-children {
   background-color: #fff !important;
 }
@@ -500,4 +471,18 @@ form > input:focus {
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+.avatar-border:hover .text-upload {
+  display: block !important;
+  transition: diplay 1s ease-in;
+}
+.show-avatar_upload,.show-user_avatar {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
 }

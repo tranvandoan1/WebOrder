@@ -11,22 +11,58 @@
   bottom: 0;
   width: 100%;
   height: 100%;
+  z-index: 1000;
 }
 .back {
-  background: url(https://leenstory.com/wp-content/uploads/2020/11/hinh-anh-gif-khu-rung-tuyet-roi-dem-trang_053437398.gif);
-  background-size: calc(100%);
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-repeat: no-repeat;
+  animation-name: animationBackgroud;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  -webkit-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+}
+@keyframes animationBackgroud {
+  0% {
+    background-color: rgb(255, 81, 0);
+  }
+  10% {
+    background-color: rgb(89, 255, 0);
+  }
+  40% {
+    background-color: rgb(0, 60, 255);
+  }
+  100% {
+    background-color: rgb(255, 0, 115);
+  }
 }
 .form-signin {
-  width: 500px;
+  width: 600px;
   background-color: #fff;
   padding: 20px;
-  border-radius: 2px;
+  border-radius: 4px;
+  position: relative;
+  backdrop-filter: blur(5px);
+  box-shadow:
+  0px 0.3px 5.5px -22px rgba(140, 255, 0, 0.04),
+  0px 0.7px 13.2px -22px rgba(255, 0, 0, 0.075),
+  0px 1.3px 24.8px -22px rgba(93, 0, 255, 0.103),
+  0px 2.2px 44.2px -22px rgba(0, 0, 0, 0.125),
+  0px 4.2px 82.7px -22px rgba(0, 0, 0, 0.139),
+  0px 10px 198px -22px rgba(0, 0, 0, 0.34)
+;
+
+  z-index: 10;
+}
+
+.ant-form-item-explain-error {
+  margin: 5px 0;
+}
+.ant-form-item-label > label {
+  margin-left: 10px;
 }
 .logo > img {
   width: 30%;
@@ -44,4 +80,114 @@
 
 .upload-list-inline [class*="-upload-list-rtl"] .ant-upload-list-item {
   float: right;
+}
+@keyframes animate {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+    border-radius: 0;
+  }
+  100% {
+    transform: translateY(-1000px) rotate(720deg);
+    opacity: 0;
+    border-radius: 50%;
+  }
+}
+
+.background-body {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+      217deg,
+      rgba(255, 121, 121, 0.5),
+      rgba(231, 255, 96, 0.5) 70.71%
+    ),
+    linear-gradient(127deg, rgba(26, 238, 26, 0.5), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(0, 0, 255, 0.5), rgba(0, 0, 255, 0) 70.71%);
+  overflow: hidden;
+}
+.background-body li {
+  position: absolute;
+  display: block;
+  list-style: none;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: animate 7s linear infinite;
+}
+
+.background-body li:nth-child(0) {
+  left: 47%;
+  width: 156px;
+  height: 156px;
+  bottom: -156px;
+  animation-delay: 1s;
+}
+.background-body li:nth-child(1) {
+  left: 86%;
+  width: 164px;
+  height: 164px;
+  bottom: -164px;
+  animation-delay: 2s;
+}
+.background-body li:nth-child(2) {
+  left: 21%;
+  width: 153px;
+  height: 153px;
+  bottom: -153px;
+  animation-delay: 2s;
+}
+.background-body li:nth-child(3) {
+  left: 14%;
+  width: 140px;
+  height: 140px;
+  bottom: -140px;
+  animation-delay: 12s;
+}
+.background-body li:nth-child(4) {
+  left: 76%;
+  width: 189px;
+  height: 189px;
+  bottom: -189px;
+  animation-delay: 3s;
+}
+.background-body li:nth-child(5) {
+  left: 28%;
+  width: 184px;
+  height: 184px;
+  bottom: -184px;
+  animation-delay: 5s;
+}
+.background-body li:nth-child(6) {
+  left: 25%;
+  width: 160px;
+  height: 160px;
+  bottom: -160px;
+  animation-delay: 26s;
+}
+.background-body li:nth-child(7) {
+  left: 38%;
+  width: 124px;
+  height: 124px;
+  bottom: -124px;
+  animation-delay: 1s;
+}
+.background-body li:nth-child(8) {
+  left: 57%;
+  width: 182px;
+  height: 182px;
+  bottom: -182px;
+  animation-delay: 28s;
+}
+.background-body li:nth-child(9) {
+  left: 1%;
+  width: 192px;
+  height: 192px;
+  bottom: -192px;
+  animation-delay: 43s;
 }

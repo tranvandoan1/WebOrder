@@ -1,26 +1,29 @@
 .menu {
-    font-size: 1.1rem !important;
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    margin-top: 5px;
-    height: 90vh;
-    overflow: auto;
+  font-size: 1.1rem !important;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  margin-top: 5px;
+  height: 90vh;
+  overflow: auto;
 }
 
 .menu::-webkit-scrollbar {
-    height: 0;
-    width: 0;
+  height: 0;
+  width: 0;
 }
 
 .back {
-    bottom: 10px;
-    background-color: rgb(9, 80, 247);
-    padding: 15px;
+  bottom: 10px;
+  background-color: rgb(9, 80, 247);
+  padding: 15px;
 }
-
+.back::-webkit-scrollbar {
+  height: 0 !important;
+  width: 0 !important;
+}
 .back a {
-    color: #fff;
-    display: flex;
-    align-items: center;
+  color: #fff;
+  display: flex;
+  align-items: center;
 }

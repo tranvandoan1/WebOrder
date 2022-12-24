@@ -21,17 +21,19 @@ import {
   LogoutOutlined,
   MenuUnfoldOutlined,
   CloseCircleOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import ListTable from "./ListTable";
-import { cancelTable, getAllTable } from "../features/TableSlice/TableSlice";
 import {
-  getAllSaveOrder,
-  removeSaveOrderAll,
-} from "../features/saveorderSlice/saveOrderSlice";
-import { editBookTable } from "../features/TableSlice/TableSlice";
+  cancelTable,
+  getAllTable,
+  editBookTable,
+} from "../features/TableSlice/TableSlice";
+import { getAllSaveOrder } from "../features/saveorderSlice/saveOrderSlice";
 import { Size } from "../size";
 import { uploadLogin } from "../API/Users";
 import { getUser } from "../features/User/UserSlice";
+import { validatePhone } from './../components/Validate';
 const { Header, Content, Sider } = Layout;
 
 const LayoutWeb = () => {
@@ -49,7 +51,7 @@ const LayoutWeb = () => {
   const [bookTable, setBookTable] = useState();
   const [showMenu, setShowMenu] = useState(false); //hiện menu khi bàn có khách hoặc bàn đặt
   const [moveTable, setMoveTable] = useState(false); //hiện chuyển bàn
-  const tables = useSelector((data) => data.table.value);
+  const tables = useSelector((data) => data.table);
   const saveorders = useSelector((data) => data.saveorder.value);
   const [form] = Form.useForm();
   useEffect(() => {
@@ -58,7 +60,7 @@ const LayoutWeb = () => {
   }, []);
 
   let checkSaveOrder = [];
-  tables?.map((element) => {
+  tables?.value?.map((element) => {
     let arrFilter = saveorders?.filter((e) => {
       return e.id_table === element._id;
     });
@@ -85,11 +87,7 @@ const LayoutWeb = () => {
   };
   // đặt bàn
   const onFinish = async (values) => {
-    const isphone =
-      /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
-        values.phone
-      );
-    if (isphone == false) {
+    if (validatePhone(values.phone) == false) {
       message.warning("Số điện thoại chưa đúng !");
     } else if (Number.isFinite(Number(values.amount)) == false) {
       message.warning("Số lượng phải là số !");
@@ -140,7 +138,7 @@ const LayoutWeb = () => {
           navigate("/manager/statistical"),
           localStorage.setItem(
             "key",
-            JSON.stringify([tables.length <= 0 ? "2" : "1"])
+            JSON.stringify([tables?.value.length <= 0 ? "2" : "1"])
           )
         )}
       >
@@ -263,7 +261,11 @@ const LayoutWeb = () => {
   };
   return (
     <div
-      style={{ backgroundColor: "rgb(243, 243, 243)", position: "relative" }}
+      style={{
+        backgroundColor: "rgb(243, 243, 243)",
+        position: "relative",
+        flex: 1,
+      }}
       className={styles.main}
     >
       <Layout>
@@ -275,10 +277,10 @@ const LayoutWeb = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                height:'100%',
-                boxShadow:'0 0 15px rgb(188, 188, 188)',
-                borderBottom:'1px solid rgb(235, 235, 235)',
-                zIndex:10
+                height: "100%",
+                boxShadow: "0 0 15px rgb(188, 188, 188)",
+                borderBottom: "1px solid rgb(235, 235, 235)",
+                zIndex: 10,
               }}
             >
               <div
@@ -288,7 +290,8 @@ const LayoutWeb = () => {
                 }}
               >
                 {String(user.nameRestaurant).length <= 0 &&
-                String(user.avatarRestaurant).length <= 0 ? (
+                (String(user.avatarRestaurant).length <= 0 ||
+                  user.avatarRestaurant == null) ? (
                   <span
                     style={{ padding: 10, color: "red", fontWeight: "500" }}
                   >
@@ -296,12 +299,18 @@ const LayoutWeb = () => {
                   </span>
                 ) : (
                   <React.Fragment>
-                    <Avatar
-                      src={user?.avatarRestaurant}
-                      style={{ margin: "10px" }}
-                      size={60}
-                      alt=""
-                    />
+                    {String(user.avatarRestaurant).length <= 0 ||
+                    user.avatarRestaurant == null ? (
+                      <Avatar
+                        src={user?.avatarRestaurant}
+                        style={{ margin: "10px" }}
+                        size={60}
+                        alt=""
+                      />
+                    ) : (
+                      <UserOutlined style={{ fontSize: 35, padding: 20 }} />
+                    )}
+
                     <span style={{ fontSize: 20, fontWeight: "500" }}>
                       {user?.nameRestaurant}
                     </span>
@@ -603,6 +612,7 @@ const LayoutWeb = () => {
             background: "rgba(0,0,0,0.6)",
             zIndex: 100,
             height: "100%",
+            flex: 1,
           }}
           className="box-show-menu"
         >
@@ -660,7 +670,7 @@ const LayoutWeb = () => {
                     fontWeight: "500",
                   }}
                 >
-                  {bookTable?.name}{' '}
+                  {bookTable?.name}{" "}
                   <span style={{ color: "red", fontWeight: "500" }}>
                     {bookTable?.timeBookTable !== "null" ? "( Bàn đặt )" : ""}
                   </span>

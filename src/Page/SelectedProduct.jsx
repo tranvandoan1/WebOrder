@@ -17,20 +17,26 @@ import { getCategori } from "../features/Categoris/CategoriSlice";
 import "../css/Order.css";
 import { openNotificationWithIcon } from "../Notification";
 import moment from "moment";
-import {
-  addOrderTable,
-} from "../features/TableSlice/TableSlice";
+import { addOrderTable } from "../features/TableSlice/TableSlice";
 import { getAllTable } from "./../features/TableSlice/TableSlice";
 import { addOrder } from "../features/Order/Order";
 import { removeOrderTable } from "../API/TableAPI";
+import { Size } from "../size";
 const SelectedProduct = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const { name, id } = useParams();
+  const sizes = Size();
+  const { id } = useParams();
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
   const tables = useSelector((data) => data.table.value);
   const tableFind = tables?.find((item) => item._id == id);
+  const dataTable =
+    tableFind?.orders?.length == undefined
+      ? tableFind?.orders == null
+        ? []
+        : [tableFind?.orders]
+      : tableFind?.orders;
   const [value, setValue] = useState(0);
   const [valueSale, setValueSale] = useState(0);
   const [valueAmount, setValueAmount] = useState({
@@ -47,22 +53,21 @@ const SelectedProduct = (props) => {
     dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
-
   // tính tổng tiền
-  const prices = tableFind?.orders?.map((item) => {
-    if (item.weight) {
-      return Math.ceil(+item.price * item.weight * +item.amount);
+  const prices = dataTable?.map((item) => {
+    if (item?.weight) {
+      return Math.ceil(+item?.price * item?.weight * +item?.amount);
     } else {
-      return Math.ceil(+item.price * +item.amount);
+      return Math.ceil(+item?.price * +item?.amount);
     }
   });
   let sum = 0;
-  for (var i = 0; i < prices?.length; i++) {
+  for (let i = 0; i < prices?.length; i++) {
     sum += +prices[i];
   }
 
   const showModal = () => {
-    tableFind?.orders?.length >= 1
+    dataTable?.length >= 1
       ? setIsModalVisible(true)
       : message.warning("Bạn chưa chọn món");
   };
@@ -77,7 +82,7 @@ const SelectedProduct = (props) => {
   const quantityChange = async (item) => {
     const newData = [];
     const handle = async () => {
-      tableFind?.orders?.map((itemOrder) => {
+      dataTable?.map((itemOrder) => {
         if (itemOrder.id == item.item.id) {
           newData.push({
             ...itemOrder,
@@ -99,7 +104,7 @@ const SelectedProduct = (props) => {
     };
     if (item.item.amount == 1) {
       if (item.check == "reduce") {
-        const newDataOrder = tableFind?.orders.filter(
+        const newDataOrder = dataTable.filter(
           (itemOrder) => itemOrder.id !== item.item.id
         );
         await dispatch(
@@ -120,7 +125,7 @@ const SelectedProduct = (props) => {
 
   const comfirm = async () => {
     const order = [];
-    tableFind?.orders?.map((item) =>
+    dataTable?.map((item) =>
       order.push({
         _id: item.id_pro,
         name_pro: item.name,
@@ -136,7 +141,7 @@ const SelectedProduct = (props) => {
           ? "Admin"
           : customerName,
       user_id: user._id,
-      orders: tableFind?.orders,
+      orders: dataTable,
       bookTable: {
         nameUser: tableFind?.nameUser,
         timeBookTable: tableFind?.timeBookTable,
@@ -225,7 +230,7 @@ const SelectedProduct = (props) => {
     setLoading(true);
     if (isNaN(valueAmount?.amount) == false) {
       if (valueAmount?.amount == 0 || String(valueAmount?.amount).length <= 0) {
-        const newDataOrder = tableFind?.orders.filter(
+        const newDataOrder = dataTable.filter(
           (itemOrder) => itemOrder.id !== item.id
         );
         await dispatch(
@@ -236,7 +241,7 @@ const SelectedProduct = (props) => {
         );
       } else {
         const newData = [];
-        tableFind?.orders?.map((itemOrder) => {
+        dataTable?.map((itemOrder) => {
           if (itemOrder.id == item.id) {
             newData.push({
               ...itemOrder,
@@ -266,30 +271,71 @@ const SelectedProduct = (props) => {
     setValueAmount();
     setLoading(false);
   };
+
+  //   const [size, setSize] = useState(() => {
+  //     const proSelect = document.querySelector("#order_pro");
+  //     return { width: proSelect.offsetWidth, height: proSelect.offsetHeight };
+  //   });
+  // console.log(size,'size')
+  //   useEffect(() => {
+  //     window.addEventListener("resize", function () {
+  //       const proSelect = document.querySelector("#order_pro");
+  //       // setSize({ width: proSelect.innerWidth, height: proSelect.innerHeight });
+  //       console.log(
+  //         { width: proSelect.offsetWidth, height: proSelect.offsetHeight },
+  //         "đâsasd"
+  //       );
+  //     });
+  //   }, []);
   return (
-    <div>
-      <div className="order">
-        <div className="order_pro">Sản phẩm đã chọn</div>
-        {tableFind?.orders?.length <= 0 || tableFind?.orders == null ? (
+    <div
+      className="order"
+      style={{
+        height: sizes.height,
+      }}
+    >
+      {sizes.width < 1024 ? (
+        <></>
+      ) : (
+        <div onlay className="order_pro" id="order_pro">
+          Sản phẩm đã chọn
+        </div>
+      )}
+      {dataTable?.length <= 0 || dataTable == null ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <span style={{ fontSize: 20, fontWeight: "500", color: "blue" }}>
+            Hãy thêm món nào{" "}
+          </span>
+        </div>
+      ) : (
+        <React.Fragment>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
               height: "100%",
             }}
           >
-            <span style={{ fontSize: 20, fontWeight: "500", color: "blue" }}>
-              Hãy thêm món nào{" "}
-            </span>
-          </div>
-        ) : (
-          <React.Fragment>
             <div
+              onl
               className="box-order"
-              style={{ overflowX: "scroll", height: "60%" }}
+              style={{
+                overflowX: "scroll",
+                height:
+                  sizes.width < 1024
+                    ? sizes.height - 150
+                    : sizes.width == 1024
+                    ? sizes.height - 203
+                    : sizes.height - 203,
+                position: "relative",
+              }}
             >
-              {tableFind?.orders?.map((item, index) => {
+              {dataTable?.map((item, index) => {
                 return (
                   <Row key={index} className="row-order">
                     <Col
@@ -299,33 +345,92 @@ const SelectedProduct = (props) => {
                       lg={3}
                       xl={3}
                     >
-                      <span className="stt">{index + 1}</span>
+                      <span
+                        className="stt"
+                        style={{
+                          fontSize:
+                            sizes.width < 1024
+                              ? 20
+                              : sizes.width == 1024
+                              ? 11
+                              : 19,
+                        }}
+                      >
+                        {index + 1}
+                      </span>
                     </Col>
                     <Col
-                      xs={4}
+                      xs={16}
                       sm={18}
                       md={props?.isModalOpen == true ? 12 : 13}
-                      lg={props?.isModalOpen == true ? 3 : 12}
+                      lg={
+                        props?.isModalOpen == true
+                          ? sizes.width < 1024
+                            ? 14
+                            : sizes.width == 1024
+                            ? 14
+                            : 14
+                          : sizes.width < 1024
+                          ? 14
+                          : sizes.width == 1024
+                          ? 14
+                          : 14
+                      }
                       xl={13}
                     >
-                      <span className="name_ode">{item.name}</span>
+                      <span
+                        className="name_ode"
+                        style={{
+                          fontSize:
+                            sizes.width < 1024
+                              ? 20
+                              : sizes.width == 1024
+                              ? 14
+                              : 19,
+                        }}
+                      >
+                        {item.name}
+                      </span>
                       {item.weight > 0 && (
-                        <span>{item.weight && item.weight + "kg"}</span>
+                        <span
+                          style={{
+                            fontSize:
+                              sizes.width < 1024
+                                ? 20
+                                : sizes.width == 1024
+                                ? 11
+                                : 19,
+                          }}
+                        >
+                          {item.weight && item.weight + "kg"}
+                        </span>
                       )}
                     </Col>
                     <Col
-                      xs={12}
-                      sm={4}
+                      xs={8}
+                      sm={6}
                       md={props?.isModalOpen == true ? 9 : 8}
-                      lg={8}
+                      lg={sizes.width < 1024 ? 6 : sizes.width == 1024 ? 6 : 9}
                       xl={8}
                     >
                       <span className="quantity buttons_added">
                         <Button
                           style={{
                             background: "rgb(211, 211, 211)",
-                            paddingRight: 10,
-                            paddingLeft: 10,
+                            paddingRight:
+                              sizes.width < 1024
+                                ? 10
+                                : sizes.width == 1024
+                                ? 5
+                                : 19,
+
+                            paddingLeft:
+                              sizes.width < 1024
+                                ? 10
+                                : sizes.width == 1024
+                                ? 5
+                                : 19,
+
                             textAlign: "center",
                             fontWeight: "600",
                             marginRight: 2,
@@ -344,7 +449,16 @@ const SelectedProduct = (props) => {
                               ? valueAmount?.amount
                               : item.amount
                           }
-                          style={{ textAlign: "center" }}
+                          style={{
+                            textAlign: "center",
+                            margin: 0,
+                            padding: "3px 0",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                            width:'100%'
+                          }}
                           onChange={(e) => {
                             setValueAmount({
                               id: item.id,
@@ -356,8 +470,19 @@ const SelectedProduct = (props) => {
                         <Button
                           style={{
                             background: "rgb(211, 211, 211)",
-                            paddingRight: 10,
-                            paddingLeft: 10,
+                            paddingRight:
+                              sizes.width < 1024
+                                ? 10
+                                : sizes.width == 1024
+                                ? 5
+                                : 19,
+
+                            paddingLeft:
+                              sizes.width < 1024
+                                ? 10
+                                : sizes.width == 1024
+                                ? 5
+                                : 19,
                             textAlign: "center",
                             fontWeight: "600",
                             marginLeft: 2,
@@ -373,69 +498,6 @@ const SelectedProduct = (props) => {
                   </Row>
                 );
               })}
-            </div>
-            <div className="discount">
-              <div className="inpkk ">
-                Giảm giá :
-                <Input
-                  style={{ width: 40 }}
-                  placeholder="......"
-                  value={value > 1 ? value : ""}
-                  onChange={(e) => setValue(e.target.value)}
-                />
-                <Button
-                  style={{ textAlign: "right" }}
-                  onClick={() => applySale()}
-                  type="primary"
-                >
-                  Áp dụng
-                </Button>
-                {value > 0 && (
-                  <Button
-                    style={{
-                      textAlign: "right",
-                      background: "red",
-                      border: "0",
-                      marginLeft: 10,
-                    }}
-                    onClick={() => cancel()}
-                    type="primary"
-                  >
-                    Hủy
-                  </Button>
-                )}
-              </div>
-
-              <div className="payy">
-                {loading == true || props.loading == true ? (
-                  <Spin size="large" />
-                ) : (
-                  <div className="sum">
-                    Tổng Tiền :{" "}
-                    <span
-                      style={{ color: "red", fontWeight: "500", fontSize: 22 }}
-                    >
-                      {Math.ceil(sum * ((100 - valueSale) / 100))
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                      đ
-                    </span>
-                  </div>
-                )}
-                <Button
-                  className="pay"
-                  style={{
-                    background: "blue",
-                    width: "100%",
-                    height: "100%",
-                    fontSize: "1.3rem",
-                  }}
-                  type="primary"
-                  onClick={showModal}
-                >
-                  Thanh toán
-                </Button>
-              </div>
 
               {/* <!-- xác nhận thanh toán--> */}
               <Modal
@@ -471,12 +533,12 @@ const SelectedProduct = (props) => {
                   <div className="col-8">
                     <div className="tablee_xn">
                       <div className="information">sản phẩm đã thêm</div>
-                      {tableFind?.orders?.length < 8 ? (
+                      {dataTable?.length < 8 ? (
                         <Table
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={tableFind?.orders}
+                          dataSource={dataTable}
                           pagination={false}
                           rowKey={(item) => item._id}
                         />
@@ -485,7 +547,7 @@ const SelectedProduct = (props) => {
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={tableFind?.orders}
+                          dataSource={dataTable}
                           pagination={false}
                           scroll={{ y: 300 }}
                           rowKey={(item) => item._id}
@@ -530,9 +592,99 @@ const SelectedProduct = (props) => {
                 />
               </Modal>
             </div>
-          </React.Fragment>
-        )}
-      </div>
+            <div
+              className="discount"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: 150,
+              }}
+            >
+              <div className="inpkk ">
+                Giảm giá :
+                <Input
+                  style={{ width: 40 }}
+                  placeholder="......"
+                  value={value > 1 ? value : ""}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+                <Button
+                  style={{ textAlign: "right" }}
+                  onClick={() => applySale()}
+                  type="primary"
+                >
+                  Áp dụng
+                </Button>
+                {value > 0 && (
+                  <Button
+                    style={{
+                      textAlign: "right",
+                      background: "red",
+                      border: "0",
+                      marginLeft: 10,
+                    }}
+                    onClick={() => cancel()}
+                    type="primary"
+                  >
+                    Hủy
+                  </Button>
+                )}
+              </div>
+
+              <div className="payy">
+                {loading == true || props.loading == true ? (
+                  <Spin size="large" />
+                ) : (
+                  <div
+                    className="sum"
+                    style={{
+                      marginTop: 20,
+                      fontSize:
+                        sizes.width < 1024 ? 20 : sizes.width == 1024 ? 17 : 19,
+                    }}
+                  >
+                    Tổng Tiền :{" "}
+                    <span
+                      style={{
+                        color: "red",
+                        fontWeight: "500",
+                        fontSize:
+                          sizes.width < 1024
+                            ? 20
+                            : sizes.width == 1024
+                            ? 20
+                            : 19,
+                      }}
+                    >
+                      {Math.ceil(sum * ((100 - valueSale) / 100))
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                      đ
+                    </span>
+                  </div>
+                )}
+                <Button
+                  style={{
+                    width: "100%",
+                    fontSize: "1.3rem",
+                    padding: 20,
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  type="primary"
+                  onClick={showModal}
+                >
+                  Thanh toán
+                </Button>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
+      )}
     </div>
   );
 };

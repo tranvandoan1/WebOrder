@@ -9,8 +9,10 @@ import IconTable from "../images/table.png";
 import Error from "../images/error.png";
 
 import MoveTable from "./MoveTable";
+import { Size } from "./../size";
 
 const ListTable = (props) => {
+  const sizes = Size();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const tables = useSelector((data) => data.table);
@@ -51,7 +53,9 @@ const ListTable = (props) => {
   };
 
   const renderSumPriceBookTable = (item) => {
-    const prices = item?.orders?.map((item) => {
+    const prices = (
+      item?.orders.length == undefined ? [item?.orders] : item?.orders
+    )?.map((item) => {
       if (item.weight) {
         return Math.ceil(+item.price * item.weight * +item.amount);
       } else {
@@ -59,7 +63,7 @@ const ListTable = (props) => {
       }
     });
     let sum = 0;
-    for (var i = 0; i < prices?.length; i++) {
+    for (let i = 0; i < prices?.length; i++) {
       sum += +prices[i];
     }
     return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -69,14 +73,17 @@ const ListTable = (props) => {
     <div
       className="group_home"
       style={{
-        height:
-          tables?.value?.length <= 0 && tables?.checkData == true
-            ? "100vh"
-            : "100%",
         position: "relative",
-        overflow: "hidden",
+        height:'100%',
+        background: "#fff",
         zIndex:
-          props?.showMenu == true ? (props?.moveTable == true ? 25 : 10) :props?.moveTable == true? 25:10,
+          props?.showMenu == true
+            ? props?.moveTable == true
+              ? 25
+              : 10
+            : props?.moveTable == true
+            ? 25
+            : 10,
       }}
     >
       {tables?.value?.length <= 0 && tables?.checkData == false ? (
@@ -123,8 +130,11 @@ const ListTable = (props) => {
               </span>
             </div>
           ) : (
-            (props?.statusTable == undefined ? tables?.value : statusTable).map(
-              (item, index) => {
+            <>
+              {(props?.statusTable == undefined
+                ? tables?.value
+                : statusTable
+              ).map((item, index) => {
                 return (
                   <Col
                     key={index}
@@ -215,8 +225,8 @@ const ListTable = (props) => {
                     </div>
                   </Col>
                 );
-              }
-            )
+              })}
+            </>
           )}
         </Row>
       )}

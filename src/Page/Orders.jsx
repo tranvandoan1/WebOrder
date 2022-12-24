@@ -15,25 +15,26 @@ import {
   Form,
   message,
   Spin,
+  Drawer,
 } from "antd";
 import { Link } from "react-router-dom";
 import {
   DoubleLeftOutlined,
   MenuFoldOutlined,
+  MenuOutlined,
   MenuUnfoldOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import SelectedProduct from "./SelectedProduct";
 import styles from "../css/Order.module.css";
 import { getProductAll } from "./../features/ProductsSlice/ProductSlice";
 import { getCategori } from "./../features/Categoris/CategoriSlice";
-import { getAllSaveOrder } from "./../features/saveorderSlice/saveOrderSlice";
 import Loading from "../Loading";
 import { addOrderTable, getAllTable } from "../features/TableSlice/TableSlice";
 import { Size } from "../size";
 const Orders = () => {
-  const { name, id } = useParams();
-  const width = Size();
-  console.log(width, "width");
+  const { id } = useParams();
+  const sizes = Size();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [productOrder, setProductOrder] = useState([]); //lấy sản phẩm ko có kg
@@ -53,11 +54,17 @@ const Orders = () => {
     dispatch(getAllTable());
   }, []);
   const tableOrder = tables?.value?.find((item) => item._id == id);
+  const dataTable =
+    tableOrder?.orders?.length == undefined
+      ? tableOrder?.orders == null
+        ? []
+        : [tableOrder?.orders]
+      : tableOrder?.orders;
   const apply = async (values) => {
     if (Number.isFinite(Number(values.weight)) == false) {
       message.warning("Số lượng phải là số !");
     } else {
-      const newSaveOrder = tableOrder?.orders.find(
+      const newSaveOrder = dataTable?.find(
         (item) => item.weight == Number(values.weight)
       );
       form.resetFields();
@@ -65,7 +72,7 @@ const Orders = () => {
       setLoading(true);
       if (newSaveOrder !== undefined) {
         const newData = [];
-        tableOrder?.orders?.map((itemOrder) => {
+        dataTable?.map((itemOrder) => {
           if (itemOrder.id == newSaveOrder.id) {
             newData.push({
               ...itemOrder,
@@ -97,9 +104,9 @@ const Orders = () => {
         await dispatch(
           addOrderTable({
             data:
-              tableOrder?.orders?.length <= 0 || tableOrder?.orders == null
+              dataTable?.length <= 0 || dataTable == null
                 ? newOrder
-                : [...tableOrder?.orders, newOrder],
+                : [...dataTable, newOrder],
             id_table: id,
           })
         );
@@ -113,9 +120,7 @@ const Orders = () => {
     const date = new Date();
     // lấy ra được sản phẩm vừa chọn
     // kiểm tra xem sp lựa chọn đã tồn lại ở bàn này hay chưa
-    const newSaveOrder = tableOrder?.orders?.find(
-      (item) => item.id_pro == pro._id
-    );
+    const newSaveOrder = dataTable?.find((item) => item.id_pro == pro._id);
     // th1 nếu mà sp order mà cần có kg
     if (pro.check == true) {
       // nếu sp là sp theo cân thì hiện input nhập cân nặng
@@ -137,9 +142,9 @@ const Orders = () => {
         await dispatch(
           addOrderTable({
             data:
-              tableOrder?.orders?.length <= 0 || tableOrder?.orders == null
+              dataTable?.length <= 0 || dataTable == null
                 ? newOrder
-                : [...tableOrder?.orders, newOrder],
+                : [...dataTable, newOrder],
             id_table: id,
             time_start: `${
               String(date.getHours()).length == 1
@@ -155,7 +160,7 @@ const Orders = () => {
         setLoading(false);
       } else {
         const newData = [];
-        tableOrder?.orders?.map((itemOrder) => {
+        dataTable?.map((itemOrder) => {
           if (itemOrder.id == newSaveOrder.id) {
             newData.push({
               ...itemOrder,
@@ -185,8 +190,68 @@ const Orders = () => {
       setProSelect(productFind);
     }
   };
+  // show menu width<1024
+  const [openCart, setOpenCart] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>
+      {/* reponsive  */}
+      {sizes.width < 1024 ? (
+        <div
+          style={{
+            background: "rgb(57, 90, 255)",
+            padding: 10,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              border: "1px solid #CCCCCC",
+              borderRadius: 5,
+              padding: "3px 8px",
+              cursor: "pointer",
+            }}
+            onClick={() => setOpenMenu(true)}
+          >
+            <MenuOutlined style={{ color: "#fff", fontSize: 20 }} />
+          </div>
+          <div
+            style={{
+              border: "1px solid #CCCCCC",
+              borderRadius: 5,
+              padding: "3px 8px",
+              cursor: "pointer",
+              position: "relative",
+            }}
+            onClick={() => setOpenCart(true)}
+          >
+            <ShoppingCartOutlined style={{ color: "#fff", fontSize: 20 }} />
+            <span
+              style={{
+                position: "absolute",
+                top: -10,
+                left: -10,
+                background: "red",
+                borderRadius: "100%",
+                color: "#fff",
+                fontSize: 12,
+                fontWeight: "500",
+                width: 23,
+                height: 23,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {dataTable == null ? 0 : dataTable?.length}
+            </span>
+          </div>
+        </div>
+      ) : null}
       {products?.value?.length <= 0 && products?.checkData == false ? (
         <Loading />
       ) : products?.value?.length <= 0 && products?.checkData == true ? (
@@ -217,33 +282,34 @@ const Orders = () => {
         </div>
       ) : (
         <React.Fragment>
-          {isModalOpen == true || width.width < 1024 ? (
-            width.width < 1024 ? (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 10,
-                  left: 0,
-                  background: "#fff",
-                  zIndex: 100,
-                  borderRadius: "30% 15% 15% 30%",
-                  padding: "5px 5px",
-                  boxShadow: "0 0 10px blue",
-                }}
-              >
-                <Link
-                  to="/tables"
-                  style={{
-                    marginLeft: 10,
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: 9,
-                  }}
-                >
-                  {" "}
-                  <DoubleLeftOutlined className="icon" /> Quay lại{" "}
-                </Link>
-              </div>
+          {isModalOpen == true || sizes.width < 1024 ? (
+            sizes.width < 1024 ? (
+              // <div
+              //   style={{
+              //     position: "absolute",
+              //     top: 10,
+              //     left: 0,
+              //     background: "#fff",
+              //     zIndex: 100,
+              //     borderRadius: "30% 15% 15% 30%",
+              //     padding: "5px 5px",
+              //     boxShadow: "0 0 10px blue",
+              //   }}
+              // >
+              //   <Link
+              //     to="/tables"
+              //     style={{
+              //       marginLeft: 10,
+              //       display: "flex",
+              //       alignItems: "center",
+              //       fontSize: 9,
+              //     }}
+              //   >
+              //     {" "}
+              //     <DoubleLeftOutlined className="icon" /> Quay lại{" "}
+              //   </Link>
+              // </div>
+              <></>
             ) : (
               <div
                 style={{
@@ -252,10 +318,10 @@ const Orders = () => {
                   left: 0,
                   background: "#fff",
                   zIndex: 100,
-                  borderRadius: "20% 15% 15% 20%",
+                  borderRadius: "100%",
                   display: "flex",
                   justifyContent: "space-between",
-                  padding: "10px 20px",
+                  padding: "10px ",
                   boxShadow: "0 0 10px blue",
                 }}
               >
@@ -277,7 +343,7 @@ const Orders = () => {
               xs={0}
               sm={0}
               md={isModalOpen == true ? 0 : 0}
-              lg={isModalOpen == true ? 0 : 4}
+              lg={sizes.width < 1024 ? 0 : isModalOpen == true ? 0 : 4}
               xl={isModalOpen == true ? 0 : 4}
             >
               <div
@@ -320,11 +386,14 @@ const Orders = () => {
             <Col
               xs={24}
               sm={24}
-              md={isModalOpen == true ? 16 : 16}
+              md={sizes.width < 1024 ? 24 : isModalOpen == true ? 16 : 16}
               lg={isModalOpen == true ? 18 : 14}
               xl={isModalOpen == true ? 18 : 14}
             >
-              <div className="products" style={{ paddingBottom: 10 }}>
+              <div
+                className="products"
+                style={{ paddingBottom: 10, height: "100vh" }}
+              >
                 <Row>
                   {(proSelect?.length >= 1 ? proSelect : products?.value)?.map(
                     (item_pro) => {
@@ -332,8 +401,8 @@ const Orders = () => {
                         <Col
                           xs={12}
                           sm={8}
-                          md={8}
-                          lg={8}
+                          md={6}
+                          lg={6}
                           xl={6}
                           key={item_pro._id}
                           onClick={() => selectProduct(item_pro)}
@@ -362,7 +431,7 @@ const Orders = () => {
             <Col
               xs={0}
               sm={0}
-              md={isModalOpen == true ? 8 : 8}
+              md={sizes.width < 1024 ? 0 : isModalOpen == true ? 6 : 6}
               lg={isModalOpen == true ? 6 : 6}
               xl={isModalOpen == true ? 6 : 6}
             >
@@ -422,6 +491,67 @@ const Orders = () => {
             </Form>
           </Modal>
         </React.Fragment>
+      )}
+
+      {/* show menu cart width <1024 */}
+      {sizes.width < 1024 ? (
+        <React.Fragment>
+          <Drawer
+            title="Sản phẩm đã chọn"
+            placement="right"
+            onClose={() => setOpenCart(false)}
+            open={openCart}
+            width={sizes.width < 539 ? "100%" : "60%"}
+          >
+            <SelectedProduct
+              loading={loading}
+              tableOrder={tableOrder}
+              isModalOpen={isModalOpen}
+            />
+          </Drawer>
+          <Drawer
+            title="Lọc theo danh mục"
+            placement="left"
+            onClose={() => setOpenMenu(false)}
+            open={openMenu}
+          >
+            <div>
+              <Menu style={{ fontSize: "1.1rem", border: 0 }}>
+                <Menu.Item key="00" onClick={() => listCate("all")}>
+                  Tất cả
+                </Menu.Item>
+                {categoris.map((item, index) => {
+                  return (
+                    <Menu.Item
+                      key={index}
+                      style={{ textTransform: "capitalize" }}
+                      onClick={() => {
+                        listCate(item._id);
+                        setOpenMenu(false);
+                      }}
+                    >
+                      {item.name}
+                    </Menu.Item>
+                  );
+                })}
+                <Menu.Item style={{ textTransform: "capitalize" }}>
+                  <Link
+                    to="/tables"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <DoubleLeftOutlined
+                      className="icon"
+                      style={{ marginRight: 5, marginTop: 2 }}
+                    />{" "}
+                    Quay lại{" "}
+                  </Link>
+                </Menu.Item>
+              </Menu>
+            </div>
+          </Drawer>
+        </React.Fragment>
+      ) : (
+        <></>
       )}
     </div>
   );

@@ -1,7 +1,6 @@
 import { Button, Spin, Select, message } from "antd";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import styles from "../css/Home.module.css";
 import { changeTables } from "../features/TableSlice/TableSlice";
@@ -25,22 +24,27 @@ const MoveTable = (props) => {
       await dispatch(changeTables(uploadTable));
       setLoading(false);
 
-      props?.hideBookTable(), setSelectTransferTable();
+      props?.hideBookTable();
+      setSelectTransferTable();
       message.success("Chuyển bàn thành công");
     }
   };
 
   // hiện tổng tiền
   const renderSumPriceBookTable = () => {
-    const prices = props?.bookTable?.orders?.map((item) => {
-      if (item.weight) {
-        return Math.ceil(+item.price * item.weight * +item.amount);
+    const prices = (
+      props?.bookTable?.orders.length == undefined
+        ? [props?.bookTable?.orders]
+        : props?.bookTable?.orders
+    )?.map((item) => {
+      if (item?.weight) {
+        return Math.ceil(+item.price * item?.weight * +item.amount);
       } else {
-        return Math.ceil(+item.price * +item.amount);
+        return Math.ceil(+item?.price * +item?.amount);
       }
     });
     let sum = 0;
-    for (var i = 0; i < prices?.length; i++) {
+    for (let i = 0; i < prices?.length; i++) {
       sum += +prices[i];
     }
     return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -184,9 +188,7 @@ const MoveTable = (props) => {
           }}
         >
           <Button
-            onClick={() => (
-              props?.hideBookTable(), setSelectTransferTable()
-            )}
+            onClick={() => (props?.hideBookTable(), setSelectTransferTable())}
             type="primary"
             style={{
               background: "red",

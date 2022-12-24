@@ -6,7 +6,7 @@ export const getUser = createAsyncThunk("user/getUser", async () => {
   const userFind = users.find((item) => item._id == user._id);
   return userFind;
 });
-export const editNameAvatarUser = createAsyncThunk("user/editNameAvatarUser", async (data) => {
+export const editInfoUser = createAsyncThunk("user/editInfoUser", async (data) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const { data: users } = await upload(data);
   const userFind = users.find((item) => item._id == user._id);
@@ -32,7 +32,7 @@ const userSlice = createSlice({
       }
       state.value = action.payload;
     });
-    builder.addCase(editNameAvatarUser.fulfilled, (state, action) => {
+    builder.addCase(editInfoUser.fulfilled, (state, action) => {
       state.value = action.payload;
     });
     builder.addCase(editLogin.fulfilled, (state, action) => {

@@ -43,13 +43,18 @@ function App() {
   const avatarWeb = document.getElementById("avatarWeb");
   const nameWeb = document.getElementById("nameWeb");
   avatarWeb.href =
-    String(user?.value.avatarRestaurant).length <= 0
+    String(user?.value.avatarRestaurant).length <= 0 ||
+    user?.value.avatarRestaurant == null
       ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
       : user?.value.avatarRestaurant;
   nameWeb.innerHTML =
-    user?.value.nameRestaurant == undefined
+    user?.value.nameRestaurant == undefined ||
+    String(user?.value.nameRestaurant).length < 0
       ? "WebSite Order"
       : user?.value.nameRestaurant;
+  console.log(tables, "tables");
+  console.log(String(user.value).length, "user");
+  const key = JSON.parse(localStorage.getItem("key"));
   return (
     <BrowserRouter>
       {userLoca !== null ? (
@@ -60,21 +65,23 @@ function App() {
             <Route
               path="/"
               element={
-                user?.value.loginWeb == 0 &&
+                user?.value.count == 0 &&
                 tables.value.length <= 0 &&
                 tables.checkData == false ? (
                   <Introduce />
-                ) : user?.value.loginWeb == 0 &&
+                ) : user?.value.count == 0 &&
                   tables.value.length <= 0 &&
                   tables.checkData == true ? (
                   <Introduce />
-                ) : user?.value.loginWeb == 1 &&
+                ) : user?.value.count == 1 &&
                   tables.value.length <= 0 &&
                   tables.checkData == true ? (
-                  (localStorage.setItem("key", JSON.stringify(["2"])),
+                  (key == undefined || key == null
+                    ? localStorage.setItem("key", JSON.stringify(["2"]))
+                    : null,
                   (<Navigate to="/manager/table" />))
                 ) : (
-                  user?.value.loginWeb == 1 &&
+                  user?.value.count == 1 &&
                   tables.value.length > 0 &&
                   tables.checkData == false && <Navigate to="/tables" />
                 )
@@ -97,7 +104,11 @@ function App() {
             <Route
               path="/tables/"
               element={
-                user?.value.loginWeb == 0 ? <Navigate to="/" /> : <LayoutWeb />
+                user?.value.accountType == 0 ? (
+                  <Navigate to="/" />
+                ) : (
+                  <LayoutWeb />
+                )
               }
             />
 
@@ -124,7 +135,7 @@ function App() {
               <Route path="table/add" element={<AddTable />} />
               <Route path="table/edit=:id" element={<EditTable />} />
               {/* thống kê */}
-              {(user?.value.loginWeb !== 0 || tables?.length > 0) && (
+              {tables?.length > 0 && (
                 <Route path="statistical" element={<ListStatistical />} />
               )}
 

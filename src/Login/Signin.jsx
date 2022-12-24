@@ -14,16 +14,19 @@ const Signin = () => {
     setLoading(true);
     try {
       const { data } = await UserAPI.signin(user);
-      localStorage.setItem("user", JSON.stringify({ _id: data.user._id }));
-      localStorage.setItem("token", JSON.stringify(data.token));
-      alert("Mời bạn vào trang web");
-      if (data?.user?.loginWeb == 0) {
-        window.location.href = "/";
+      if (data.user.accountType == 1) {
+        message.warning("Loại tài khoản không tương thích");
       } else {
-        window.location.href = "/";
+        localStorage.setItem("user", JSON.stringify({ _id: data.user._id }));
+        localStorage.setItem("token", JSON.stringify(data.token));
+        alert("Mời bạn vào trang web");
+        if (data?.user?.loginWeb == 0) {
+          window.location.href = "/";
+        } else {
+          window.location.href = "/";
+        }
       }
       setLoading(false);
-
     } catch (error) {
       const errorLogin = error.response.data.error;
       message.error(errorLogin);
@@ -34,6 +37,18 @@ const Signin = () => {
   return (
     <div className="backgroundd">
       <div className="back">
+        <ul class="background-body">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
         <div className="form-signin">
           <div
             className="logo"
@@ -62,6 +77,11 @@ const Signin = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
+                style={{
+                  borderRadius: 5,
+                  fontSize: 16,
+                }}
+                type='email'
               />
             </Form.Item>
             <Form.Item
@@ -72,22 +92,44 @@ const Signin = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                style={{
+                  borderRadius: 5,
+                  fontSize: 16,
+                }}
               />
             </Form.Item>
             {loading == true ? (
               <Spin style={{ marginRight: 10 }} />
             ) : (
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="login-form-button"
-                >
-                  Đăng nhập
-                </Button>
-                <Link style={{ marginLeft: "10px" }} to="/signup">
-                  Đăng ký
-                </Link>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    style={{
+                      fontSize: 15,
+                      padding: "20px 20px",
+                      margin: 0,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontWeight: "400",
+                    }}
+                  >
+                    Đăng nhập
+                  </Button>
+                  <Link
+                    to="/signup"
+                    style={{
+                      fontSize: 15,
+                      padding: 10,
+                      margin: 0,
+                    }}
+                  >
+                    Đăng ký
+                  </Link>
+                </div>
               </Form.Item>
             )}
           </Form>
