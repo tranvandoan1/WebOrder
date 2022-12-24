@@ -112,7 +112,7 @@ function App() {
               }
             />
 
-            <Route path="/order/table-name=:name&&:id" element={<Orders />} />
+            <Route path="/order/:name/:id" element={<Orders />} />
             <Route
               path="/manager/"
               element={

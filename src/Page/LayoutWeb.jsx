@@ -33,7 +33,7 @@ import { getAllSaveOrder } from "../features/saveorderSlice/saveOrderSlice";
 import { Size } from "../size";
 import { uploadLogin } from "../API/Users";
 import { getUser } from "../features/User/UserSlice";
-import { validatePhone } from './../components/Validate';
+import { validatePhone } from "./../components/Validate";
 const { Header, Content, Sider } = Layout;
 
 const LayoutWeb = () => {
@@ -120,11 +120,6 @@ const LayoutWeb = () => {
     }
   };
 
-  window.addEventListener("click", function (e) {
-    if (e.target == document.getElementById("book_table")) {
-      setCheckBookTable(false);
-    }
-  });
   const menu = (
     <Menu className={styles.dropdown}>
       <Menu.Item key="2">
@@ -358,10 +353,20 @@ const LayoutWeb = () => {
               }
             : {}
         }
-        id="book_table"
       >
         <div
-          style={{ background: "#fff", borderRadius: 2 }}
+          onClick={() => setCheckBookTable(false)}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1,
+          }}
+        ></div>
+        <div
+          style={{ background: "#fff", borderRadius: 2, zIndex: 10 }}
           className={styles.table_book_table}
         >
           <h3
@@ -459,7 +464,7 @@ const LayoutWeb = () => {
               <Select placeholder="Bàn muốn đặt" allowClear>
                 {checkSaveOrder.map((item, index) => {
                   return (
-                    <Select.Option key={index} value={item._id}>
+                    <Select.Option key={item} value={item._id}>
                       {item.name}
                     </Select.Option>
                   );
@@ -499,7 +504,26 @@ const LayoutWeb = () => {
           </Form>
         </div>
         <Drawer
-          title="BOM BOM"
+          title={
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              {String(user.avatarRestaurant).length <= 0 ||
+              user.avatarRestaurant == null ? (
+                <Avatar src={user?.avatarRestaurant} size={30} alt="" />
+              ) : (
+                <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
+              )}
+
+              <span style={{ fontSize: 18, fontWeight: "500" }}>
+                {user?.nameRestaurant}
+              </span>
+            </div>
+          }
           placement="right"
           onClose={() => setCheckResponsive(false)}
           open={checkResponsive}
@@ -509,9 +533,36 @@ const LayoutWeb = () => {
           }}
         >
           <div>
-            <div>
-              <Avatar size={44} src={user?.avatar} />
-              <span style={{ marginLeft: 10 }}>{user?.name}</span>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <Avatar size={44} src={user?.avatar} />
+                <span style={{ marginLeft: 10 }}>{user?.name}</span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #d9d9d9",
+                  borderRadius: 4,
+                  padding: "5px 10px",
+                  background: "hsl(214, 89%, 52%)",
+                  color: "#fff",
+                }}
+                onClick={() => signOut()}
+              >
+                <LogoutOutlined
+                  style={{ fontSize: 14, marginRight: 5, marginTop: 2 }}
+                />
+                <span style={{ fontSize: 12, fontWeight: "400" }}>
+                  Đăng xuất
+                </span>
+              </div>
             </div>
             <div style={{ position: "relative" }}>
               <Select
@@ -548,39 +599,6 @@ const LayoutWeb = () => {
               )}
             </div>
 
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div
-                className={styles.not}
-                style={{ fontSize: 16, marginRight: 15, fontWeight: "500" }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#FF7F00",
-                    width: 17,
-                    height: 17,
-                    borderRadius: 100,
-                    marginRight: 5,
-                  }}
-                ></div>
-                Đặt bàn
-              </div>
-              <div
-                className={styles.not}
-                style={{ fontSize: 16, marginRight: 15, fontWeight: "500" }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "yellowgreen",
-                    width: 17,
-                    height: 17,
-                    borderRadius: 100,
-                    marginRight: 5,
-                  }}
-                ></div>
-                Đang có khách
-              </div>
-            </div>
-
             <Button
               onClick={() => (
                 setCheckBookTable(true), setCheckResponsive(false)
@@ -590,12 +608,53 @@ const LayoutWeb = () => {
                 border: 0,
                 marginRight: 10,
                 borderRadius: 5,
-                marginTop: 10,
               }}
               type="primary"
             >
               Đặt bàn
             </Button>
+            <div
+              style={{ display: "flex", alignItems: "center", marginTop: 10 }}
+            >
+              (
+              <span
+                style={{ marginRight: 10, fontSize: 13, fontWeight: "500" }}
+              >
+                {" "}
+                Chú ý :{" "}
+              </span>
+              <div
+                className={styles.not}
+                style={{ fontSize: 11, marginRight: 15, fontWeight: "500" }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#FF7F00",
+                    width: 10,
+                    height: 10,
+                    borderRadius: 100,
+                    marginRight: 5,
+                  }}
+                ></div>
+                Đặt bàn
+              </div>
+              <div
+                className={styles.not}
+                style={{ fontSize: 11, fontWeight: "500" }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "yellowgreen",
+                    width: 10,
+                    height: 10,
+                    borderRadius: 100,
+                    marginRight: 5,
+                  }}
+                ></div>
+                Đang có khách
+              </div>
+              )
+            </div>
           </div>
         </Drawer>
       </div>

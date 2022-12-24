@@ -33,6 +33,7 @@ import Loading from "../Loading";
 import { addOrderTable, getAllTable } from "../features/TableSlice/TableSlice";
 import { Size } from "../size";
 const Orders = () => {
+  console.log('có vào')
   const { id } = useParams();
   const sizes = Size();
   const dispatch = useDispatch();

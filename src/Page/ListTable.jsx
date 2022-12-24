@@ -44,7 +44,7 @@ const ListTable = (props) => {
       (item?.orders?.length <= 0 || item?.orders == null) &&
       item.timeBookTable == "null"
     ) {
-      navigate(`/order/table-name=${item.name}&&${item._id}`);
+      navigate(`/order/name=${item.name}?id=${item._id}`);
     } else if (item?.orders?.length > 0 && item.timeBookTable == "null") {
       props?.callBack(item);
     } else {
