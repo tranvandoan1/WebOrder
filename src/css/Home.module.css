@@ -1,6 +1,7 @@
 .header {
   background-color: #fff !important;
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
   right: 0;
   left: 0;
@@ -40,6 +41,7 @@
 .menu {
   background-color: #fff !important;
   position: sticky;
+  position: -webkit-sticky;
   top: 70px;
   right: 0;
   left: 0;

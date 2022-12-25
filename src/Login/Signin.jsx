@@ -53,7 +53,7 @@ const Signin = () => {
         </ul>
         <div
           className="form-signin"
-          style={{ width: sizes.width < 768 ? 300 : 600 }}
+          style={{ width: sizes.width < 768 ? 360 : 600 }}
         >
           <div
             className="logo"

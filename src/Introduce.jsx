@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "../src/css/Home.css";
-import { Avatar, Button, Form, Input, message, Spin } from "antd";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { Avatar, Button, Form, Input, message, Spin, Upload } from "antd";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  CloseCircleOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import styles from "./css/Account.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  editLogin,
-  editInfoUser,
-  getUser,
-} from "./features/User/UserSlice";
+import { editLogin, editInfoUser, getUser } from "./features/User/UserSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "./firebase";
 import { getAllTable } from "./features/TableSlice/TableSlice";
+import { Size } from "./size";
 const Introduce = () => {
+  const sizes = Size();
   const [check, setCheck] = useState(0);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -35,7 +38,8 @@ const Introduce = () => {
       check == 0 ||
       check == 1 ||
       (String(user.nameRestaurant).length <= 0 &&
-       ( String(user.avatarRestaurant).length <= 0 ||user.avatarRestaurant==null)&&
+        (String(user.avatarRestaurant).length <= 0 ||
+          user.avatarRestaurant == null) &&
         check == 2)
     ) {
       (check == 0
@@ -45,7 +49,8 @@ const Introduce = () => {
         : check == 2
         ? intro3
         : String(user.nameRestaurant).length <= 0 &&
-        ( String(user.avatarRestaurant).length <= 0 ||user.avatarRestaurant==null)
+          (String(user.avatarRestaurant).length <= 0 ||
+            user.avatarRestaurant == null)
         ? intro4
         : ""
       ).classList.remove(
@@ -102,21 +107,24 @@ const Introduce = () => {
         setValidate(false);
         message.error("Bạn chưa chọn tên !");
       } else {
-        const uploadUser = {
-          _id: user._id,
-          nameRestaurant: value == undefined ? user : value,
-          avatarRestaurant:
-            photo == undefined
-              ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
-              : photo,
-        };
+        const imageRef = ref(storage, `images/${photo.file.name}`);
         setLoading(true);
-        await dispatch(editInfoUser(uploadUser));
-        alert("Hãy thiết lập thêm để bắt đầu nhé !");
-        setPhoto();
-        setValue();
-        setLoading(false);
-        window.location.href = "/";
+        uploadBytes(imageRef, photo.file).then(() => {
+          getDownloadURL(imageRef).then(async (url) => {
+            const uploadUser = {
+              _id: user._id,
+              nameRestaurant: value == undefined ? user : value,
+              avatarRestaurant: url,
+            };
+            setLoading(true);
+            await dispatch(editInfoUser(uploadUser));
+            alert("Hãy thiết lập thêm để bắt đầu nhé !");
+            setPhoto();
+            setValue();
+            setLoading(false);
+            window.location.href = "/";
+          });
+        });
       }
     }
   };
@@ -190,15 +198,10 @@ const Introduce = () => {
   }, []);
 
   const loadFile = (event) => {
-    const photo = document.querySelector("#images").files[0];
-    const imageRef = ref(storage, `images/${photo.name}`);
-    setLoading(true);
-    uploadBytes(imageRef, photo).then(() => {
-      getDownloadURL(imageRef).then(async (url) => {
-        await setPhoto(url);
-        setLoading(false);
-      });
-    });
+    setLoading(false);
+    const src = URL.createObjectURL(event);
+    setPhoto({ url: src, file: event });
+    setLoading(false);
   };
 
   const skip = async () => {
@@ -248,7 +251,10 @@ const Introduce = () => {
           }}
           className="image-intro"
         />
-        <div style={{ width: 500, color: "black" }} id="intro_hello">
+        <div
+          style={{ width: sizes.width < 768 ? 300 : 500, color: "black" }}
+          id="intro_hello"
+        >
           <h2>Xin chào! </h2>
           <span style={{ fontSize: 18 }} className="content">
             Chào mừng bạn đến với Website Order, đội ngũ xây dựng website mong
@@ -264,9 +270,9 @@ const Introduce = () => {
             background: "red",
             marginTop: 30,
             color: "#fff",
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: "500",
-            height: 50,
+            height: 40,
             display: "flex",
             alignItems: "center",
             borderRadius: 3,
@@ -282,7 +288,11 @@ const Introduce = () => {
           className="image-intro2"
         />
         <div
-          style={{ width: 500, color: "black", margin: "40px 0" }}
+          style={{
+            width: sizes.width < 768 ? 300 : 500,
+            color: "black",
+            margin: "40px 0",
+          }}
           className="intro-hello"
           id="intro_hello"
         >
@@ -300,9 +310,9 @@ const Introduce = () => {
             style={{
               marginTop: 30,
               color: "blue",
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: "500",
-              height: 50,
+              height: 40,
               display: "flex",
               alignItems: "center",
               borderRadius: 3,
@@ -318,9 +328,9 @@ const Introduce = () => {
               background: "red",
               marginTop: 30,
               color: "#fff",
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: "500",
-              height: 50,
+              height: 40,
               display: "flex",
               alignItems: "center",
               borderRadius: 3,
@@ -341,7 +351,7 @@ const Introduce = () => {
           }}
         />
         <div
-          style={{ width: 500, color: "black" }}
+          style={{ width: sizes.width < 768 ? 300 : 500, color: "black" }}
           className="intro-hello"
           id="intro_hello"
         >
@@ -358,9 +368,9 @@ const Introduce = () => {
             style={{
               marginTop: 30,
               color: "blue",
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: "500",
-              height: 50,
+              height: 40,
               display: "flex",
               alignItems: "center",
               borderRadius: 3,
@@ -376,9 +386,9 @@ const Introduce = () => {
               background: "red",
               marginTop: 30,
               color: "#fff",
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: "500",
-              height: 50,
+              height: 40,
               display: "flex",
               alignItems: "center",
               borderRadius: 3,
@@ -390,36 +400,60 @@ const Introduce = () => {
       </div>
       <div className="intro4 active_none" id="intro4">
         <div
-          style={{ width: 500, color: "black" }}
+          style={{ width: sizes.width < 768 ? 300 : 500, color: "black" }}
           className="intro-hello"
           id="intro_hello"
         >
-          <div>
-            {photo !== undefined ? (
-              <label
-                htmlFor="images"
-                style={{ border: 0 }}
-                className={styles.user_choose_photo}
-              >
-                <Avatar size={200} src={photo} />
-              </label>
-            ) : loading == true ? (
+          <div style={{ position: "relative" }}>
+            {loading == true ? (
               <Spin size="large" />
             ) : (
-              <label
-                htmlFor="images"
+              <div
                 style={{
                   position: "relative",
-                  overflow: "hidden",
                   textAlign: "center",
+                  cursor: "pointer",
+                  width: 150,
+                  height: 150,
                   borderRadius: "100%",
+                  overflow: "hidden",
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  boxShadow: "0 0 5px #CCCCCC",
                 }}
-                className={styles.user_choose_photo}
+                className="box-image"
               >
-                <Avatar
-                  size={200}
-                  src="https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
-                />
+                <Upload
+                  listType="picture-card"
+                  showUploadList={false}
+                  beforeUpload={loadFile}
+                >
+                  {photo ? (
+                    <div className={styles.box_image}>
+                      <img src={photo.url} className="image" />
+                    </div>
+                  ) : (
+                    <div>
+                      <div
+                        style={{
+                          marginTop: 5,
+                          marginLeft: 7,
+                        }}
+                      >
+                        {loading == true ? (
+                          <Spin />
+                        ) : (
+                          <Avatar
+                            size={150}
+                            src="https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </Upload>
                 <div
                   style={{
                     position: "absolute",
@@ -427,22 +461,35 @@ const Introduce = () => {
                     right: 0,
                     left: 0,
                     background: "rgba(0,0,0,0.5)",
-                    fontSize: 16,
+                    fontSize: 20,
                     color: "#fff",
                   }}
                 >
                   Chọn
                 </div>
-              </label>
+              </div>
+            )}
+            {photo !== undefined && (
+              <CloseCircleOutlined
+                onClick={() => setPhoto()}
+                style={{
+                  fontSize: 20,
+                  position: "absolute",
+                  color: "red",
+                  top: 0,
+                  right: 0,
+                  zIndex: 1000,
+                }}
+              />
             )}
           </div>
-          <Input
+          {/* <Input
             type="file"
             name=""
             id="images"
             style={{ display: "none" }}
             onChange={() => loadFile(event)}
-          />
+          /> */}
           <h4 style={{ marginTop: 30 }}>
             Hãy đặt cho quán (shop) của bạn 1 cái tên ý nghĩa nhé !
           </h4>
@@ -468,9 +515,9 @@ const Introduce = () => {
                 style={{
                   marginTop: 30,
                   color: "blue",
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: "500",
-                  height: 50,
+                  height: 40,
                   display: "flex",
                   alignItems: "center",
                   borderRadius: 3,
@@ -486,9 +533,9 @@ const Introduce = () => {
                   background: "red",
                   marginTop: 30,
                   color: "#fff",
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: "500",
-                  height: 50,
+                  height: 40,
                   display: "flex",
                   alignItems: "center",
                   borderRadius: 3,

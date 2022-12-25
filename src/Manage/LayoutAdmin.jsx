@@ -112,8 +112,8 @@ const LayoutAdmin = () => {
                         alt=""
                       />
                     )}
-                    {String(user.avatarRestaurant).length > 0 ||
-                    user.avatarRestaurant !== null ? (
+                    {String(user.nameRestaurant).length <= 0 ||
+                    user.nameRestaurant == null ? (
                       <span
                         style={{
                           color: "red",
@@ -259,38 +259,41 @@ const LayoutAdmin = () => {
               marginLeft: sizes.width > 1024 ? 200 : 0,
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                background: "#0d6efd",
-                padding: 10,
-              }}
-            >
+            {sizes.width < 1024 && (
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "flex-end",
-                  color: "#fff",
+                  justifyContent: "space-between",
+                  background: "#0d6efd",
+                  padding: 10,
                 }}
               >
-                {String(user.avatar).length > 0 || user.avatar !== null ? (
-                  <Avatar src={user?.avatar} size={30} alt="" />
-                ) : (
-                  <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
-                )}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    color: "#fff",
+                  }}
+                >
+                  {String(user.avatar).length > 0 || user.avatar !== null ? (
+                    <Avatar src={user?.avatar} size={30} alt="" />
+                  ) : (
+                    <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
+                  )}
 
-                <span style={{ fontSize: 18, fontWeight: "500" }}>
-                  {user?.name}
-                </span>
+                  <span style={{ fontSize: 18, fontWeight: "500" }}>
+                    {user?.name}
+                  </span>
+                </div>
+                <MenuUnfoldOutlined
+                  style={{ fontSize: 30, cursor: "pointer", color: "#fff" }}
+                  onClick={() => setOpen(true)}
+                />
               </div>
-              <MenuUnfoldOutlined
-                style={{ fontSize: 30, cursor: "pointer", color: "#fff" }}
-                onClick={() => setOpen(true)}
-              />
-            </div>
+            )}
+
             <Content style={{ margin: "5px 10px 0" }}>
               <div className="site-layout-background" style={{ padding: 24 }}>
                 <Outlet />
@@ -338,6 +341,7 @@ const LayoutAdmin = () => {
         closable={false}
         onClose={onClose}
         open={open}
+        width={sizes.width < 768 ? "100%" : "50%"}
       >
         <Menu
           theme="dark"

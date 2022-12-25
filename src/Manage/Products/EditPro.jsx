@@ -2,29 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../css/LayoutAdmin.module.css";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  Row,
-  Select,
-  Spin,
-  Switch,
-  Upload,
-} from "antd";
-import { openNotificationWithIcon } from "../../Notification";
-import {
-  getProduct,
-  getProductAll,
-} from "../../features/ProductsSlice/ProductSlice";
+import { Alert, Button, Form, Input, Select, Spin, Switch, Upload } from "antd";
+import { getProductAll } from "../../features/ProductsSlice/ProductSlice";
 import { getCategori } from "../../features/Categoris/CategoriSlice";
 import { uploadProduct } from "./../../features/ProductsSlice/ProductSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase";
-import { PlusCircleOutlined } from "@ant-design/icons";
 
 const formItemLayout = {
   labelCol: {
@@ -56,27 +39,50 @@ const EditPro = () => {
       cate_id: value.cate_id == undefined ? product?.cate_id : value.cate_id,
       dvt: value.dvt == undefined ? product?.dvt : value.dvt,
       name: value.name == undefined ? product?.name : value.name,
-      photo: photo == undefined ? product?.photo : photo,
       price: value.price == undefined ? product?.price : value.price,
       user_id: product?.user_id,
       check: value.check == undefined ? product?.check : value.check,
     };
-    await dispatch(uploadProduct({ id: product?._id, data: productNew }));
-    navigate("/manager/products");
-    message.success("Sửa thành công");
-
-    setCheck(false);
+    if (photo == undefined) {
+      await dispatch(
+        uploadProduct({
+          id: product?._id,
+          data: {
+            ...productNew,
+            photo: product?.photo,
+          },
+        })
+      );
+      navigate("/manager/products");
+      message.success("Sửa thành công");
+      setCheck(false);
+    } else {
+      const imageRef = ref(storage, `images/${photo.file.name}`);
+      setLoading(true);
+      uploadBytes(imageRef, photo.file).then(() => {
+        getDownloadURL(imageRef).then(async (url) => {
+          await dispatch(
+            uploadProduct({
+              id: product?._id,
+              data: {
+                ...productNew,
+                photo: url,
+              },
+            })
+          );
+          navigate("/manager/products");
+          message.success("Sửa thành công");
+          setCheck(false);
+        });
+      });
+    }
   };
 
   const UploadAvatatr = (file) => {
-    const imageRef = ref(storage, `images/${file.name}`);
-    setLoading(true);
-    uploadBytes(imageRef, file).then(() => {
-      getDownloadURL(imageRef).then(async (url) => {
-        await setPhoto(url);
-        setLoading(false);
-      });
-    });
+    setLoading(false);
+    const src = URL.createObjectURL(file);
+    setPhoto({ url: src, file: file });
+    setLoading(false);
   };
   return (
     <div>
@@ -88,7 +94,7 @@ const EditPro = () => {
           </Spin>
         )}
       </h5>
-      {products.length <= 0 ? (
+      {products?.length <= 0 ? (
         <Spin />
       ) : (
         <Form {...formItemLayout} onFinish={uploadTable}>
@@ -134,11 +140,7 @@ const EditPro = () => {
                   beforeUpload={UploadAvatatr}
                 >
                   <div>
-                    <div
-                      style={{
-                        marginTop: 8,
-                      }}
-                    >
+                    <div>
                       {loading == true ? (
                         <Spin />
                       ) : (
@@ -151,7 +153,9 @@ const EditPro = () => {
                           }}
                         >
                           <img
-                            src={photo == undefined ? product?.photo : photo}
+                            src={
+                              photo == undefined ? product?.photo : photo.url
+                            }
                             className="image"
                             style={{
                               objectFit: "contain",
@@ -199,7 +203,6 @@ const EditPro = () => {
           </Form.Item>
         </Form>
       )}
-      ;
     </div>
   );
 };

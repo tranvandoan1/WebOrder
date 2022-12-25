@@ -1,6 +1,7 @@
 .menu {
   font-size: 1.1rem !important;
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
   background-color: #fff;
   margin-top: 5px;

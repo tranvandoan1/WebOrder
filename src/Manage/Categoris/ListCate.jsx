@@ -35,7 +35,7 @@ const ListCate = () => {
       render: (data) => (
         <>
           <Space size="middle" style={{ marginRight: 10 }}>
-            <Link to={`/manager/categoris/edit=${data._id}`}>
+            <Link to={`/manager/categoris/edit/${data._id}`}>
               <EditOutlined />
             </Link>
           </Space>

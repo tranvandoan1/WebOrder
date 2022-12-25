@@ -4,7 +4,8 @@
   border-left: 1px solid rgb(238, 238, 238);
 }
 
-.products::-webkit-scrollbar,.payment_confirmation::-webkit-scrollbar {
+.products::-webkit-scrollbar,
+.payment_confirmation::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
 }
@@ -102,6 +103,7 @@
   text-align: center;
   font-weight: 700;
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
   z-index: 10;
   font-size: 1.3rem;
@@ -204,8 +206,6 @@ tbody > tr > td {
   position: relative;
   padding: 10px;
 }
-
-
 
 .example {
   position: absolute;
@@ -364,7 +364,7 @@ form > input:focus {
   opacity: 0;
 }
 .image-intro2 {
-  animation: intro2 3s ease-in infinite;
+  animation: intro2 5s ease-in infinite;
   display: block !important;
 }
 @keyframes intro2 {
@@ -472,7 +472,8 @@ form > input:focus {
   display: block !important;
   transition: diplay 1s ease-in;
 }
-.show-avatar_upload,.show-user_avatar {
+.show-avatar_upload,
+.show-user_avatar {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -481,4 +482,12 @@ form > input:focus {
   object-fit: cover !important;
   width: 100% !important;
   height: 100% !important;
+}
+.box-image {
+  background-color: #fff;
+}
+.box-image .ant-upload {
+  margin-left: 5px;
+  border: 0 !important;
+  background-color: #fff !important;
 }

@@ -40,7 +40,7 @@ const ListTable = () => {
       render: (data) => (
         <>
           <Space size="middle" style={{ marginRight: 10 }}>
-            <Link to={`/manager/table/edit=${data._id}`}>
+            <Link to={`/manager/table/edit/${data._id}`}>
               <EditOutlined />
             </Link>
           </Space>

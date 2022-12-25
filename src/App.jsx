@@ -28,7 +28,6 @@ import { getAllTable } from "./features/TableSlice/TableSlice";
 import Setting from "./Manage/Setting";
 import { getUser } from "./features/User/UserSlice";
 import Notfound from "./Notfound";
-import PrivateLogin from "./CheckRole/privateLogin";
 import Loading from "./Loading";
 import PrivateData from "./CheckRole/privateData";
 function App() {
@@ -44,16 +43,16 @@ function App() {
   const nameWeb = document.getElementById("nameWeb");
   avatarWeb.href =
     String(user?.value.avatarRestaurant).length <= 0 ||
-    user?.value.avatarRestaurant == null
+    user?.value.avatarRestaurant == null ||
+    user?.value.avatarRestaurant == undefined
       ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
       : user?.value.avatarRestaurant;
   nameWeb.innerHTML =
     user?.value.nameRestaurant == undefined ||
-    String(user?.value.nameRestaurant).length < 0
+    user?.value.nameRestaurant == null ||
+    String(user?.value.nameRestaurant).length <= 0
       ? "WebSite Order"
       : user?.value.nameRestaurant;
-  console.log(user?.value.count, "ser?.value.count");
-  console.log(String(user.value).length, "user");
   const key = JSON.parse(localStorage.getItem("key"));
   return (
     <BrowserRouter>
@@ -143,7 +142,7 @@ function App() {
               />
               <Route
                 errorElement={<Notfound />}
-                path="categoris/edit=:id"
+                path="categoris/edit/:id"
                 element={<EditCate />}
               />
               {/* pro */}
@@ -159,7 +158,7 @@ function App() {
               />
               <Route
                 errorElement={<Notfound />}
-                path="products/edit=:id"
+                path="products/edit/:id"
                 element={<EditPro />}
               />
 
@@ -176,7 +175,7 @@ function App() {
               />
               <Route
                 errorElement={<Notfound />}
-                path="table/edit=:id"
+                path="table/edit/:id"
                 element={<EditTable />}
               />
               {/* thống kê */}
@@ -218,7 +217,7 @@ function App() {
             path="/signup"
             element={<PicturesWall />}
           />
-          <Route
+          {/* <Route
             errorElement={<Notfound />}
             path="/tables/"
             element={<Notfound />}
@@ -233,9 +232,9 @@ function App() {
             errorElement={<Notfound />}
             path="/manager/"
             element={<Notfound />}
-          >
-            {/* cate */}
-            <Route
+          > */}
+          {/* cate */}
+          {/* <Route
               errorElement={<Notfound />}
               path="categoris/"
               element={<Notfound />}
@@ -249,9 +248,9 @@ function App() {
               errorElement={<Notfound />}
               path="categoris/edit=:id"
               element={<Notfound />}
-            />
-            {/* pro */}
-            <Route
+            /> */}
+          {/* pro */}
+          {/* <Route
               errorElement={<Notfound />}
               path="products"
               element={<Notfound />}
@@ -265,10 +264,10 @@ function App() {
               errorElement={<Notfound />}
               path="products/edit=:id"
               element={<Notfound />}
-            />
+            /> */}
 
-            {/* bàn */}
-            <Route
+          {/* bàn */}
+          {/* <Route
               errorElement={<Notfound />}
               path="table"
               element={<ListTablee />}
@@ -282,9 +281,9 @@ function App() {
               errorElement={<Notfound />}
               path="table/edit=:id"
               element={<Notfound />}
-            />
-            {/* thống kê */}
-            <Route
+            /> */}
+          {/* thống kê */}
+          {/* <Route
               errorElement={<Notfound />}
               path="statistical"
               element={<Notfound />}
@@ -306,7 +305,7 @@ function App() {
               path="setting"
               element={<Notfound />}
             />
-          </Route>
+          </Route> */}
         </Routes>
       )}
 
