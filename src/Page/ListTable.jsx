@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, React } from "react";
 import { getAllTable } from "../features/TableSlice/TableSlice";
-import { Row, Col, Spin, Alert } from "antd";
-import React from "react";
+import { Row, Col, Spin } from "antd";
 
 import IconTable from "../images/table.png";
 import Error from "../images/error.png";
-
+import '../css/Home.css'
 import MoveTable from "./MoveTable";
 import { Size } from "./../size";
 
@@ -44,7 +43,7 @@ const ListTable = (props) => {
       (item?.orders?.length <= 0 || item?.orders == null) &&
       item.timeBookTable == "null"
     ) {
-      navigate(`/order/name=${item.name}?id=${item._id}`);
+      navigate(`/order/${item.name}/${item._id}`);
     } else if (item?.orders?.length > 0 && item.timeBookTable == "null") {
       props?.callBack(item);
     } else {
@@ -54,12 +53,12 @@ const ListTable = (props) => {
 
   const renderSumPriceBookTable = (item) => {
     const prices = (
-      item?.orders.length == undefined ? [item?.orders] : item?.orders
+      item?.orders?.length == undefined ? [item?.orders] : item?.orders
     )?.map((item) => {
-      if (item.weight) {
-        return Math.ceil(+item.price * item.weight * +item.amount);
+      if (item?.weight) {
+        return Math.ceil(+item?.price * item?.weight * +item?.amount);
       } else {
-        return Math.ceil(+item.price * +item.amount);
+        return Math.ceil(+item?.price * +item?.amount);
       }
     });
     let sum = 0;
@@ -71,10 +70,9 @@ const ListTable = (props) => {
 
   return (
     <div
-      className="group_home"
       style={{
         position: "relative",
-        height:'100%',
+        height: "100%",
         background: "#fff",
         zIndex:
           props?.showMenu == true
@@ -113,7 +111,7 @@ const ListTable = (props) => {
           </span>
         </div>
       ) : (
-        <Row>
+        <Row >
           {statusTable.length <= 0 && props?.statusTable !== undefined ? (
             <div
               style={{
@@ -124,7 +122,11 @@ const ListTable = (props) => {
                 alignItems: "center",
               }}
             >
-              <img src={Error} alt="" style={{ width: "20%" }} />
+              <img
+                src={Error}
+                alt=""
+                style={{ width: sizes.width < 768 ? "50%" : "20%" }}
+              />
               <span style={{ fontSize: 20, fontWeight: "500", color: "red" }}>
                 Xin lỗi, hiện tại chưa có dữ liệu.
               </span>
@@ -137,7 +139,7 @@ const ListTable = (props) => {
               ).map((item, index) => {
                 return (
                   <Col
-                    key={index}
+                    key={item._id}
                     className="gutter-row"
                     style={{ padding: "10px", position: "relative" }}
                     xs={12}
@@ -177,16 +179,21 @@ const ListTable = (props) => {
                             <div
                               style={{
                                 backgroundColor: "yellowgreen",
-                                width: 16,
+                                width: sizes.width < 768 ? 12 : 16,
                                 borderRadius: 100,
                                 marginRight: 5,
-                                height: 16,
+                                height: sizes.width < 768 ? 12 : 16,
                               }}
                             ></div>
                           )}
                         </div>
 
-                        <div style={{ fontSize: 20, fontWeight: "500" }}>
+                        <div
+                          style={{
+                            fontSize: sizes.width < 768 ? 15 : 19,
+                            fontWeight: "500",
+                          }}
+                        >
                           {item.name}
                         </div>
                         {item.amount > 0 ? (
@@ -195,7 +202,7 @@ const ListTable = (props) => {
                             item.timeBookTable !== "null") && (
                             <span
                               style={{
-                                fontSize: 17,
+                                fontSize: sizes.width < 768 ? 12 : 17,
                                 color: "#00CC00",
                                 fontWeight: "500",
                               }}
@@ -210,7 +217,7 @@ const ListTable = (props) => {
                         ) : (
                           <span
                             style={{
-                              fontSize: 17,
+                              fontSize: sizes.width < 768 ? 12 : 17,
                               color:
                                 item?.orders?.length > 0 ? "#00CC00" : "red",
                               fontWeight: "500",

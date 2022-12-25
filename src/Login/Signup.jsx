@@ -263,24 +263,20 @@ const Signup = () => {
                   width: "100%",
                   flexDirection: "column",
                   height: "100%",
-                  marginTop: 55,
+                  marginTop: sizes.width < 768 ? 80 : 70,
                 }}
               >
                 {loading == true ? (
                   <Spin />
                 ) : (
                   <Form.Item>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Link
-                        style={{
-                          fontSize: 14,
-                          padding: 5,
-                          margin: 0,
-                        }}
-                        to="/signin"
-                      >
-                        Đăng nhập
-                      </Link>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: sizes.width < 768 ? "column" : "row",
+                      }}
+                    >
                       <Button
                         type="primary"
                         htmlType="submit"
@@ -300,6 +296,16 @@ const Signup = () => {
                       >
                         Đăng ký
                       </Button>
+                      <Link
+                        style={{
+                          fontSize: 14,
+                          padding: 5,
+                          margin: 0,
+                        }}
+                        to="/signin"
+                      >
+                        Đăng nhập
+                      </Link>
                     </div>
                   </Form.Item>
                 )}

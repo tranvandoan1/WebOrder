@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Modal, message, Spin } from "antd";
+import { Form, Input, Button, message, Spin } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "../css/Signin.css";
 import UserAPI from "../API/Users";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Size } from "./../size";
 const Signin = () => {
+  const sizes = Size();
   const [loading, setLoading] = useState(false);
   const signin = async (values) => {
     const user = {
@@ -49,7 +51,10 @@ const Signin = () => {
           <li></li>
           <li></li>
         </ul>
-        <div className="form-signin">
+        <div
+          className="form-signin"
+          style={{ width: sizes.width < 768 ? 300 : 600 }}
+        >
           <div
             className="logo"
             style={{ textAlign: "center", marginBottom: "20px" }}
@@ -60,7 +65,7 @@ const Signin = () => {
             />
           </div>
           <h3
-            style={{ textAlign: "center", margin: "20px 0", color: "#ee4d2d" }}
+            style={{ textAlign: "center", margin: "10px 0", color: "#ee4d2d" }}
           >
             Đăng nhập
           </h3>
@@ -81,7 +86,7 @@ const Signin = () => {
                   borderRadius: 5,
                   fontSize: 16,
                 }}
-                type='email'
+                type="email"
               />
             </Form.Item>
             <Form.Item
@@ -109,7 +114,7 @@ const Signin = () => {
                     className="login-form-button"
                     style={{
                       fontSize: 15,
-                      padding: "20px 20px",
+                      padding: 10,
                       margin: 0,
                       display: "flex",
                       justifyContent: "center",

@@ -33,7 +33,7 @@ import Loading from "../Loading";
 import { addOrderTable, getAllTable } from "../features/TableSlice/TableSlice";
 import { Size } from "../size";
 const Orders = () => {
-  console.log('có vào')
+  console.log("có vào");
   const { id } = useParams();
   const sizes = Size();
   const dispatch = useDispatch();
@@ -373,7 +373,7 @@ const Orders = () => {
                   {categoris.map((item, index) => {
                     return (
                       <Menu.Item
-                        key={index}
+                        key={item._id}
                         style={{ textTransform: "capitalize" }}
                         onClick={() => listCate(item._id)}
                       >
@@ -409,7 +409,19 @@ const Orders = () => {
                           onClick={() => selectProduct(item_pro)}
                         >
                           <div className="list_pro">
-                            <div className="img">
+                            <div
+                              className="img"
+                              style={{
+                                height:
+                                  sizes.width < 768
+                                    ? 170
+                                    : sizes.width == 1024
+                                    ? isModalOpen == true
+                                      ? 170
+                                      : 150
+                                    : 180,
+                              }}
+                            >
                               <img src={item_pro.photo} alt="" />
                               <div className="name-price">
                                 <div className="name">{item_pro.name}</div>
@@ -498,7 +510,18 @@ const Orders = () => {
       {sizes.width < 1024 ? (
         <React.Fragment>
           <Drawer
-            title="Sản phẩm đã chọn"
+            title={
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>Sản phẩm đã chọn</span>
+                {loading == true && <Spin />}
+              </div>
+            }
             placement="right"
             onClose={() => setOpenCart(false)}
             open={openCart}
@@ -508,6 +531,7 @@ const Orders = () => {
               loading={loading}
               tableOrder={tableOrder}
               isModalOpen={isModalOpen}
+              callBack={(e) => setLoading(e)}
             />
           </Drawer>
           <Drawer

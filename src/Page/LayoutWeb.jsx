@@ -13,7 +13,7 @@ import {
   Drawer,
   Dropdown,
 } from "antd";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../css/Home.module.css";
 import {
@@ -37,7 +37,7 @@ import { validatePhone } from "./../components/Validate";
 const { Header, Content, Sider } = Layout;
 
 const LayoutWeb = () => {
-  const width = Size();
+  const sizes = Size();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((data) => data.user.value);
@@ -152,6 +152,7 @@ const LayoutWeb = () => {
   // lọc trạng thái bàn
   const handleChange = (value) => {
     setStatusTable(value);
+    setCheckResponsive(false);
   };
   const render = () => (
     <div
@@ -259,9 +260,8 @@ const LayoutWeb = () => {
       style={{
         backgroundColor: "rgb(243, 243, 243)",
         position: "relative",
-        flex: 1,
       }}
-      className={styles.main}
+      className="layout-body"
     >
       <Layout>
         <Layout className="site-layout">
@@ -303,7 +303,12 @@ const LayoutWeb = () => {
                         alt=""
                       />
                     ) : (
-                      <UserOutlined style={{ fontSize: 35, padding: 20 }} />
+                      <UserOutlined
+                        style={{
+                          fontSize: 35,
+                          padding: sizes.width < 768 ? "0 10px 0 0" : 20,
+                        }}
+                      />
                     )}
 
                     <span style={{ fontSize: 20, fontWeight: "500" }}>
@@ -312,8 +317,8 @@ const LayoutWeb = () => {
                   </React.Fragment>
                 )}
               </div>
-
-              {width.width < 960 ? (
+              {/* show when width is less than 1024 */}
+              {sizes.width < 960 ? (
                 <MenuUnfoldOutlined
                   style={{ fontSize: 30, cursor: "pointer" }}
                   onClick={() => setCheckResponsive(true)}
@@ -341,6 +346,8 @@ const LayoutWeb = () => {
           </Content>
         </Layout>
       </Layout>
+
+      {/* book table */}
       <div
         className={styles.book_table}
         style={
@@ -350,6 +357,8 @@ const LayoutWeb = () => {
                 visibility: "visible",
                 opacity: 1,
                 zIndex: 1000,
+                overflow: "scroll",
+                height: "100%",
               }
             : {}
         }
@@ -366,7 +375,12 @@ const LayoutWeb = () => {
           }}
         ></div>
         <div
-          style={{ background: "#fff", borderRadius: 2, zIndex: 10 }}
+          style={{
+            background: "#fff",
+            borderRadius: 2,
+            zIndex: 10,
+            width: sizes.width < 786 ? "100%" : 500,
+          }}
           className={styles.table_book_table}
         >
           <h3
@@ -472,10 +486,10 @@ const LayoutWeb = () => {
               </Select>
             </Form.Item>
             <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
+            // wrapperCol={{
+            //   offset: 8,
+            //   span: 16,
+            // }}
             >
               <div
                 style={{
@@ -531,6 +545,9 @@ const LayoutWeb = () => {
             padding: 0,
             margin: 0,
           }}
+          width={
+            sizes.width > 1024 ? "100%" : sizes.width < 768 ? "100%" : "100%"
+          }
         >
           <div>
             <div
@@ -544,24 +561,30 @@ const LayoutWeb = () => {
                 <Avatar size={44} src={user?.avatar} />
                 <span style={{ marginLeft: 10 }}>{user?.name}</span>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  border: "1px solid #d9d9d9",
-                  borderRadius: 4,
-                  padding: "5px 10px",
-                  background: "hsl(214, 89%, 52%)",
-                  color: "#fff",
-                }}
-                onClick={() => signOut()}
-              >
-                <LogoutOutlined
-                  style={{ fontSize: 14, marginRight: 5, marginTop: 2 }}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    border: "1px solid #d9d9d9",
+                    borderRadius: 4,
+                    padding: "5px 10px",
+                    background: "hsl(214, 89%, 52%)",
+                    color: "#fff",
+                  }}
+                  onClick={() => signOut()}
+                >
+                  <LogoutOutlined
+                    style={{ fontSize: 14, marginRight: 5, marginTop: 2 }}
+                  />
+                  <span style={{ fontSize: 12, fontWeight: "400" }}>
+                    Đăng xuất
+                  </span>
+                </div>
+                <SettingOutlined
+                  onClick={() => navigate("/manager/statistical")}
+                  style={{ fontSize: 30, marginLeft: 10, cursor: "pointer" }}
                 />
-                <span style={{ fontSize: 12, fontWeight: "400" }}>
-                  Đăng xuất
-                </span>
               </div>
             </div>
             <div style={{ position: "relative" }}>
@@ -599,61 +622,73 @@ const LayoutWeb = () => {
               )}
             </div>
 
-            <Button
-              onClick={() => (
-                setCheckBookTable(true), setCheckResponsive(false)
-              )}
-              style={{
-                backgroundColor: "red",
-                border: 0,
-                marginRight: 10,
-                borderRadius: 5,
-              }}
-              type="primary"
-            >
-              Đặt bàn
-            </Button>
             <div
-              style={{ display: "flex", alignItems: "center", marginTop: 10 }}
+              style={
+                sizes.width > 768
+                  ? {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }
+                  : {}
+              }
             >
-              (
-              <span
-                style={{ marginRight: 10, fontSize: 13, fontWeight: "500" }}
+              <Button
+                onClick={() => (
+                  setCheckBookTable(true), setCheckResponsive(false)
+                )}
+                style={{
+                  backgroundColor: "red",
+                  border: 0,
+                  marginRight: 10,
+                  borderRadius: 5,
+                }}
+                type="primary"
               >
-                {" "}
-                Chú ý :{" "}
-              </span>
-              <div
-                className={styles.not}
-                style={{ fontSize: 11, marginRight: 15, fontWeight: "500" }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#FF7F00",
-                    width: 10,
-                    height: 10,
-                    borderRadius: 100,
-                    marginRight: 5,
-                  }}
-                ></div>
                 Đặt bàn
-              </div>
+              </Button>
               <div
-                className={styles.not}
-                style={{ fontSize: 11, fontWeight: "500" }}
+                style={{ display: "flex", alignItems: "center", marginTop: 10 }}
               >
+                (
+                <span
+                  style={{ marginRight: 10, fontSize: 13, fontWeight: "500" }}
+                >
+                  {" "}
+                  Chú ý :{" "}
+                </span>
                 <div
-                  style={{
-                    backgroundColor: "yellowgreen",
-                    width: 10,
-                    height: 10,
-                    borderRadius: 100,
-                    marginRight: 5,
-                  }}
-                ></div>
-                Đang có khách
+                  className={styles.not}
+                  style={{ fontSize: 11, marginRight: 15, fontWeight: "500" }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "#FF7F00",
+                      width: 10,
+                      height: 10,
+                      borderRadius: 100,
+                      marginRight: 5,
+                    }}
+                  ></div>
+                  Đặt bàn
+                </div>
+                <div
+                  className={styles.not}
+                  style={{ fontSize: 11, fontWeight: "500" }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "yellowgreen",
+                      width: 10,
+                      height: 10,
+                      borderRadius: 100,
+                      marginRight: 5,
+                    }}
+                  ></div>
+                  Đang có khách
+                </div>
+                )
               </div>
-              )
             </div>
           </div>
         </Drawer>
@@ -669,17 +704,31 @@ const LayoutWeb = () => {
             right: 0,
             bottom: 0,
             background: "rgba(0,0,0,0.6)",
-            zIndex: 100,
+            zIndex: 1000,
             height: "100%",
-            flex: 1,
+            width: "100%",
           }}
           className="box-show-menu"
         >
           <div
+            onClick={() => setShowMenu(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0,0,0,0.6)",
+              zIndex: 0,
+              height: "100%",
+              width: "100%",
+            }}
+          ></div>
+          <div
             style={{
               width: "100%",
-              height: "100%",
-              flex: 1,
+              // height:'100%',
+              marginTop: 100,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -689,7 +738,7 @@ const LayoutWeb = () => {
             <div
               style={{
                 background: "#fff",
-                width: 400,
+                width: sizes?.width < 786 ? 300 : 400,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -710,7 +759,7 @@ const LayoutWeb = () => {
                   right: -10,
                   color: "red",
                   cursor: "pointer",
-                  fontSize: 25,
+                  fontSize: sizes?.width < 786 ? 20 : 25,
                   background: "#fff",
                   borderRadius: "100%",
                 }}
@@ -724,7 +773,7 @@ const LayoutWeb = () => {
               >
                 <span
                   style={{
-                    fontSize: 22,
+                    fontSize: sizes?.width < 786 ? 17 : 22,
                     color: "black",
                     fontWeight: "500",
                   }}
@@ -741,13 +790,15 @@ const LayoutWeb = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   position: "relative",
-                  marginTop: 50,
+                  marginTop: sizes?.width < 786 ? 20 : 40,
                 }}
               >
                 <div
                   className="select-option"
                   style={{
                     boxShadow: "0px 0px 30px 0px rgb(0, 24, 145)",
+                    width: sizes?.width < 786 ? 50 : 80,
+                    height: sizes?.width < 786 ? 50 : 80,
                   }}
                   onClick={() => {
                     setShowMenu(false);
@@ -755,9 +806,13 @@ const LayoutWeb = () => {
                   }}
                 >
                   <span
-                    style={{ color: "black", fontSize: 13, fontWeight: 600 }}
+                    style={{
+                      color: "black",
+                      fontSize: sizes?.width < 786 ? 11 : 13,
+                      fontWeight: 600,
+                    }}
                   >
-                    Chuyển bàn
+                    Chuyển
                   </span>
                 </div>
                 <div
@@ -766,28 +821,38 @@ const LayoutWeb = () => {
                     margin: "0 30px",
                     borderRadius: "100%",
                     boxShadow: "0px 0px 30px 0px red",
+                    width: sizes?.width < 786 ? 50 : 80,
+                    height: sizes?.width < 786 ? 50 : 80,
                   }}
                   onClick={() => onclickCancelTable()}
                 >
                   <span
-                    style={{ color: "black", fontSize: 16, fontWeight: 600 }}
+                    style={{
+                      color: "black",
+                      fontSize: sizes?.width < 786 ? 11 : 15,
+                      fontWeight: 600,
+                    }}
                   >
-                    Hủy bàn
+                    Hủy
                   </span>
                 </div>
                 <div
                   className="select-option"
                   style={{
                     boxShadow: "0px 0px 30px 0px rgb(204, 255, 0)",
+                    width: sizes?.width < 786 ? 50 : 80,
+                    height: sizes?.width < 786 ? 50 : 80,
                   }}
                   onClick={() =>
-                    navigate(
-                      `/order/table-name=${bookTable.name}&&${bookTable._id}`
-                    )
+                    navigate(`/order/${bookTable.name}/${bookTable._id}`)
                   }
                 >
                   <span
-                    style={{ color: "black", fontSize: 16, fontWeight: 600 }}
+                    style={{
+                      color: "black",
+                      fontSize: sizes?.width < 786 ? 11 : 16,
+                      fontWeight: 600,
+                    }}
                   >
                     Order
                   </span>

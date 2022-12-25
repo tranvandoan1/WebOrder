@@ -59,28 +59,28 @@ body::-webkit-scrollbar {
 @media (min-width: 1024px) {
 }
 @media (width: 1024px) {
-  .list_pro > .img {
-    height: 170px;
-  }
 }
 @media (min-width: 739px) and (max-width: 1023px) {
-  .list_pro > .img {
-    height: 180px;
-  }
 }
 
 @media (min-width: 539px) and (max-width: 739px) {
-  .list_pro > .img {
-    height: 170px;
+  .ant-table-thead > tr > th,
+  tbody > tr > td {
+    padding: 5px !important;
+    font-size: 12px !important;
   }
 }
 @media (min-width: 396px) and (max-width: 538px) {
-  .list_pro > .img {
-    height: 170px;
+  .ant-table-thead > tr > th,
+  tbody > tr > td {
+    padding: 5px !important;
+    font-size: 12px !important;
   }
 }
 @media (max-width: 395px) {
-  .list_pro > .img {
-    height: 150px;
+  .ant-table-thead > tr > th,
+  tbody > tr > td {
+    padding: 5px !important;
+    font-size: 12px !important;
   }
 }

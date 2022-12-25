@@ -80,6 +80,7 @@ const SelectedProduct = (props) => {
 
   //tăng giảm số lượng
   const quantityChange = async (item) => {
+    props?.callBack(true);
     const newData = [];
     const handle = async () => {
       dataTable?.map((itemOrder) => {
@@ -101,6 +102,7 @@ const SelectedProduct = (props) => {
           id_table: id,
         })
       );
+      props?.callBack(false);
     };
     if (item.item.amount == 1) {
       if (item.check == "reduce") {
@@ -113,6 +115,7 @@ const SelectedProduct = (props) => {
             id_table: id,
           })
         );
+        props?.callBack(false);
       } else {
         handle();
       }
@@ -193,21 +196,25 @@ const SelectedProduct = (props) => {
       width: 150,
       render: (name, data) =>
         data.weight > 0 ? (
-          <span>
-            {name} ({data.weight}kg)
+          <span style={{ fontSize: sizes.width < 768 ? 12 : 15 }}>
+            {name} ({data.weight}kg) ({data.dvt})
           </span>
         ) : (
-          name
+          <span>
+            {name} ({data.dvt})
+          </span>
         ),
     },
+
     {
       title: "Số lượng",
       dataIndex: "amount",
+      render: (amount, data) => <div>{amount}</div>,
     },
-    {
-      title: "Đơn vị(Kg)",
-      dataIndex: "dvt",
-    },
+    // {
+    //   title: "Đơn vị(Kg)",
+    //   dataIndex: "dvt",
+    // },
     {
       title: "Đơn giá",
       dataIndex: "price",
@@ -227,6 +234,7 @@ const SelectedProduct = (props) => {
   ];
   // thay đổi số lượng từ ô input
   const changeAmountInput = async (item) => {
+    props?.callBack(true);
     setLoading(true);
     if (isNaN(valueAmount?.amount) == false) {
       if (valueAmount?.amount == 0 || String(valueAmount?.amount).length <= 0) {
@@ -239,6 +247,7 @@ const SelectedProduct = (props) => {
             id_table: id,
           })
         );
+        props?.callBack(false);
       } else {
         const newData = [];
         dataTable?.map((itemOrder) => {
@@ -261,6 +270,7 @@ const SelectedProduct = (props) => {
             id_table: id,
           })
         );
+        props?.callBack(false);
       }
     } else {
       if (valueAmount?.amount !== undefined) {
@@ -272,21 +282,6 @@ const SelectedProduct = (props) => {
     setLoading(false);
   };
 
-  //   const [size, setSize] = useState(() => {
-  //     const proSelect = document.querySelector("#order_pro");
-  //     return { width: proSelect.offsetWidth, height: proSelect.offsetHeight };
-  //   });
-  // console.log(size,'size')
-  //   useEffect(() => {
-  //     window.addEventListener("resize", function () {
-  //       const proSelect = document.querySelector("#order_pro");
-  //       // setSize({ width: proSelect.innerWidth, height: proSelect.innerHeight });
-  //       console.log(
-  //         { width: proSelect.offsetWidth, height: proSelect.offsetHeight },
-  //         "đâsasd"
-  //       );
-  //     });
-  //   }, []);
   return (
     <div
       className="order"
@@ -337,7 +332,7 @@ const SelectedProduct = (props) => {
             >
               {dataTable?.map((item, index) => {
                 return (
-                  <Row key={index} className="row-order">
+                  <Row key={item._id} className="row-order">
                     <Col
                       xs={0}
                       sm={0}
@@ -383,7 +378,9 @@ const SelectedProduct = (props) => {
                         style={{
                           fontSize:
                             sizes.width < 1024
-                              ? 20
+                              ? sizes.width < 768
+                                ? 15
+                                : 20
                               : sizes.width == 1024
                               ? 14
                               : 19,
@@ -396,7 +393,9 @@ const SelectedProduct = (props) => {
                           style={{
                             fontSize:
                               sizes.width < 1024
-                                ? 20
+                                ? sizes.width < 768
+                                  ? 15
+                                  : 20
                                 : sizes.width == 1024
                                 ? 11
                                 : 19,
@@ -422,14 +421,14 @@ const SelectedProduct = (props) => {
                                 ? 10
                                 : sizes.width == 1024
                                 ? 5
-                                : 19,
+                                : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
                                 ? 5
-                                : 19,
+                                : 10,
 
                             textAlign: "center",
                             fontWeight: "600",
@@ -457,7 +456,7 @@ const SelectedProduct = (props) => {
                             justifyContent: "center",
                             alignItems: "center",
                             flexDirection: "column",
-                            width:'100%'
+                            width: "100%",
                           }}
                           onChange={(e) => {
                             setValueAmount({
@@ -475,14 +474,14 @@ const SelectedProduct = (props) => {
                                 ? 10
                                 : sizes.width == 1024
                                 ? 5
-                                : 19,
+                                : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
                                 ? 5
-                                : 19,
+                                : 10,
                             textAlign: "center",
                             fontWeight: "600",
                             marginLeft: 2,
@@ -502,13 +501,21 @@ const SelectedProduct = (props) => {
               {/* <!-- xác nhận thanh toán--> */}
               <Modal
                 title="Xác nhận thanh toán"
-                width={"80%"}
+                width={sizes.width < 768 ? "100%" : "80%"}
                 visible={isModalVisible}
                 onCancel={handleCancel}
               >
                 <div className="row payment_confirmation">
-                  <div className="col-4">
-                    <div className="jidrr">
+                  <div className={sizes.width < 768 ? "col-12" : "col-4"}>
+                    <div
+                      className="jidrr"
+                      style={{
+                        borderRight:
+                          sizes.width < 768
+                            ? 0
+                            : "1px solid rgb(214, 214, 214)",
+                      }}
+                    >
                       <div className="buyer_information">
                         Thông tin người mua
                       </div>
@@ -530,9 +537,15 @@ const SelectedProduct = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="col-8">
-                    <div className="tablee_xn">
-                      <div className="information">sản phẩm đã thêm</div>
+                  {sizes.width < 768 && <hr />}
+                  <div className={sizes.width < 768 ? "col-12" : "col-8"}>
+                    <div style={{ padding: sizes.width < 768 ? 0 : 10 }}>
+                      <div
+                        className="information"
+                        style={{ fontSize: sizes.width < 768 ? 14 : 16 }}
+                      >
+                        sản phẩm đã thêm
+                      </div>
                       {dataTable?.length < 8 ? (
                         <Table
                           columns={columns}
@@ -677,6 +690,7 @@ const SelectedProduct = (props) => {
                   }}
                   type="primary"
                   onClick={showModal}
+                  disabled={props?.loading || loading}
                 >
                   Thanh toán
                 </Button>

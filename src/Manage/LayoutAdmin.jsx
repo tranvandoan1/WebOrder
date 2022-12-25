@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Layout, Menu, message, Spin } from "antd";
+import { Avatar, Drawer, Layout, Menu, Spin } from "antd";
 import {
   ShoppingCartOutlined,
   ProfileOutlined,
@@ -11,6 +11,9 @@ import {
   SettingOutlined,
   LoginOutlined,
   QuestionCircleOutlined,
+  MenuUnfoldOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { NavLink, Outlet } from "react-router-dom";
 import styles from "../css/LayoutAdmin.module.css";
@@ -27,6 +30,11 @@ const LayoutAdmin = () => {
   const dispatch = useDispatch();
   const user = useSelector((data) => data.user.value);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     dispatch(getUser());
   }, []);
@@ -251,6 +259,38 @@ const LayoutAdmin = () => {
               marginLeft: sizes.width > 1024 ? 200 : 0,
             }}
           >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "#0d6efd",
+                padding: 10,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  color: "#fff",
+                }}
+              >
+                {String(user.avatar).length > 0 || user.avatar !== null ? (
+                  <Avatar src={user?.avatar} size={30} alt="" />
+                ) : (
+                  <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
+                )}
+
+                <span style={{ fontSize: 18, fontWeight: "500" }}>
+                  {user?.name}
+                </span>
+              </div>
+              <MenuUnfoldOutlined
+                style={{ fontSize: 30, cursor: "pointer", color: "#fff" }}
+                onClick={() => setOpen(true)}
+              />
+            </div>
             <Content style={{ margin: "5px 10px 0" }}>
               <div className="site-layout-background" style={{ padding: 24 }}>
                 <Outlet />
@@ -259,6 +299,156 @@ const LayoutAdmin = () => {
           </Layout>
         </React.Fragment>
       )}
+
+      <Drawer
+        title={
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <CloseOutlined
+              style={{ fontSize: 20, cursor: "pointer", color: "red" }}
+              onClick={() => setOpen(false)}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              {String(user.avatarRestaurant).length > 0 ||
+              user.avatarRestaurant !== null ? (
+                <Avatar src={user?.avatarRestaurant} size={30} alt="" />
+              ) : (
+                <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
+              )}
+
+              <span style={{ fontSize: 18, fontWeight: "500", marginLeft: 10 }}>
+                {user?.nameRestaurant}
+              </span>
+            </div>
+          </div>
+        }
+        placement="right"
+        closable={false}
+        onClose={onClose}
+        open={open}
+      >
+        <Menu
+          theme="dark"
+          mode="inline"
+          className={styles.menu}
+          defaultSelectedKeys={
+            key == null ? [tables?.value?.length > 0 ? "1" : "1"] : key
+          }
+          items={[
+            {
+              key: "1",
+              icon: <BarChartOutlined />,
+              label: "Thông kê",
+              itemIcon: <NavLink to="statistical" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["1"]));
+                setOpen(false);
+              },
+            },
+            {
+              key: "2",
+              icon: <BorderlessTableOutlined />,
+              label: "Bàn",
+              itemIcon: <NavLink to="table" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["2"]));
+                setOpen(false);
+              },
+            },
+            {
+              key: "3",
+              icon: <ProfileOutlined />,
+              label: "Danh mục",
+              itemIcon: <NavLink to="categoris" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["3"]));
+                setOpen(false);
+              },
+            },
+            {
+              key: "4",
+              icon: <ClusterOutlined />,
+              label: "Sản phẩm",
+              itemIcon: <NavLink to="products" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["4"]));
+                setOpen(false);
+              },
+            },
+
+            {
+              key: "5",
+              icon: <ShoppingCartOutlined />,
+              label: "Đơn hàng",
+              itemIcon: <NavLink to="order" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["5"]));
+                setOpen(false);
+              },
+            },
+            {
+              key: "6",
+              icon: <UserOutlined />,
+              label: "Tài khoản",
+              itemIcon: <NavLink to="account" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["6"]));
+                setOpen(false);
+              },
+            },
+            {
+              key: "7",
+              icon: <SettingOutlined />,
+              label: "Cài đặt",
+              itemIcon: <NavLink to="setting" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["7"]));
+                setOpen(false);
+              },
+            },
+            (tables?.value?.length <= 0 && tables?.checkData == false) ||
+            (tables.value.length <= 0 && tables.checkData == true)
+              ? null
+              : {
+                  key: "8",
+                  icon: <RollbackOutlined />,
+                  label: "Quay lại Order",
+                  itemIcon: <NavLink to="/tables" />,
+                  style: { color: "black" },
+                  onClick: () => {
+                    localStorage.removeItem("key");
+                    setOpen(false);
+                  },
+                },
+          ]}
+        />
+      </Drawer>
     </Layout>
   );
 };

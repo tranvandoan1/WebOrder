@@ -63,6 +63,7 @@ function App() {
         ) : (
           <Routes>
             <Route
+              errorElement={<Notfound />}
               path="/"
               element={
                 user?.value.count == 0 &&
@@ -89,12 +90,14 @@ function App() {
             />
 
             <Route
+              errorElement={<Notfound />}
               path="/signin"
               element={
                 userLoca !== null ? <Navigate to="/tables" /> : <Signin />
               }
             />
             <Route
+              errorElement={<Notfound />}
               path="/signup"
               element={
                 userLoca !== null ? <Navigate to="/tables" /> : <PicturesWall />
@@ -102,6 +105,7 @@ function App() {
             />
 
             <Route
+              errorElement={<Notfound />}
               path="/tables/"
               element={
                 user?.value.accountType == 0 ? (
@@ -112,8 +116,13 @@ function App() {
               }
             />
 
-            <Route path="/order/:name/:id" element={<Orders />} />
             <Route
+              path="/order/:name/:id"
+              element={<Orders />}
+              errorElement={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
               path="/manager/"
               element={
                 <PrivateData>
@@ -122,59 +131,181 @@ function App() {
               }
             >
               {/* cate */}
-              <Route path="categoris/" element={<ListCate />}></Route>
-              <Route path="categoris/add" element={<AddCate />} />
-              <Route path="categoris/edit=:id" element={<EditCate />} />
+              <Route
+                errorElement={<Notfound />}
+                path="categoris/"
+                element={<ListCate />}
+              ></Route>
+              <Route
+                errorElement={<Notfound />}
+                path="categoris/add"
+                element={<AddCate />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="categoris/edit=:id"
+                element={<EditCate />}
+              />
               {/* pro */}
-              <Route path="products" element={<ListPro />} />
-              <Route path="products/add" element={<AddPro />} />
-              <Route path="products/edit=:id" element={<EditPro />} />
+              <Route
+                errorElement={<Notfound />}
+                path="products"
+                element={<ListPro />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="products/add"
+                element={<AddPro />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="products/edit=:id"
+                element={<EditPro />}
+              />
 
               {/* bàn */}
-              <Route path="table" element={<ListTablee />} />
-              <Route path="table/add" element={<AddTable />} />
-              <Route path="table/edit=:id" element={<EditTable />} />
+              <Route
+                errorElement={<Notfound />}
+                path="table"
+                element={<ListTablee />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="table/add"
+                element={<AddTable />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="table/edit=:id"
+                element={<EditTable />}
+              />
               {/* thống kê */}
-              {tables?.length > 0 && (
-                <Route path="statistical" element={<ListStatistical />} />
-              )}
+              <Route
+                errorElement={<Notfound />}
+                path="statistical"
+                element={<ListStatistical />}
+              />
 
-              <Route path="account" element={<Account />} />
+              <Route
+                errorElement={<Notfound />}
+                path="account"
+                element={<Account />}
+              />
 
-              <Route path="order" element={<ListOder />} />
-              <Route path="setting" element={<Setting />} />
+              <Route
+                errorElement={<Notfound />}
+                path="order"
+                element={<ListOder />}
+              />
+              <Route
+                errorElement={<Notfound />}
+                path="setting"
+                element={<Setting />}
+              />
             </Route>
           </Routes>
         )
       ) : (
         <Routes>
-          <Route path="/" element={<Signin />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<PicturesWall />} />
-          <Route path="/tables/" element={<Notfound />} />
+          <Route errorElement={<Notfound />} path="/" element={<Signin />} />
+          <Route
+            errorElement={<Notfound />}
+            path="/signin"
+            element={<Signin />}
+          />
+          <Route
+            errorElement={<Notfound />}
+            path="/signup"
+            element={<PicturesWall />}
+          />
+          <Route
+            errorElement={<Notfound />}
+            path="/tables/"
+            element={<Notfound />}
+          />
 
-          <Route path="/order/table-name=:name&&:id" element={<Notfound />} />
-          <Route path="/manager/" element={<Notfound />}>
+          <Route
+            errorElement={<Notfound />}
+            path="/order/table-name=:name&&:id"
+            element={<Notfound />}
+          />
+          <Route
+            errorElement={<Notfound />}
+            path="/manager/"
+            element={<Notfound />}
+          >
             {/* cate */}
-            <Route path="categoris/" element={<Notfound />}></Route>
-            <Route path="categoris/add" element={<Notfound />} />
-            <Route path="categoris/edit=:id" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="categoris/"
+              element={<Notfound />}
+            ></Route>
+            <Route
+              errorElement={<Notfound />}
+              path="categoris/add"
+              element={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="categoris/edit=:id"
+              element={<Notfound />}
+            />
             {/* pro */}
-            <Route path="products" element={<Notfound />} />
-            <Route path="products/add" element={<Notfound />} />
-            <Route path="products/edit=:id" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="products"
+              element={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="products/add"
+              element={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="products/edit=:id"
+              element={<Notfound />}
+            />
 
             {/* bàn */}
-            <Route path="table" element={<ListTablee />} />
-            <Route path="table/add" element={<Notfound />} />
-            <Route path="table/edit=:id" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="table"
+              element={<ListTablee />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="table/add"
+              element={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="table/edit=:id"
+              element={<Notfound />}
+            />
             {/* thống kê */}
-            <Route path="statistical" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="statistical"
+              element={<Notfound />}
+            />
 
-            <Route path="account" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="account"
+              element={<Notfound />}
+            />
 
-            <Route path="order" element={<Notfound />} />
-            <Route path="setting" element={<Notfound />} />
+            <Route
+              errorElement={<Notfound />}
+              path="order"
+              element={<Notfound />}
+            />
+            <Route
+              errorElement={<Notfound />}
+              path="setting"
+              element={<Notfound />}
+            />
           </Route>
         </Routes>
       )}
@@ -183,7 +314,10 @@ function App() {
       //  : (
       //   <Routes>
       //     <Route
-      //       path="/"
+      //       
+              errorElement={<Notfound />}
+      
+      path="/"
       //       element={
       //         Object.keys(user)?.length > 0 ? (
       //           <Navigate to="/tables" />
@@ -196,7 +330,10 @@ function App() {
       //     />
 
       //     <Route
-      //       path="/signin"
+      //       
+              errorElement={<Notfound />}
+      
+      path="/signin"
       //       element={
       //         Object.keys(user)?.length > 0 ? (
       //           <Navigate to="/tables" />
@@ -208,7 +345,10 @@ function App() {
       //       }
       //     />
       //     <Route
-      //       path="/signup"
+      //       
+              errorElement={<Notfound />}
+      
+      path="/signup"
       //       element={
       //         Object.keys(user)?.length > 0 ? (
       //           <Navigate to="/tables" />
@@ -220,7 +360,7 @@ function App() {
       //   </Routes>
       // )} */}
       <Routes>
-        <Route path="/404" element={<Notfound />} />
+        <Route errorElement={<Notfound />} path="/404" element={<Notfound />} />
       </Routes>
     </BrowserRouter>
   );

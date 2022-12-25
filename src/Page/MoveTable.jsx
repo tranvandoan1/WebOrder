@@ -4,8 +4,10 @@ import { useDispatch } from "react-redux";
 
 import styles from "../css/Home.module.css";
 import { changeTables } from "../features/TableSlice/TableSlice";
+import { Size } from "../size";
 
 const MoveTable = (props) => {
+  const sizes = Size();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [selectTransferTable, setSelectTransferTable] = useState();
@@ -33,7 +35,7 @@ const MoveTable = (props) => {
   // hiện tổng tiền
   const renderSumPriceBookTable = () => {
     const prices = (
-      props?.bookTable?.orders.length == undefined
+      props?.bookTable?.orders?.length == undefined
         ? [props?.bookTable?.orders]
         : props?.bookTable?.orders
     )?.map((item) => {
@@ -74,7 +76,7 @@ const MoveTable = (props) => {
       <div
         style={{
           background: "#fff",
-          width: 400,
+          width: sizes?.width < 786 ? 300 : 400,
           borderRadius: 2,
         }}
         className={styles.table_book_table}
@@ -90,13 +92,15 @@ const MoveTable = (props) => {
           Chuyển bàn
         </h4>
 
-        <div style={{ fontSize: 16, fontWeight: "500" }}>
+        <div
+          style={{ fontSize: sizes?.width < 786 ? 12 : 16, fontWeight: "500" }}
+        >
           <span>Bàn chuyển : </span>
           <span style={{ color: "red" }}>{props?.bookTable?.name}</span>
         </div>
         <div
           style={{
-            fontSize: 16,
+            fontSize: sizes?.width < 786 ? 12 : 16,
             fontWeight: "500",
             margin: "10px 0",
           }}
@@ -105,7 +109,7 @@ const MoveTable = (props) => {
           <span style={{ color: "red" }}>
             <span
               style={{
-                fontSize: 17,
+                fontSize: sizes?.width < 786 ? 15 : 17,
                 color: props?.bookTable?.orders?.length > 0 ? "#00CC00" : "red",
                 fontWeight: "500",
               }}
@@ -116,17 +120,34 @@ const MoveTable = (props) => {
         </div>
         {props?.bookTable?.timeBookTable !== "null" && (
           <React.Fragment>
-            <div style={{ fontSize: 16, fontWeight: "500" }}>
+            <div
+              style={{
+                fontSize: sizes?.width < 786 ? 12 : 16,
+                fontWeight: "500",
+              }}
+            >
               <span>Người đặt bàn : </span>
               <span style={{ color: "red" }}>{props?.bookTable?.nameUser}</span>
             </div>
-            <div style={{ fontSize: 16, fontWeight: "500", margin: "10px 0" }}>
+            <div
+              style={{
+                fontSize: sizes?.width < 786 ? 12 : 16,
+                fontWeight: "500",
+                margin: "10px 0",
+              }}
+            >
               <span>Thời gian đặt bàn : </span>
               <span style={{ color: "red" }}>
                 {props?.bookTable?.timeBookTable}
               </span>
             </div>
-            <div style={{ fontSize: 16, fontWeight: "500", marginBottom: 10 }}>
+            <div
+              style={{
+                fontSize: sizes?.width < 786 ? 12 : 16,
+                fontWeight: "500",
+                marginBottom: 10,
+              }}
+            >
               <span>Số lượng : </span>
               <span style={{ color: "red" }}>{props?.bookTable?.amount}</span>
             </div>
@@ -137,13 +158,12 @@ const MoveTable = (props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            zIndex: 10000221,
           }}
         >
           <span
             style={{
               width: "40%",
-              fontSize: 16,
+              fontSize: sizes?.width < 786 ? 12 : 16,
               fontWeight: "500",
             }}
           >
@@ -152,7 +172,7 @@ const MoveTable = (props) => {
           <Select
             style={{
               width: "60%",
-              zIndex: 10000221,
+              fontSize: sizes?.width < 786 ? 11 : 13,
             }}
             value={
               selectTransferTable == undefined
@@ -168,7 +188,7 @@ const MoveTable = (props) => {
                   key={item._id}
                   value={item._id}
                   style={{
-                    zIndex: 10000221,
+                    fontSize: sizes?.width < 786 ? 11 : 13,
                   }}
                 >
                   {item.name}
@@ -194,6 +214,8 @@ const MoveTable = (props) => {
               background: "red",
               border: 0,
               marginRight: 10,
+              padding: "3px 10px",
+              fontSize: sizes?.width < 786 ? 11 : 13,
             }}
           >
             Đóng
@@ -201,7 +223,15 @@ const MoveTable = (props) => {
           {loading == true ? (
             <Spin size={33} />
           ) : (
-            <Button onClick={() => cancelReservation()} type="primary">
+            <Button
+              onClick={() => cancelReservation()}
+              type="primary"
+              style={{
+                border: 0,
+                padding: "3px 10px",
+                fontSize: sizes?.width < 786 ? 11 : 13,
+              }}
+            >
               Chuyển bàn
             </Button>
           )}

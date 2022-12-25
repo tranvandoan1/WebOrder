@@ -1,3 +1,8 @@
+.layout-body::-webkit-scrollbar,
+.ant-layout-content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
 .ant-modal {
   top: 50px !important;
 }
@@ -11,9 +16,7 @@ table tr th {
   width: 0 !important;
   height: 0 !important;
 }
-.box-order {
-  /* height: calc(100%-170px) !important; */
-}
+
 .box-order::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -26,21 +29,19 @@ table tr th {
   width: 0 !important;
   height: 0 !important;
 }
-.select-option:hover {
+/* .select-option:hover {
   transform: translateY(-30%);
   transition: 0.3s ease-in;
   color: #fff;
-}
-.select-option:first-child:hover {
+} */
+/* .select-option:first-child:hover {
   transform: translateY(-30%);
   transition: 0.3s ease-in;
   color: #fff;
-}
+} */
 .select-option-center,
 .select-option {
   transition: 0.3s ease-in;
-  width: 80px;
-  height: 80px;
   border-radius: 100%;
   background-color: #fff;
   display: flex;
@@ -57,6 +58,7 @@ table tr th {
   /* animation: box_show_menu 1s ease-in; */
   transition: 0.3s ease-in;
 }
+
 @keyframes box_show_menu {
   0% {
     transform: scale(1, 1);

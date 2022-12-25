@@ -4,9 +4,9 @@
   border-left: 1px solid rgb(238, 238, 238);
 }
 
-.products::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+.products::-webkit-scrollbar,.payment_confirmation::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .products::-webkit-scrollbar-thumb {
@@ -172,7 +172,7 @@
 
 thead > tr > th {
   text-transform: capitalize;
-  font-size: 0.7rem;
+  font-size: 0.1rem;
   text-align: center;
 }
 
@@ -185,7 +185,6 @@ tbody > tr > td {
 
 .information,
 .buyer_information {
-  font-size: 1rem;
   font-weight: 600;
   text-transform: capitalize;
   margin-bottom: 10px;
@@ -201,15 +200,12 @@ tbody > tr > td {
 }
 
 .jidrr {
-  border-right: 1px solid rgb(214, 214, 214);
   height: 100%;
   position: relative;
   padding: 10px;
 }
 
-.tablee_xn {
-  padding: 10px;
-}
+
 
 .example {
   position: absolute;
