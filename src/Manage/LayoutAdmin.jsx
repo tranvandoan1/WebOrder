@@ -14,6 +14,7 @@ import {
   MenuUnfoldOutlined,
   CloseCircleOutlined,
   CloseOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { NavLink, Outlet } from "react-router-dom";
 import styles from "../css/LayoutAdmin.module.css";
@@ -444,6 +445,17 @@ const LayoutAdmin = () => {
                   icon: <RollbackOutlined />,
                   label: "Quay lại Order",
                   itemIcon: <NavLink to="/tables" />,
+                  style: { color: "black" },
+                  onClick: () => {
+                    localStorage.removeItem("key");
+                    setOpen(false);
+                  },
+                },
+                {
+                  key: "7",
+                  icon: <LogoutOutlined />,
+                  label: "Đăng xuất",
+                  itemIcon: <NavLink to="" />,
                   style: { color: "black" },
                   onClick: () => {
                     localStorage.removeItem("key");
