@@ -451,17 +451,21 @@ const LayoutAdmin = () => {
                     setOpen(false);
                   },
                 },
-                {
-                  key: "7",
-                  icon: <LogoutOutlined />,
-                  label: "Đăng xuất",
-                  itemIcon: <NavLink to="" />,
-                  style: { color: "black" },
-                  onClick: () => {
-                    localStorage.removeItem("key");
-                    setOpen(false);
-                  },
-                },
+            {
+              key: "7",
+              icon: <LogoutOutlined />,
+              label: "Đăng xuất",
+              itemIcon: <NavLink to="/" />,
+              style: { color: "black" },
+              onClick: () => {
+                if (confirm("Bạn có muốn đăng xuất không ?")) {
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("key");
+                  window.location.href = "/";
+                }
+              },
+            },
           ]}
         />
       </Drawer>
