@@ -1,4 +1,4 @@
-import { Button, DatePicker, Modal, Row, Select, Space, Statistic } from "antd";
+import { DatePicker, Row, Select, Statistic } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "../../../css/CssAdmin.module.css";
 import { Bar } from "@ant-design/plots";
@@ -9,9 +9,7 @@ import Year from "./Year";
 import Month from "./Month";
 import styles1 from "../../../css/Home.module.css";
 import { EyeOutlined } from "@ant-design/icons";
-const dateFormat = "YYYY/MM/DD";
 const SelectTime = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
   const dipsatch = useDispatch();
   const orders = useSelector((data) => data.order.value);
   const [detailStatistic, setDetailStatistic] = useState(false);

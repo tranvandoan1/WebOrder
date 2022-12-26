@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Collapse, Descriptions, Empty, message, Pagination, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { getAllOrder, removeOrder } from "../features/Order/Order";
 
 import { getAllTable } from "../features/TableSlice/TableSlice";

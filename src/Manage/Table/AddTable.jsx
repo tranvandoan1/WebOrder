@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Spin, message } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Spin, message } from "antd";
 import styles from "../../css/LayoutAdmin.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addTable } from "./../../features/TableSlice/TableSlice";
 const AddTable = () => {
   const dispatch = useDispatch();

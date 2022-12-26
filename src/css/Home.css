@@ -5,7 +5,8 @@
 }
 
 .products::-webkit-scrollbar,
-.payment_confirmation::-webkit-scrollbar {
+.payment_confirmation::-webkit-scrollbar,
+.site-layout::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
 }
@@ -27,22 +28,6 @@
 
 .list_pro {
   position: relative;
-}
-.list_pro:hover .img > img {
-  /* transform: scale(2, 2);
-  transition: 1s ease-in initial; */
-  animation: intro1 1s ease-in infinite;
-}
-@keyframes intro1 {
-  0% {
-    transform: scale(1, 1);
-  }
-  50% {
-    transform: scale(1.2, 1.2);
-  }
-  100% {
-    transform: scale(1, 1);
-  }
 }
 
 .img {

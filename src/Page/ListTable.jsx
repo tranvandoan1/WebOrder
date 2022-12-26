@@ -6,9 +6,9 @@ import { Row, Col, Spin } from "antd";
 
 import IconTable from "../images/table.png";
 import Error from "../images/error.png";
-import '../css/Home.css'
+import "../css/Home.css";
 import MoveTable from "./MoveTable";
-import { Size } from "./../size";
+import { Size } from "./../components/size";
 
 const ListTable = (props) => {
   const sizes = Size();
@@ -132,11 +132,8 @@ const ListTable = (props) => {
               </span>
             </div>
           ) : (
-            <>
-              {(props?.statusTable == undefined
-                ? tables?.value
-                : statusTable
-              ).map((item, index) => {
+            (props?.statusTable == undefined ? tables?.value : statusTable).map(
+              (item, index) => {
                 return (
                   <Col
                     key={item._id}
@@ -232,8 +229,8 @@ const ListTable = (props) => {
                     </div>
                   </Col>
                 );
-              })}
-            </>
+              }
+            )
           )}
         </Row>
       )}

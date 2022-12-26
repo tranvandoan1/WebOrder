@@ -1,14 +1,12 @@
-import { Button, Form, Input, InputNumber, message, Spin } from "antd";
+import { Button, Form, Input, message, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCategori,
   uploadCategori,
 } from "../../features/Categoris/CategoriSlice";
 import styles from "../../css/AdminCate.module.css";
-import { openNotificationWithIcon } from "./../../Notification";
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },

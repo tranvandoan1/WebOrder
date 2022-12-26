@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "../css/Signin.css";
 import UserAPI from "../API/Users";
 import { Link } from "react-router-dom";
-import { Size } from "./../size";
+import { Size } from "./../components/size";
 const Signin = () => {
   const sizes = Size();
   const [loading, setLoading] = useState(false);
@@ -120,6 +120,8 @@ const Signin = () => {
                       justifyContent: "center",
                       alignItems: "center",
                       fontWeight: "400",
+                      width: 100,
+                      height: 35,
                     }}
                   >
                     Đăng nhập

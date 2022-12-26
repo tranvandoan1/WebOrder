@@ -15,13 +15,12 @@ import {
 import { getProduct } from "../features/ProductsSlice/ProductSlice";
 import { getCategori } from "../features/Categoris/CategoriSlice";
 import "../css/Order.css";
-import { openNotificationWithIcon } from "../Notification";
 import moment from "moment";
 import { addOrderTable } from "../features/TableSlice/TableSlice";
 import { getAllTable } from "./../features/TableSlice/TableSlice";
 import { addOrder } from "../features/Order/Order";
 import { removeOrderTable } from "../API/TableAPI";
-import { Size } from "../size";
+import { Size } from "../components/size";
 const SelectedProduct = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const sizes = Size();
@@ -180,7 +179,7 @@ const SelectedProduct = (props) => {
     if (value > 0) {
       setValueSale(value);
     } else {
-      openNotificationWithIcon("warning", "Bạn chưa nhập mã !");
+      message.warning('Bạn chưa nhập mã !')
     }
   };
   // hủy mã
@@ -234,9 +233,9 @@ const SelectedProduct = (props) => {
   ];
   // thay đổi số lượng từ ô input
   const changeAmountInput = async (item) => {
-    props?.callBack(true);
     setLoading(true);
     if (isNaN(valueAmount?.amount) == false) {
+      props?.callBack(true);
       if (valueAmount?.amount == 0 || String(valueAmount?.amount).length <= 0) {
         const newDataOrder = dataTable.filter(
           (itemOrder) => itemOrder.id !== item.id

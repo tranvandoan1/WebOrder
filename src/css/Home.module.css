@@ -51,6 +51,10 @@
 .content {
   position: relative;
 }
+.content::-webkit-scrollbar{
+  width: 0 !important;
+  height: 0 !important;
+}
 .headerContent {
   position: absolute;
   bottom: 0;

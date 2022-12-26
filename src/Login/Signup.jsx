@@ -12,8 +12,8 @@ import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import UserAPI, { getUserCheckLogIn } from "../API/Users";
 import styles from "../css/Home.module.css";
-import { Size } from "./../size";
 import { validateEmail, validatePhone } from "../components/Validate";
+import { Size } from "../components/size";
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState();

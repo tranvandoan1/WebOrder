@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Table, Button, Space, message, Spin } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table, Button, Space, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import {
   getCategori,
   removeCategori,
@@ -10,7 +9,6 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const ListCate = () => {
   const categoris = useSelector((data) => data.categori);
-  console.log(categoris);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();

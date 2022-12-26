@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { removes } from "../../API/SaveOrder";
 import TableAPI, {
   add,
   addOrdersTable,

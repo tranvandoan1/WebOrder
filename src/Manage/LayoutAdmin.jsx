@@ -12,7 +12,6 @@ import {
   LoginOutlined,
   QuestionCircleOutlined,
   MenuUnfoldOutlined,
-  CloseCircleOutlined,
   CloseOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
@@ -23,7 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllTable } from "../features/TableSlice/TableSlice";
 import { getUser } from "../features/User/UserSlice";
 import { uploadLogin } from "../API/Users";
-import { Size } from "./../size";
+import { Size } from "./../components/size";
 const { Header, Content, Footer, Sider } = Layout;
 
 const LayoutAdmin = () => {
@@ -260,14 +259,14 @@ const LayoutAdmin = () => {
               marginLeft: sizes.width > 1024 ? 200 : 0,
             }}
           >
-            {sizes.width < 1024 && (
+            {sizes.width <= 1024 && (
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   background: "#0d6efd",
-                  padding: 10,
+                  padding: "15px 10px",
                 }}
               >
                 <div
@@ -289,7 +288,7 @@ const LayoutAdmin = () => {
                   </span>
                 </div>
                 <MenuUnfoldOutlined
-                  style={{ fontSize: 30, cursor: "pointer", color: "#fff" }}
+                  style={{ fontSize: 25, cursor: "pointer", color: "#fff" }}
                   onClick={() => setOpen(true)}
                 />
               </div>
@@ -452,12 +451,13 @@ const LayoutAdmin = () => {
                   },
                 },
             {
-              key: "7",
+              key: "9",
               icon: <LogoutOutlined />,
               label: "Đăng xuất",
-              itemIcon: <NavLink to="/" />,
               style: { color: "black" },
               onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["11"]));
                 if (confirm("Bạn có muốn đăng xuất không ?")) {
                   localStorage.removeItem("user");
                   localStorage.removeItem("token");

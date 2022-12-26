@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import styles from "../css/Home.module.css";
 import { changeTables } from "../features/TableSlice/TableSlice";
-import { Size } from "../size";
+import { Size } from "../components/size";
 
 const MoveTable = (props) => {
   const sizes = Size();

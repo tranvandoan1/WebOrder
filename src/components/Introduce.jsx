@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "../src/css/Home.css";
-import { Avatar, Button, Form, Input, message, Spin, Upload } from "antd";
+import "../../src/css/Home.css";
+import { Avatar, Button, Input, message, Spin, Upload } from "antd";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
   CloseCircleOutlined,
-  PlusCircleOutlined,
 } from "@ant-design/icons";
-import styles from "./css/Account.module.css";
+import styles from "../css/Account.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { editLogin, editInfoUser, getUser } from "./features/User/UserSlice";
+import { editLogin, editInfoUser, getUser } from "../features/User/UserSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "./firebase";
-import { getAllTable } from "./features/TableSlice/TableSlice";
+import { storage } from "../firebase";
+import { getAllTable } from "../features/TableSlice/TableSlice";
 import { Size } from "./size";
 const Introduce = () => {
   const sizes = Size();
@@ -216,7 +215,6 @@ const Introduce = () => {
   return (
     <div className="intro_main">
       <div
-        onClick={() => skip()}
         style={{
           position: "fixed",
           top: 30,
@@ -226,6 +224,7 @@ const Introduce = () => {
         }}
       >
         <span
+          onClick={() => skip()}
           style={{
             background: "red",
             padding: "22px 10px",
@@ -235,6 +234,26 @@ const Introduce = () => {
           }}
         >
           Bỏ qua
+        </span>
+        <span
+          onClick={() => {
+            if (confirm("Bạn có muốn đăng xuất không ?")) {
+              localStorage.removeItem("user");
+              localStorage.removeItem("token");
+              localStorage.removeItem("key");
+              window.location.href = "/";
+            }
+          }}
+          style={{
+            background: "blue",
+            padding: "22px 10px",
+            borderRadius: 1000,
+            fontWeight: "500",
+            color: "#fff",
+            marginLeft: 10,
+          }}
+        >
+          Đăng xuất
         </span>
       </div>
       <div className="intro1" id="intro1">
@@ -483,13 +502,6 @@ const Introduce = () => {
               />
             )}
           </div>
-          {/* <Input
-            type="file"
-            name=""
-            id="images"
-            style={{ display: "none" }}
-            onChange={() => loadFile(event)}
-          /> */}
           <h4 style={{ marginTop: 30 }}>
             Hãy đặt cho quán (shop) của bạn 1 cái tên ý nghĩa nhé !
           </h4>

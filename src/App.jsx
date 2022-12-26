@@ -21,15 +21,15 @@ import EditPro from "./Manage/Products/EditPro";
 import ListStatistical from "./Manage/Statistical/ListStatistical";
 
 import "./App.css";
-import Introduce from "./Introduce";
+import Introduce from "./components/Introduce";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { getAllTable } from "./features/TableSlice/TableSlice";
 import Setting from "./Manage/Setting";
 import { getUser } from "./features/User/UserSlice";
-import Notfound from "./Notfound";
-import Loading from "./Loading";
+import Notfound from "./components/Notfound";
 import PrivateData from "./CheckRole/privateData";
+import Loading from './components/Loading';
 function App() {
   const userLoca = JSON.parse(localStorage.getItem("user"));
   const user = useSelector((data) => data.user);
@@ -217,147 +217,9 @@ function App() {
             path="/signup"
             element={<PicturesWall />}
           />
-          {/* <Route
-            errorElement={<Notfound />}
-            path="/tables/"
-            element={<Notfound />}
-          />
-
-          <Route
-            errorElement={<Notfound />}
-            path="/order/table-name=:name&&:id"
-            element={<Notfound />}
-          />
-          <Route
-            errorElement={<Notfound />}
-            path="/manager/"
-            element={<Notfound />}
-          > */}
-          {/* cate */}
-          {/* <Route
-              errorElement={<Notfound />}
-              path="categoris/"
-              element={<Notfound />}
-            ></Route>
-            <Route
-              errorElement={<Notfound />}
-              path="categoris/add"
-              element={<Notfound />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="categoris/edit=:id"
-              element={<Notfound />}
-            /> */}
-          {/* pro */}
-          {/* <Route
-              errorElement={<Notfound />}
-              path="products"
-              element={<Notfound />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="products/add"
-              element={<Notfound />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="products/edit=:id"
-              element={<Notfound />}
-            /> */}
-
-          {/* bàn */}
-          {/* <Route
-              errorElement={<Notfound />}
-              path="table"
-              element={<ListTablee />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="table/add"
-              element={<Notfound />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="table/edit=:id"
-              element={<Notfound />}
-            /> */}
-          {/* thống kê */}
-          {/* <Route
-              errorElement={<Notfound />}
-              path="statistical"
-              element={<Notfound />}
-            />
-
-            <Route
-              errorElement={<Notfound />}
-              path="account"
-              element={<Notfound />}
-            />
-
-            <Route
-              errorElement={<Notfound />}
-              path="order"
-              element={<Notfound />}
-            />
-            <Route
-              errorElement={<Notfound />}
-              path="setting"
-              element={<Notfound />}
-            />
-          </Route> */}
         </Routes>
       )}
 
-      {/* )
-      //  : (
-      //   <Routes>
-      //     <Route
-      //       
-              errorElement={<Notfound />}
-      
-      path="/"
-      //       element={
-      //         Object.keys(user)?.length > 0 ? (
-      //           <Navigate to="/tables" />
-      //         ) : (
-      //           <Privateadmin>
-      //             <Signin />
-      //           </Privateadmin>
-      //         )
-      //       }
-      //     />
-
-      //     <Route
-      //       
-              errorElement={<Notfound />}
-      
-      path="/signin"
-      //       element={
-      //         Object.keys(user)?.length > 0 ? (
-      //           <Navigate to="/tables" />
-      //         ) : (
-      //           <Privateadmin>
-      //             <Signin />
-      //           </Privateadmin>
-      //         )
-      //       }
-      //     />
-      //     <Route
-      //       
-              errorElement={<Notfound />}
-      
-      path="/signup"
-      //       element={
-      //         Object.keys(user)?.length > 0 ? (
-      //           <Navigate to="/tables" />
-      //         ) : (
-      //           <PicturesWall />
-      //         )
-      //       }
-      //     />
-      //   </Routes>
-      // )} */}
       <Routes>
         <Route errorElement={<Notfound />} path="/404" element={<Notfound />} />
       </Routes>

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addSaveOrder,
-  uploadSaveOrderFind,
-} from "../features/saveorderSlice/saveOrderSlice";
+
 import {
   Menu,
   Input,
@@ -17,7 +13,7 @@ import {
   Spin,
   Drawer,
 } from "antd";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   DoubleLeftOutlined,
   MenuFoldOutlined,
@@ -29,11 +25,10 @@ import SelectedProduct from "./SelectedProduct";
 import styles from "../css/Order.module.css";
 import { getProductAll } from "./../features/ProductsSlice/ProductSlice";
 import { getCategori } from "./../features/Categoris/CategoriSlice";
-import Loading from "../Loading";
 import { addOrderTable, getAllTable } from "../features/TableSlice/TableSlice";
-import { Size } from "../size";
+import { Size } from "../components/size";
+import Loading from "../components/Loading";
 const Orders = () => {
-  console.log("có vào");
   const { id } = useParams();
   const sizes = Size();
   const dispatch = useDispatch();
@@ -71,6 +66,7 @@ const Orders = () => {
       form.resetFields();
 
       setLoading(true);
+      setModalWeight(false);
       if (newSaveOrder !== undefined) {
         const newData = [];
         dataTable?.map((itemOrder) => {
@@ -112,7 +108,6 @@ const Orders = () => {
           })
         );
       }
-      setModalWeight(false);
       setLoading(false);
     }
   };
@@ -229,27 +224,33 @@ const Orders = () => {
             }}
             onClick={() => setOpenCart(true)}
           >
-            <ShoppingCartOutlined style={{ color: "#fff", fontSize: 20 }} />
-            <span
-              style={{
-                position: "absolute",
-                top: -10,
-                left: -10,
-                background: "red",
-                borderRadius: "100%",
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: "500",
-                width: 23,
-                height: 23,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {dataTable == null ? 0 : dataTable?.length}
-            </span>
+            {loading == true ? (
+              <Spin />
+            ) : (
+              <React.Fragment>
+                <ShoppingCartOutlined style={{ color: "#fff", fontSize: 20 }} />
+                <span
+                  style={{
+                    position: "absolute",
+                    top: -10,
+                    left: -10,
+                    background: "red",
+                    borderRadius: "100%",
+                    color: "#fff",
+                    fontSize: 12,
+                    fontWeight: "500",
+                    width: 23,
+                    height: 23,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {dataTable == null ? 0 : dataTable?.length}
+                </span>
+              </React.Fragment>
+            )}
           </div>
         </div>
       ) : null}
@@ -283,61 +284,32 @@ const Orders = () => {
         </div>
       ) : (
         <React.Fragment>
-          {isModalOpen == true || sizes.width < 1024 ? (
-            sizes.width < 1024 ? (
-              // <div
-              //   style={{
-              //     position: "absolute",
-              //     top: 10,
-              //     left: 0,
-              //     background: "#fff",
-              //     zIndex: 100,
-              //     borderRadius: "30% 15% 15% 30%",
-              //     padding: "5px 5px",
-              //     boxShadow: "0 0 10px blue",
-              //   }}
-              // >
-              //   <Link
-              //     to="/tables"
-              //     style={{
-              //       marginLeft: 10,
-              //       display: "flex",
-              //       alignItems: "center",
-              //       fontSize: 9,
-              //     }}
-              //   >
-              //     {" "}
-              //     <DoubleLeftOutlined className="icon" /> Quay lại{" "}
-              //   </Link>
-              // </div>
-              <></>
-            ) : (
-              <div
+          {isModalOpen == true || sizes.width > 1024 ? (
+            <div
+              style={{
+                position: "absolute",
+                top: 10,
+                left: 0,
+                background: "#fff",
+                zIndex: 100,
+                borderRadius: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px ",
+                boxShadow: "0 0 10px blue",
+              }}
+            >
+              <MenuUnfoldOutlined
+                className="icon"
+                onClick={() => setIsModalOpen(false)}
                 style={{
-                  position: "absolute",
-                  top: 10,
-                  left: 0,
-                  background: "#fff",
-                  zIndex: 100,
-                  borderRadius: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "10px ",
-                  boxShadow: "0 0 10px blue",
+                  color: "blue",
+                  cursor: "pointer",
+                  fontSize: 20,
+                  fontWeight: "700",
                 }}
-              >
-                <MenuUnfoldOutlined
-                  className="icon"
-                  onClick={() => setIsModalOpen(false)}
-                  style={{
-                    color: "blue",
-                    cursor: "pointer",
-                    fontSize: 20,
-                    fontWeight: "700",
-                  }}
-                />
-              </div>
-            )
+              />
+            </div>
           ) : null}
           <Row>
             <Col
@@ -403,7 +375,13 @@ const Orders = () => {
                           xs={12}
                           sm={8}
                           md={6}
-                          lg={6}
+                          lg={
+                            sizes.width == 1024
+                              ? isModalOpen == true
+                                ? 6
+                                : 8
+                              : 6
+                          }
                           xl={6}
                           key={item_pro._id}
                           onClick={() => selectProduct(item_pro)}
@@ -418,7 +396,7 @@ const Orders = () => {
                                     : sizes.width == 1024
                                     ? isModalOpen == true
                                       ? 170
-                                      : 150
+                                      : 160
                                     : 180,
                               }}
                             >
@@ -452,6 +430,7 @@ const Orders = () => {
                 loading={loading}
                 tableOrder={tableOrder}
                 isModalOpen={isModalOpen}
+                callBack={(e) => setLoading(e)}
               />
             </Col>
           </Row>
@@ -531,7 +510,6 @@ const Orders = () => {
               loading={loading}
               tableOrder={tableOrder}
               isModalOpen={isModalOpen}
-              callBack={(e) => setLoading(e)}
             />
           </Drawer>
           <Drawer

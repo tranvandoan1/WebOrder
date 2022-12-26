@@ -4,16 +4,18 @@ import styles from "../../../css/CssAdmin.module.css";
 import { BarChartOutlined, EyeOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrder } from "../../../features/Order/Order";
-import { Modal, Row, Select, Spin, Statistic } from "antd";
+import { Row, Select, Statistic } from "antd";
 import Month from "./Month";
 import moment from "moment";
 import SelectTime from "./SelectTime";
 import "../../../css/Home.css";
 import styles1 from "../../../css/Home.module.css";
 import Year from "./Year";
+import { Size } from "../../../components/size";
 const { Option } = Select;
 
 const List = () => {
+  const sizes = Size();
   const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const [check, setCheck] = useState("today");
@@ -98,7 +100,7 @@ const List = () => {
               <h6 style={{ marginTop: 10, fontSize: 13 }}>{title}</h6>
               <ul style={{ paddingLeft: 0 }}>
                 {items?.map((item, index) => {
-                  const { name, value, color } = item;
+                  const { value, color } = item;
                   return (
                     <li
                       key={item.year}
@@ -156,56 +158,67 @@ const List = () => {
     return (
       <>
         <Row>
-          <Statistic
-            title={
-              check == "today"
-                ? "Hôm nay"
-                : check == "thisMonth"
-                ? "Tháng này"
-                : check == "thisYear"
-                ? "Năm nay"
-                : check == "yesterDay"
-                ? "Hôm qua"
-                : check == "lastMonth"
-                ? "Tháng trước"
-                : check == "lastYear"
-                ? "Năm trước"
-                : " "
-            }
-            value={`${
-              check == "lastYear"
-                ? `${moment().year() - 1} `
-                : `${moment().year()}${check !== "thisYear" ? "-" : " "}`
-            }${
-              check == "today" || check == "thisMonth" || check == "yesterDay"
-                ? `${
-                    String(moment().month() + 1).length == 1
-                      ? `0${moment().month() + 1}`
-                      : moment().month() + 1
-                  }${check !== "thisMonth" ? "-" : ""}`
-                : ""
-            }${
-              check == "today"
-                ? `${moment().date()}`
-                : check == "yesterDay"
-                ? `${moment().date() - 1}`
-                : check == "lastMonth"
-                ? `${
-                    String(moment().month()).length == 1
-                      ? `0${moment().month()}`
-                      : moment().month()
-                  }`
-                : ""
-            }`}
-          />
-          <Statistic
-            title="Doanh thu"
-            value={`${sum}`}
-            suffix="VNĐ"
-            style={{
-              margin: "0 32px",
-            }}
-          />
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            className="statistic"
+          >
+            <Statistic
+              title={
+                <span style={{ fontSize: sizes.width < 768 ? 15 : 20 }}>
+                  {check == "today"
+                    ? "Hôm nay"
+                    : check == "thisMonth"
+                    ? "Tháng này"
+                    : check == "thisYear"
+                    ? "Năm nay"
+                    : check == "yesterDay"
+                    ? "Hôm qua"
+                    : check == "lastMonth"
+                    ? "Tháng trước"
+                    : check == "lastYear"
+                    ? "Năm trước"
+                    : " "}
+                </span>
+              }
+              value={`${
+                check == "lastYear"
+                  ? `${moment().year() - 1} `
+                  : `${moment().year()}${check !== "thisYear" ? "-" : " "}`
+              }${
+                check == "today" || check == "thisMonth" || check == "yesterDay"
+                  ? `${
+                      String(moment().month() + 1).length == 1
+                        ? `0${moment().month() + 1}`
+                        : moment().month() + 1
+                    }${check !== "thisMonth" ? "-" : ""}`
+                  : ""
+              }${
+                check == "today"
+                  ? `${moment().date()}`
+                  : check == "yesterDay"
+                  ? `${moment().date() - 1}`
+                  : check == "lastMonth"
+                  ? `${
+                      String(moment().month()).length == 1
+                        ? `0${moment().month()}`
+                        : moment().month()
+                    }`
+                  : ""
+              }`}
+            />
+            <Statistic
+              title={
+                <span style={{ fontSize: sizes.width < 768 ? 15 : 20 }}>
+                  Doanh thu
+                </span>
+              }
+              value={`${sum}`}
+              suffix="VNĐ"
+              style={{
+                margin: "0 32px",
+              }}
+            />
+          </div>
           {(check == "thisMonth" ||
             check == "thisYear" ||
             check == "lastMonth" ||

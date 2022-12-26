@@ -29,8 +29,7 @@ import {
   getAllTable,
   editBookTable,
 } from "../features/TableSlice/TableSlice";
-import { getAllSaveOrder } from "../features/saveorderSlice/saveOrderSlice";
-import { Size } from "../size";
+import { Size } from "../components/size";
 import { uploadLogin } from "../API/Users";
 import { getUser } from "../features/User/UserSlice";
 import { validatePhone } from "./../components/Validate";
@@ -52,29 +51,16 @@ const LayoutWeb = () => {
   const [showMenu, setShowMenu] = useState(false); //hiện menu khi bàn có khách hoặc bàn đặt
   const [moveTable, setMoveTable] = useState(false); //hiện chuyển bàn
   const tables = useSelector((data) => data.table);
-  const saveorders = useSelector((data) => data.saveorder.value);
   const [form] = Form.useForm();
   useEffect(() => {
     dispatch(getAllTable());
-    dispatch(getAllSaveOrder());
   }, []);
-
-  let checkSaveOrder = [];
-  tables?.value?.map((element) => {
-    let arrFilter = saveorders?.filter((e) => {
-      return e.id_table === element._id;
-    });
-    arrFilter.length <= 0 &&
-      element.timeBookTable == "null" &&
-      checkSaveOrder.push({
-        _id: element._id,
-        data: arrFilter,
-        name: element.name,
-        timeBookTable: element.timeBookTable,
-        amount: element.amount,
-        nameUser: element.nameUser,
-      });
-  });
+  // lấy danh sách bàn trống để đặt bàn
+  const dataTable = tables?.value?.filter(
+    (item) =>
+      (item?.orders.length <= 0 || item?.orders == null) &&
+      item.timeBookTable == "null"
+  );
   const signOut = async () => {
     if (confirm("Bạn có muốn đăng xuất không !")) {
       localStorage.removeItem("user");
@@ -476,7 +462,7 @@ const LayoutWeb = () => {
               ]}
             >
               <Select placeholder="Bàn muốn đặt" allowClear>
-                {checkSaveOrder.map((item, index) => {
+                {dataTable?.map((item, index) => {
                   return (
                     <Select.Option key={item} value={item._id}>
                       {item.name}

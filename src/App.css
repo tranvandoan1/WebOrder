@@ -1,51 +1,9 @@
-/* .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-button {
-  font-size: calc(10px + 2vmin);
-} */
 body {
   flex: 1;
 }
 body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  width: 0 !important;
+  height: 0 !important;
 }
 .loading {
   background-image: url("https://i.pinimg.com/originals/ca/89/fb/ca89fbce5e5c68f46d5330946c58ddc6.gif");
@@ -56,18 +14,14 @@ body::-webkit-scrollbar {
   background-size: calc(100%);
 }
 
-@media (min-width: 1024px) {
-}
-@media (width: 1024px) {
-}
-@media (min-width: 739px) and (max-width: 1023px) {
-}
-
 @media (min-width: 539px) and (max-width: 739px) {
   .ant-table-thead > tr > th,
   tbody > tr > td {
     padding: 5px !important;
     font-size: 12px !important;
+  }
+  .statistic .ant-statistic-content {
+    font-size: 18px !important;
   }
 }
 @media (min-width: 396px) and (max-width: 538px) {
@@ -76,11 +30,17 @@ body::-webkit-scrollbar {
     padding: 5px !important;
     font-size: 12px !important;
   }
+  .statistic .ant-statistic-content {
+    font-size: 18px !important;
+  }
 }
 @media (max-width: 395px) {
   .ant-table-thead > tr > th,
   tbody > tr > td {
     padding: 5px !important;
     font-size: 12px !important;
+  }
+  .statistic .ant-statistic-content {
+    font-size: 18px !important;
   }
 }

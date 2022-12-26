@@ -8,7 +8,9 @@ import { getAll } from "../../features/AllDataSlice/AllDataSlice";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { FaProductHunt, FaOpencart, FaTable } from "react-icons/fa";
+import { Size } from "../../components/size";
 const ListStatistical = () => {
+  const sizes = Size();
   const dispatch = useDispatch();
   const allData = useSelector((data) => data.allData.value);
   useEffect(() => {
@@ -35,7 +37,11 @@ const ListStatistical = () => {
         <div className={styles.title}>
           <h5 style={{ display: "flex", alignItems: "center", fontSize: 18 }}>
             <HddOutlined
-              style={{ fontSize: 30, color: "chocolate", marginRight: 10 }}
+              style={{
+                fontSize: sizes.width < 768 ? 20 : 30,
+                color: "chocolate",
+                marginRight: 10,
+              }}
             />{" "}
             Thống kê
           </h5>
@@ -50,7 +56,7 @@ const ListStatistical = () => {
                   <FileTextOutlined
                     style={{
                       marginRight: 10,
-                      fontSize: 30,
+                      fontSize: sizes.width < 768 ? 20 : 30,
                       color: "chocolate",
                     }}
                   />{" "}
@@ -69,7 +75,7 @@ const ListStatistical = () => {
                   <FaProductHunt
                     style={{
                       color: "chocolate",
-                      fontSize: 30,
+                      fontSize: sizes.width < 768 ? 20 : 30,
                       marginRight: 10,
                     }}
                   />
@@ -88,7 +94,7 @@ const ListStatistical = () => {
                   <FaOpencart
                     style={{
                       color: "chocolate",
-                      fontSize: 30,
+                      fontSize: sizes.width < 768 ? 20 : 30,
                       marginRight: 10,
                     }}
                   />
@@ -107,7 +113,7 @@ const ListStatistical = () => {
                   <FaTable
                     style={{
                       color: "chocolate",
-                      fontSize: 30,
+                      fontSize: sizes.width < 768 ? 20 : 30,
                       marginRight: 10,
                     }}
                   />
