@@ -179,6 +179,7 @@ const Orders = () => {
   };
 
   const listCate = (id) => {
+    setOpenMenu(false);
     if (id == "all") {
       setProSelect([]);
     } else {
@@ -284,7 +285,7 @@ const Orders = () => {
         </div>
       ) : (
         <React.Fragment>
-          {isModalOpen == true || sizes.width > 1024 ? (
+          {isModalOpen == true ? (
             <div
               style={{
                 position: "absolute",
@@ -392,7 +393,9 @@ const Orders = () => {
                               style={{
                                 height:
                                   sizes.width < 768
-                                    ? 170
+                                    ? sizes.width < 359
+                                      ? 150
+                                      : 190
                                     : sizes.width == 1024
                                     ? isModalOpen == true
                                       ? 170
@@ -510,6 +513,7 @@ const Orders = () => {
               loading={loading}
               tableOrder={tableOrder}
               isModalOpen={isModalOpen}
+              callBack={(e) => setLoading(e)}
             />
           </Drawer>
           <Drawer
@@ -526,11 +530,10 @@ const Orders = () => {
                 {categoris.map((item, index) => {
                   return (
                     <Menu.Item
-                      key={index}
+                      key={item._id}
                       style={{ textTransform: "capitalize" }}
                       onClick={() => {
                         listCate(item._id);
-                        setOpenMenu(false);
                       }}
                     >
                       {item.name}

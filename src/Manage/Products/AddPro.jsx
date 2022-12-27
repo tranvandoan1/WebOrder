@@ -131,7 +131,7 @@ const AddPro = () => {
                 {categoris.map((item, index) => (
                   <Option
                     value={item._id}
-                    key={index}
+                    key={item}
                     style={{ textTransform: "capitalize" }}
                   >
                     {item.name}

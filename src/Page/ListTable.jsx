@@ -111,7 +111,7 @@ const ListTable = (props) => {
           </span>
         </div>
       ) : (
-        <Row >
+        <Row>
           {statusTable.length <= 0 && props?.statusTable !== undefined ? (
             <div
               style={{
@@ -199,7 +199,9 @@ const ListTable = (props) => {
                             item.timeBookTable !== "null") && (
                             <span
                               style={{
-                                fontSize: sizes.width < 768 ? 12 : 17,
+                                fontSize: sizes.width < 768 ? 12 : sizes.width == 1024
+                                ? 15
+                                : 16,
                                 color: "#00CC00",
                                 fontWeight: "500",
                               }}
@@ -214,7 +216,12 @@ const ListTable = (props) => {
                         ) : (
                           <span
                             style={{
-                              fontSize: sizes.width < 768 ? 12 : 17,
+                              fontSize:
+                                sizes.width < 768
+                                  ? 12
+                                  : sizes.width == 1024
+                                  ? 15
+                                  : 16,
                               color:
                                 item?.orders?.length > 0 ? "#00CC00" : "red",
                               fontWeight: "500",

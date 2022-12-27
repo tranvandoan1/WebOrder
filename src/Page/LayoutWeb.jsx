@@ -58,8 +58,8 @@ const LayoutWeb = () => {
   // lấy danh sách bàn trống để đặt bàn
   const dataTable = tables?.value?.filter(
     (item) =>
-      (item?.orders.length <= 0 || item?.orders == null) &&
-      item.timeBookTable == "null"
+      (item?.orders?.length <= 0 || item?.orders == null) &&
+      item?.timeBookTable == "null"
   );
   const signOut = async () => {
     if (confirm("Bạn có muốn đăng xuất không !")) {
@@ -561,15 +561,25 @@ const LayoutWeb = () => {
                   onClick={() => signOut()}
                 >
                   <LogoutOutlined
-                    style={{ fontSize: 14, marginRight: 5, marginTop: 2 }}
+                    style={{
+                      fontSize: 14,
+                      marginRight: sizes.width > 450 ? 5 : 0,
+                      marginTop: 2,
+                    }}
                   />
-                  <span style={{ fontSize: 12, fontWeight: "400" }}>
-                    Đăng xuất
-                  </span>
+                  {sizes.width > 450 && (
+                    <span style={{ fontSize: 12, fontWeight: "400" }}>
+                      Đăng xuất
+                    </span>
+                  )}
                 </div>
                 <SettingOutlined
                   onClick={() => navigate("/manager/statistical")}
-                  style={{ fontSize: 30, marginLeft: 10, cursor: "pointer" }}
+                  style={{
+                    fontSize: sizes.width < 768 ? 20 : 30,
+                    marginLeft: 10,
+                    cursor: "pointer",
+                  }}
                 />
               </div>
             </div>

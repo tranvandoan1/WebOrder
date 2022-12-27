@@ -29,16 +29,7 @@ table tr th {
   width: 0 !important;
   height: 0 !important;
 }
-/* .select-option:hover {
-  transform: translateY(-30%);
-  transition: 0.3s ease-in;
-  color: #fff;
-} */
-/* .select-option:first-child:hover {
-  transform: translateY(-30%);
-  transition: 0.3s ease-in;
-  color: #fff;
-} */
+
 .select-option-center,
 .select-option {
   transition: 0.3s ease-in;
@@ -49,27 +40,10 @@ table tr th {
   align-items: center;
   cursor: pointer;
 }
-.select-option-center:hover {
-  transform: translateY(-30%);
-  transition: 0.3s ease-in;
-  color: #fff;
-}
+
 .box-show-menu {
   /* animation: box_show_menu 1s ease-in; */
   transition: 0.3s ease-in;
 }
 
-@keyframes box_show_menu {
-  0% {
-    transform: scale(1, 1);
-    transition: 0.3s ease-in;
-  }
-  100% {
-    transform: scale(1.2, 1.2);
-    transition: 0.3s ease-in;
-  }
-  0% {
-    transform: scale(1, 1);
-    transition: 0.3s ease-in;
-  }
-}
+

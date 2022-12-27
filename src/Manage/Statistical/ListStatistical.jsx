@@ -32,7 +32,7 @@ const ListStatistical = () => {
     }
   };
   return (
-    <div style={{ background: "#fff", height: "100vh" }}>
+    <div style={{ background: "#fff", flex: 1 }}>
       <React.Fragment>
         <div className={styles.title}>
           <h5 style={{ display: "flex", alignItems: "center", fontSize: 18 }}>
@@ -52,11 +52,14 @@ const ListStatistical = () => {
           <Row>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
               <Link to="/manager/table">
-                <div className={styles.list_cate}>
+                <div
+                  className={styles.list_cate}
+                  style={{ fontSize: sizes.width < 768 ? 10 : 15, height: 50 }}
+                >
                   <FileTextOutlined
                     style={{
                       marginRight: 10,
-                      fontSize: sizes.width < 768 ? 20 : 30,
+                      fontSize: sizes.width < 768 ? 10 : 30,
                       color: "chocolate",
                     }}
                   />{" "}
@@ -71,7 +74,10 @@ const ListStatistical = () => {
             </Col>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
               <Link to="/manager/products">
-                <div className={styles.list_cate}>
+                <div
+                  className={styles.list_cate}
+                  style={{ fontSize: sizes.width < 768 ? 10 : 15, height: 50 }}
+                >
                   <FaProductHunt
                     style={{
                       color: "chocolate",
@@ -90,7 +96,10 @@ const ListStatistical = () => {
             </Col>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
               <Link to="/manager/order">
-                <div className={styles.list_cate}>
+                <div
+                  className={styles.list_cate}
+                  style={{ fontSize: sizes.width < 768 ? 10 : 15, height: 50 }}
+                >
                   <FaOpencart
                     style={{
                       color: "chocolate",
@@ -109,7 +118,10 @@ const ListStatistical = () => {
             </Col>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
               <Link to="/manager/table">
-                <div className={styles.list_cate}>
+                <div
+                  className={styles.list_cate}
+                  style={{ fontSize: sizes.width < 768 ? 10 : 15, height: 50 }}
+                >
                   <FaTable
                     style={{
                       color: "chocolate",

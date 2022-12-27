@@ -379,10 +379,10 @@ const SelectedProduct = (props) => {
                             sizes.width < 1024
                               ? sizes.width < 768
                                 ? 15
-                                : 20
+                                : 16
                               : sizes.width == 1024
                               ? 14
-                              : 19,
+                              : 16,
                         }}
                       >
                         {item.name}

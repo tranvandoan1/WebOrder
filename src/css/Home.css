@@ -26,10 +26,6 @@
   text-transform: capitalize;
 }
 
-.list_pro {
-  position: relative;
-}
-
 .img {
   width: 100%;
   height: 200px;
@@ -79,6 +75,7 @@
 .list_pro {
   margin: 5px;
   cursor: pointer;
+  position: relative;
 }
 
 .order_pro {
