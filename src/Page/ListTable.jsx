@@ -25,14 +25,14 @@ const ListTable = (props) => {
     if (
       props?.statusTable == 1
         ? (item.timeBookTable !== "null" && item?.orders?.length > 0) ||
-          item?.orders?.length > 0
+        item?.orders?.length > 0
         : props?.statusTable == 2
-        ? (item.timeBookTable !== "null" && item?.orders?.length > 0) ||
+          ? (item.timeBookTable !== "null" && item?.orders?.length > 0) ||
           item.timeBookTable !== "null"
-        : props?.statusTable == 3
-        ? item.timeBookTable == "null" &&
-          (item?.orders?.length <= 0 || item?.orders == null)
-        : null
+          : props?.statusTable == 3
+            ? item.timeBookTable == "null" &&
+            (item?.orders?.length <= 0 || item?.orders == null)
+            : null
     ) {
       statusTable.push(item);
     }
@@ -53,7 +53,7 @@ const ListTable = (props) => {
 
   const renderSumPriceBookTable = (item) => {
     const prices = (
-      item?.orders?.length == undefined ? [item?.orders] : item?.orders
+      item?.orders == null ? [] : item?.orders
     )?.map((item) => {
       if (item?.weight) {
         return Math.ceil(+item?.price * item?.weight * +item?.amount);
@@ -80,8 +80,8 @@ const ListTable = (props) => {
               ? 25
               : 10
             : props?.moveTable == true
-            ? 25
-            : 10,
+              ? 25
+              : 10,
       }}
     >
       {tables?.value?.length <= 0 && tables?.checkData == false ? (
@@ -200,8 +200,8 @@ const ListTable = (props) => {
                             <span
                               style={{
                                 fontSize: sizes.width < 768 ? 12 : sizes.width == 1024
-                                ? 15
-                                : 16,
+                                  ? 15
+                                  : 16,
                                 color: "#00CC00",
                                 fontWeight: "500",
                               }}
@@ -220,8 +220,8 @@ const ListTable = (props) => {
                                 sizes.width < 768
                                   ? 12
                                   : sizes.width == 1024
-                                  ? 15
-                                  : 16,
+                                    ? 15
+                                    : 16,
                               color:
                                 item?.orders?.length > 0 ? "#00CC00" : "red",
                               fontWeight: "500",
