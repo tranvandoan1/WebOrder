@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../css/LayoutAdmin.module.css";
-import { Alert, Button, Form, Input, Select, Spin, Switch, Upload } from "antd";
+import { Alert, Button, Form, Input, message, Select, Spin, Switch, Upload } from "antd";
 import { getProductAll } from "../../features/ProductsSlice/ProductSlice";
 import { getCategori } from "../../features/Categoris/CategoriSlice";
 import { uploadProduct } from "./../../features/ProductsSlice/ProductSlice";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase";
+import { setOnllyNumber, setOnllyTextAndNumber } from "../../components/Utils";
 
 const formItemLayout = {
   labelCol: {
@@ -34,47 +35,56 @@ const EditPro = () => {
     dispatch(getCategori());
   }, []);
   const uploadTable = async (value) => {
-    setCheck(true);
-    const productNew = {
-      cate_id: value.cate_id == undefined ? product?.cate_id : value.cate_id,
-      dvt: value.dvt == undefined ? product?.dvt : value.dvt,
-      name: value.name == undefined ? product?.name : value.name,
-      price: value.price == undefined ? product?.price : value.price,
-      user_id: product?.user_id,
-      check: value.check == undefined ? product?.check : value.check,
-    };
-    if (photo == undefined) {
-      await dispatch(
-        uploadProduct({
-          id: product?._id,
-          data: {
-            ...productNew,
-            photo: product?.photo,
-          },
-        })
-      );
-      navigate("/manager/products");
-      message.success("Sửa thành công");
-      setCheck(false);
+    const validatePrice = setOnllyTextAndNumber(value?.price)
+    const validateName = setOnllyNumber(value?.name)
+    const validateDvt = setOnllyNumber(value?.dvt)
+    const validatePriceOnlly = setOnllyNumber(value?.price)
+    if (validatePrice == false) {
+      message.warning('Giá phải là số !')
     } else {
-      const imageRef = ref(storage, `images/${photo.file.name}`);
-      setLoading(true);
-      uploadBytes(imageRef, photo.file).then(() => {
-        getDownloadURL(imageRef).then(async (url) => {
-          await dispatch(
-            uploadProduct({
-              id: product?._id,
-              data: {
-                ...productNew,
-                photo: url,
-              },
-            })
-          );
-          navigate("/manager/products");
-          message.success("Sửa thành công");
-          setCheck(false);
+      setCheck(true);
+      const productNew = {
+        cate_id: value.cate_id == undefined ? product?.cate_id : value.cate_id,
+        dvt: value.dvt == undefined ? product?.dvt : validateDvt,
+        name: value.name == undefined ? product?.name : validateName,
+        price: value.price == undefined ? product?.price : validatePriceOnlly,
+        user_id: product?.user_id,
+        check: value.check == undefined ? product?.check : value.check,
+      };
+
+      if (photo == undefined) {
+        await dispatch(
+          uploadProduct({
+            id: product?._id,
+            data: {
+              ...productNew,
+              photo: product?.photo,
+            },
+          })
+        );
+        navigate("/manager/products");
+        message.success("Sửa thành công");
+        setCheck(false);
+      } else {
+        const imageRef = ref(storage, `images/${photo.file.name}`);
+        setLoading(true);
+        uploadBytes(imageRef, photo.file).then(() => {
+          getDownloadURL(imageRef).then(async (url) => {
+            await dispatch(
+              uploadProduct({
+                id: product?._id,
+                data: {
+                  ...productNew,
+                  photo: url,
+                },
+              })
+            );
+            navigate("/manager/products");
+            message.success("Sửa thành công");
+            setCheck(false);
+          });
         });
-      });
+      }
     }
   };
 
@@ -121,6 +131,9 @@ const EditPro = () => {
               ))}
             </Select>
           </Form.Item>
+          <Form.Item name="dvt" label="Đơn vị " labelAlign="left" placeholder="Đơn vị (Đĩa , cân ...)">
+            <Input defaultValue={product?.dvt} />
+          </Form.Item>
           <Form.Item>
             <div
               style={{
@@ -131,7 +144,7 @@ const EditPro = () => {
               }}
             >
               <div style={{ width: "20%" }}>
-                <h5 style={{ fontSize: 16, fontWeight: "400" }}>Ảnh : </h5>
+                <h5 style={{ fontSize: 16, fontWeight: "400", marginLeft: 12 }}>Ảnh : </h5>
               </div>
               <div style={{ width: "80%" }}>
                 <Upload

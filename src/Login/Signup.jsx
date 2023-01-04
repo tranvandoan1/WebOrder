@@ -26,66 +26,60 @@ const Signup = () => {
   };
   const signup = async (values) => {
     try {
-      await getUserCheckLogIn({
-        phone: values.phone,
-        email: values.email,
-      });
-
-      try {
-        if (validateEmail(values.email) == false) {
-          message.warning("Định dạng email chưa đúng !");
-        } else if (validatePhone(values.phone) == false) {
-          message.warning("Số điện thoại chưa đúng !");
-        } else if (isNaN(values.name) == false) {
-          message.warning("Tên khách phải là chữ !");
+      if (validateEmail(values.email) == false) {
+        message.warning("Định dạng email chưa đúng !");
+      } else if (validatePhone(values.phone) == false) {
+        message.warning("Số điện thoại chưa đúng !");
+      } else if (isNaN(values.name) == false) {
+        message.warning("Tên khách phải là chữ !");
+      } else {
+        await getUserCheckLogIn({
+          phone: values.phone,
+          email: values.email,
+        });
+        setLoading(true);
+        if (image == undefined) {
+          const user = {
+            email: values.email,
+            avatar:
+              "https://png.pngtree.com/png-vector/20170805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg",
+            name: values.name,
+            phone: values.phone,
+            password: values.password,
+            nameRestaurant: "",
+            avatarRestaurant: "",
+            accountType: 0,
+            count: 0,
+          };
+          await UserAPI.signup(user);
+          setLoading(false);
+          alert("Đăng ký thành công. Hãy đăng nhập");
+          window.location.href = "/";
         } else {
           setLoading(true);
-          if (image == undefined) {
-            const user = {
-              email: values.email,
-              avatar:
-                "https://png.pngtree.com/png-vector/20170805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg",
-              name: values.name,
-              phone: values.phone,
-              password: values.password,
-              nameRestaurant: "",
-              avatarRestaurant: "",
-              accountType: 0,
-              count: 0,
-            };
-            await UserAPI.signup(user);
-            setLoading(false);
-            alert("Đăng ký thành công. Hãy đăng nhập");
-            window.location.href = "/";
-          } else {
-            setLoading(true);
-            const imageRef = ref(storage, `images/${image.file.name}`);
-            uploadBytes(imageRef, image.file).then(() => {
-              getDownloadURL(imageRef).then(async (url) => {
-                const user = {
-                  email: values.email,
-                  avatar: url,
-                  name: values.name,
-                  phone: values.phone,
-                  password: values.password,
-                  nameRestaurant: "",
-                  avatarRestaurant: "",
-                  accountType: 0,
-                  count: 0,
-                };
-                await UserAPI.signup(user);
-                setLoading(false);
-                alert("Đăng ký thành công. Hãy đăng nhập");
-                window.location.href = "/";
-              });
+          const imageRef = ref(storage, `images/${image.file.name}`);
+          uploadBytes(imageRef, image.file).then(() => {
+            getDownloadURL(imageRef).then(async (url) => {
+              const user = {
+                email: values.email,
+                avatar: url,
+                name: values.name,
+                phone: values.phone,
+                password: values.password,
+                nameRestaurant: "",
+                avatarRestaurant: "",
+                accountType: 0,
+                count: 0,
+              };
+              await UserAPI.signup(user);
+              setLoading(false);
+              alert("Đăng ký thành công. Hãy đăng nhập");
+              window.location.href = "/";
             });
-          }
+          });
         }
-      } catch (error) {
-        const errorLogin = error.response.data.error;
-        message.error(errorLogin);
-        setLoading(false);
       }
+
     } catch (error) {
       const errorLogin = error.response.data.error;
       message.error(errorLogin);
@@ -118,8 +112,8 @@ const Signup = () => {
                     : 350
                   : 500
                 : sizes.width == 1024
-                ? 600
-                : 600,
+                  ? 600
+                  : 600,
           }}
         >
           <div className="logo" style={{ textAlign: "center" }}>

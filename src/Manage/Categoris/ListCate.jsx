@@ -26,6 +26,16 @@ const ListCate = () => {
       title: "Ngày tạo",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (createdAt) => {
+        const time = new Date(createdAt)
+        return `${time.getFullYear()}-${String(time.getMonth() + 1).length == 1
+          ? `0${time.getMonth() + 1}`
+          : time.getMonth() + 1
+          }-${String(time.getDate()).length == 1
+            ? `0${time.getDate()}`
+            : time.getDate()
+          }`
+      },
     },
     {
       title: "Thao tác",
@@ -77,7 +87,7 @@ const ListCate = () => {
         columns={columns}
         loading={
           loading ||
-          (categoris?.value.length <= 0 && categoris?.checkData == false)
+            (categoris?.value.length <= 0 && categoris?.checkData == false)
             ? true
             : false
         }

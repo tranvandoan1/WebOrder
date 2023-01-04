@@ -195,7 +195,7 @@ const ListTable = (props) => {
                         </div>
                         {item.amount > 0 ? (
                           (item?.orders?.length > 0 ||
-                            item?.orders?.length < 0 ||
+                            item?.orders?.length <= 0 ||
                             item.timeBookTable !== "null") && (
                             <span
                               style={{

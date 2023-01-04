@@ -16,6 +16,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { setOnllyNumber, setOnllyTextAndNumber } from "../../components/Utils";
 import styles from "../../css/LayoutAdmin.module.css";
 import { getCategori } from "../../features/Categoris/CategoriSlice";
 import { addProduct } from "../../features/ProductsSlice/ProductSlice";
@@ -43,32 +44,49 @@ const AddPro = () => {
     dispatch(getCategori());
   }, []);
   const onSubmit = async (data) => {
-    setCheck(true);
+    const validatePrice = setOnllyTextAndNumber(data.price)
+    const validateName = setOnllyNumber(data.name)
+    const validateDvt = setOnllyNumber(data.dvt)
+    const validatePriceOnlly = setOnllyNumber(data.price)
+    if (validatePrice == false) {
+      message.warning('Giá phải là số !')
+    } else {
+      const imageRef = ref(storage, `images/${photo.file.name}`);
+      setCheck(true);
+      setLoading(true);
+      const componnet = async (url) => {
+        const product = {
+          cate_id: data.cate_id,
+          photo: url,
+          name: validateName,
+          price: validatePriceOnlly,
+          user_id: user._id,
+          dvt: validateDvt,
+          check: data.check == undefined ? false : data.check,
+        };
+        await dispatch(addProduct(product));
+        navigate("/manager/products");
+        message.success("Thêm thành công");
 
-    const product = {
-      cate_id: data.cate_id,
-      photo: photo,
-      name: data.name,
-      price: Number(data.price),
-      user_id: user._id,
-      dvt: data.dvt,
-      check: data.check == undefined ? false : data.check,
-    };
-    await dispatch(addProduct(product));
-    navigate("/manager/products");
-    message.success("Thêm thành công");
+        setCheck(false);
+      }
+      if (photo == undefined) {
+        componnet()
+      } else {
+        uploadBytes(imageRef, photo.file).then(() => {
+          getDownloadURL(imageRef).then(async (url) => {
+            componnet(url)
+          });
+        });
+      }
 
-    setCheck(false);
+    }
   };
   const UploadAvatatr = (file) => {
-    const imageRef = ref(storage, `images/${file.name}`);
-    setLoading(true);
-    uploadBytes(imageRef, file).then(() => {
-      getDownloadURL(imageRef).then(async (url) => {
-        await setPhoto(url);
-        setLoading(false);
-      });
-    });
+    setLoading(false);
+    const src = URL.createObjectURL(file);
+    setPhoto({ url: src, file: file });
+    setLoading(false);
   };
   return (
     <div style={{ height: "100%" }}>
@@ -111,7 +129,7 @@ const AddPro = () => {
                 },
               ]}
             >
-              <Input placeholder="Giá sản phẩm" type="number" />
+              <Input placeholder="Giá sản phẩm" />
             </Form.Item>
             <Form.Item
               name="cate_id"
@@ -183,16 +201,16 @@ const AddPro = () => {
                             style={
                               photo == undefined
                                 ? {
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                  }
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }
                                 : {
-                                    position: "relative",
-                                    overflow: "hidden",
-                                    width: 100,
-                                    height: 100,
-                                  }
+                                  position: "relative",
+                                  overflow: "hidden",
+                                  width: 100,
+                                  height: 100,
+                                }
                             }
                           >
                             {photo == undefined ? (
@@ -205,7 +223,7 @@ const AddPro = () => {
                               />
                             ) : (
                               <img
-                                src={photo}
+                                src={photo.url}
                                 className="image"
                                 style={{
                                   objectFit: "contain",
@@ -243,7 +261,7 @@ const AddPro = () => {
               >
                 <Link to="/manager/products">Quay lại</Link>
               </Button>
-              {check == true||loading==true ? (
+              {check == true || loading == true ? (
                 <Spin />
               ) : (
                 <Button type="primary" htmlType="submit">

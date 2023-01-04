@@ -7,6 +7,7 @@ import {
   uploadCategori,
 } from "../../features/Categoris/CategoriSlice";
 import styles from "../../css/AdminCate.module.css";
+import { setOnllyNumber } from "../../components/Utils";
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -33,7 +34,7 @@ const EditCate = () => {
     await dispatch(
       uploadCategori({
         id: id,
-        data: { name: values.name == undefined ? categori.name : values.name },
+        data: { name: values.name == undefined ? categori.name : setOnllyNumber(values.name) },
       })
     );
     setLoading(false);

@@ -55,7 +55,7 @@ function App() {
       : user?.value.nameRestaurant;
   const key = JSON.parse(localStorage.getItem("key"));
   return (
-    <BrowserRouter>
+    <BrowserRouter  fallbackElement={<Notfound />}>
       {userLoca !== null ? (
         String(user.value).length <= 0 ? (
           <Loading />
@@ -79,11 +79,11 @@ function App() {
                   (key == undefined || key == null
                     ? localStorage.setItem("key", JSON.stringify(["2"]))
                     : null,
-                  (<Navigate to="/manager/table" />))
+                  (<Navigate to="/manager/table"/>))
                 ) : user?.value.count == 1 &&
                   tables.value.length > 0 &&
                   tables.checkData == false ? (
-                  <LayoutWeb />
+                  <LayoutWeb data={32}/>
                 ) : null
               }
             />
@@ -108,9 +108,9 @@ function App() {
               path="/tables/"
               element={
                 user?.value.accountType == 0 ? (
-                  <Navigate to="/" />
+                  <Navigate to="/" data={1} />
                 ) : (
-                  <LayoutWeb />
+                  <LayoutWeb data={1}/>
                 )
               }
             />

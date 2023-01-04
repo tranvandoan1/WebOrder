@@ -21,6 +21,7 @@ import { getAllTable } from "./../features/TableSlice/TableSlice";
 import { addOrder } from "../features/Order/Order";
 import { removeOrderTable } from "../API/TableAPI";
 import { Size } from "../components/size";
+import { setOnllyNumber } from "../components/Utils";
 const SelectedProduct = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const sizes = Size();
@@ -30,12 +31,12 @@ const SelectedProduct = (props) => {
 
   const tables = useSelector((data) => data.table.value);
   const tableFind = tables?.find((item) => item._id == id);
-  const dataTable =
-    tableFind?.orders?.length == undefined
-      ? tableFind?.orders == null
-        ? []
-        : [tableFind?.orders]
-      : tableFind?.orders;
+  // const dataTable =
+  //   tableFind?.orders?.length == undefined
+  //     ? tableFind?.orders == null
+  //       ? []
+  //       : [tableFind?.orders]
+  //     : tableFind?.orders;
   const [value, setValue] = useState(0);
   const [valueSale, setValueSale] = useState(0);
   const [valueAmount, setValueAmount] = useState({
@@ -53,7 +54,7 @@ const SelectedProduct = (props) => {
     dispatch(getAllTable());
   }, []);
   // tính tổng tiền
-  const prices = dataTable?.map((item) => {
+  const prices = props?.tableOrder?.map((item) => {
     if (item?.weight) {
       return Math.ceil(+item?.price * item?.weight * +item?.amount);
     } else {
@@ -66,7 +67,7 @@ const SelectedProduct = (props) => {
   }
 
   const showModal = () => {
-    dataTable?.length >= 1
+    props?.tableOrder?.length >= 1
       ? setIsModalVisible(true)
       : message.warning("Bạn chưa chọn món");
   };
@@ -82,7 +83,7 @@ const SelectedProduct = (props) => {
     props?.callBack(true);
     const newData = [];
     const handle = async () => {
-      dataTable?.map((itemOrder) => {
+      props?.tableOrder?.map((itemOrder) => {
         if (itemOrder.id == item.item.id) {
           newData.push({
             ...itemOrder,
@@ -95,25 +96,29 @@ const SelectedProduct = (props) => {
           newData.push(itemOrder);
         }
       });
-      await dispatch(
-        addOrderTable({
-          data: newData,
-          id_table: id,
-        })
-      );
+      // await dispatch(
+      //   addOrderTable({
+      //     data: newData,
+      //     id_table: id,
+      //   })
+      // );
+      props?.uploadDataTableOrder(newData)
+
       props?.callBack(false);
     };
     if (item.item.amount == 1) {
       if (item.check == "reduce") {
-        const newDataOrder = dataTable.filter(
+        const newDataOrder = props?.tableOrder.filter(
           (itemOrder) => itemOrder.id !== item.item.id
         );
-        await dispatch(
-          addOrderTable({
-            data: newDataOrder,
-            id_table: id,
-          })
-        );
+        // await dispatch(
+        //   addOrderTable({
+        //     data: newDataOrder,
+        //     id_table: id,
+        //   })
+        // );
+        props?.uploadDataTableOrder(newDataOrder)
+
         props?.callBack(false);
       } else {
         handle();
@@ -126,24 +131,13 @@ const SelectedProduct = (props) => {
   //thanh toán
 
   const comfirm = async () => {
-    const order = [];
-    dataTable?.map((item) =>
-      order.push({
-        _id: item.id_pro,
-        name_pro: item.name,
-        amount: item.amount,
-        weight: item.weight == undefined ? 0 : item.weight,
-        dvt: item.dvt,
-        price: item.price,
-      })
-    );
     const data = {
       seller_name:
         customerName == undefined || String(customerName).length <= 0
           ? "Admin"
           : customerName,
       user_id: user._id,
-      orders: dataTable,
+      orders: props?.tableOrder,
       bookTable: {
         nameUser: tableFind?.nameUser,
         timeBookTable: tableFind?.timeBookTable,
@@ -154,15 +148,13 @@ const SelectedProduct = (props) => {
       sumPrice: sum,
       table_id: id,
       start_time: tableFind?.time_start,
-      end_time: `${
-        String(moment().hours()).length == 1
+      end_time: `${String(moment().hours()).length == 1
           ? `0${moment().hours()}`
           : moment().hours()
-      }:${
-        String(moment().minutes()).length == 1
+        }:${String(moment().minutes()).length == 1
           ? `0${moment().minutes()}`
           : moment().minutes()
-      }`,
+        }`,
     };
     setLoading(true);
     await dispatch(addOrder(data));
@@ -237,38 +229,41 @@ const SelectedProduct = (props) => {
     if (isNaN(valueAmount?.amount) == false) {
       props?.callBack(true);
       if (valueAmount?.amount == 0 || String(valueAmount?.amount).length <= 0) {
-        const newDataOrder = dataTable.filter(
+        const newDataOrder = props?.tableOrder.filter(
           (itemOrder) => itemOrder.id !== item.id
         );
-        await dispatch(
-          addOrderTable({
-            data: newDataOrder,
-            id_table: id,
-          })
-        );
+        // await dispatch(
+        //   addOrderTable({
+        //     data: newDataOrder,
+        //     id_table: id,
+        //   })
+        // );
+        props?.uploadDataTableOrder(newDataOrder)
+
         props?.callBack(false);
       } else {
         const newData = [];
-        dataTable?.map((itemOrder) => {
+        props?.tableOrder?.map((itemOrder) => {
           if (itemOrder.id == item.id) {
             newData.push({
               ...itemOrder,
               amount: Number(
                 valueAmount?.amount == undefined
                   ? item.amount
-                  : valueAmount?.amount
+                  : setOnllyNumber(valueAmount?.amount)
               ),
             });
           } else {
             newData.push(itemOrder);
           }
         });
-        await dispatch(
-          addOrderTable({
-            data: newData,
-            id_table: id,
-          })
-        );
+        // await dispatch(
+        //   addOrderTable({
+        //     data: newData,
+        //     id_table: id,
+        //   })
+        // );
+        props?.uploadDataTableOrder(newData)
         props?.callBack(false);
       }
     } else {
@@ -295,7 +290,7 @@ const SelectedProduct = (props) => {
           Sản phẩm đã chọn
         </div>
       )}
-      {dataTable?.length <= 0 || dataTable == null ? (
+      {props?.tableOrder?.length <= 0 || props?.tableOrder == null ? (
         <div
           style={{
             display: "flex",
@@ -324,12 +319,12 @@ const SelectedProduct = (props) => {
                   sizes.width < 1024
                     ? sizes.height - 150
                     : sizes.width == 1024
-                    ? sizes.height - 203
-                    : sizes.height - 203,
+                      ? sizes.height - 203
+                      : sizes.height - 203,
                 position: "relative",
               }}
             >
-              {dataTable?.map((item, index) => {
+              {props?.tableOrder?.map((item, index) => {
                 return (
                   <Row key={item._id} className="row-order">
                     <Col
@@ -346,8 +341,8 @@ const SelectedProduct = (props) => {
                             sizes.width < 1024
                               ? 20
                               : sizes.width == 1024
-                              ? 11
-                              : 19,
+                                ? 11
+                                : 19,
                         }}
                       >
                         {index + 1}
@@ -362,13 +357,13 @@ const SelectedProduct = (props) => {
                           ? sizes.width < 1024
                             ? 14
                             : sizes.width == 1024
-                            ? 14
-                            : 14
+                              ? 14
+                              : 14
                           : sizes.width < 1024
-                          ? 14
-                          : sizes.width == 1024
-                          ? 14
-                          : 14
+                            ? 14
+                            : sizes.width == 1024
+                              ? 14
+                              : 14
                       }
                       xl={13}
                     >
@@ -381,8 +376,8 @@ const SelectedProduct = (props) => {
                                 ? 15
                                 : 16
                               : sizes.width == 1024
-                              ? 14
-                              : 16,
+                                ? 14
+                                : 16,
                         }}
                       >
                         {item.name}
@@ -396,8 +391,8 @@ const SelectedProduct = (props) => {
                                   ? 15
                                   : 20
                                 : sizes.width == 1024
-                                ? 11
-                                : 19,
+                                  ? 11
+                                  : 19,
                           }}
                         >
                           {item.weight && item.weight + "kg"}
@@ -419,15 +414,15 @@ const SelectedProduct = (props) => {
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                ? 5
-                                : 10,
+                                  ? 5
+                                  : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                ? 5
-                                : 10,
+                                  ? 5
+                                  : 10,
 
                             textAlign: "center",
                             fontWeight: "600",
@@ -444,8 +439,8 @@ const SelectedProduct = (props) => {
                             valueAmount?.amount == undefined
                               ? item.amount
                               : item.id == valueAmount?.id
-                              ? valueAmount?.amount
-                              : item.amount
+                                ? valueAmount?.amount
+                                : item.amount
                           }
                           style={{
                             textAlign: "center",
@@ -472,15 +467,15 @@ const SelectedProduct = (props) => {
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                ? 5
-                                : 10,
+                                  ? 5
+                                  : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                ? 5
-                                : 10,
+                                  ? 5
+                                  : 10,
                             textAlign: "center",
                             fontWeight: "600",
                             marginLeft: 2,
@@ -545,12 +540,12 @@ const SelectedProduct = (props) => {
                       >
                         sản phẩm đã thêm
                       </div>
-                      {dataTable?.length < 8 ? (
+                      {props?.tableOrder?.length < 8 ? (
                         <Table
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={dataTable}
+                          dataSource={props?.tableOrder}
                           pagination={false}
                           rowKey={(item) => item._id}
                         />
@@ -559,7 +554,7 @@ const SelectedProduct = (props) => {
                           columns={columns}
                           bordered={false}
                           style={{ fontSize: ".8rem" }}
-                          dataSource={dataTable}
+                          dataSource={props?.tableOrder}
                           pagination={false}
                           scroll={{ y: 300 }}
                           rowKey={(item) => item._id}
@@ -665,8 +660,8 @@ const SelectedProduct = (props) => {
                           sizes.width < 1024
                             ? 20
                             : sizes.width == 1024
-                            ? 20
-                            : 19,
+                              ? 20
+                              : 19,
                       }}
                     >
                       {Math.ceil(sum * ((100 - valueSale) / 100))

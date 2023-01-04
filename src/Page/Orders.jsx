@@ -13,7 +13,7 @@ import {
   Spin,
   Drawer,
 } from "antd";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate, json } from "react-router-dom";
 import {
   DoubleLeftOutlined,
   MenuFoldOutlined,
@@ -28,7 +28,9 @@ import { getCategori } from "./../features/Categoris/CategoriSlice";
 import { addOrderTable, getAllTable } from "../features/TableSlice/TableSlice";
 import { Size } from "../components/size";
 import Loading from "../components/Loading";
-const Orders = () => {
+import LayoutWeb from "./LayoutWeb";
+const Orders = ({ navigation }) => {
+  const navigate = useNavigate()
   const { id } = useParams();
   const sizes = Size();
   const dispatch = useDispatch();
@@ -41,6 +43,7 @@ const Orders = () => {
   const [loading, setLoading] = useState(false);
 
   const tables = useSelector((data) => data.table);
+  const table = tables?.value?.find((item) => item._id == id);
 
   const products = useSelector((data) => data.product);
   const categoris = useSelector((data) => data.categori.value);
@@ -49,18 +52,16 @@ const Orders = () => {
     dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
-  const tableOrder = tables?.value?.find((item) => item._id == id);
-  const dataTable =
-    tableOrder?.orders?.length == undefined
-      ? tableOrder?.orders == null
-        ? []
-        : [tableOrder?.orders]
-      : tableOrder?.orders;
+  const [tableOrder, setTableOrder] = useState([])
+  useEffect(() => {
+    setTableOrder(table?.orders == null ? [] : table?.orders)
+  }, [id])
+
   const apply = async (values) => {
     if (Number.isFinite(Number(values.weight)) == false) {
       message.warning("Số lượng phải là số !");
     } else {
-      const newSaveOrder = dataTable?.find(
+      const newSaveOrder = tableOrder?.find(
         (item) => item.weight == Number(values.weight)
       );
       form.resetFields();
@@ -69,7 +70,7 @@ const Orders = () => {
       setModalWeight(false);
       if (newSaveOrder !== undefined) {
         const newData = [];
-        dataTable?.map((itemOrder) => {
+        tableOrder?.map((itemOrder) => {
           if (itemOrder.id == newSaveOrder.id) {
             newData.push({
               ...itemOrder,
@@ -80,13 +81,7 @@ const Orders = () => {
             newData.push(itemOrder);
           }
         });
-
-        await dispatch(
-          addOrderTable({
-            data: newData,
-            id_table: id,
-          })
-        );
+        setTableOrder(newData)
       } else {
         const newOrder = {
           amount: 1,
@@ -98,25 +93,18 @@ const Orders = () => {
           dvt: productOrder.dvt,
           id: Math.random().toString(36).substring(0, 20),
         };
-        await dispatch(
-          addOrderTable({
-            data:
-              dataTable?.length <= 0 || dataTable == null
-                ? newOrder
-                : [...dataTable, newOrder],
-            id_table: id,
-          })
-        );
+        setTableOrder([...tableOrder, newOrder])
       }
+
       setLoading(false);
     }
   };
+  const date = new Date();
 
   const selectProduct = async (pro) => {
-    const date = new Date();
     // lấy ra được sản phẩm vừa chọn
     // kiểm tra xem sp lựa chọn đã tồn lại ở bàn này hay chưa
-    const newSaveOrder = dataTable?.find((item) => item.id_pro == pro._id);
+    const newSaveOrder = tableOrder?.find((item) => item.id_pro == pro._id);
     // th1 nếu mà sp order mà cần có kg
     if (pro.check == true) {
       // nếu sp là sp theo cân thì hiện input nhập cân nặng
@@ -135,28 +123,12 @@ const Orders = () => {
           id: Math.random().toString(36).substring(0, 20),
         };
         setLoading(true);
-        await dispatch(
-          addOrderTable({
-            data:
-              dataTable?.length <= 0 || dataTable == null
-                ? newOrder
-                : [...dataTable, newOrder],
-            id_table: id,
-            time_start: `${
-              String(date.getHours()).length == 1
-                ? `0${date.getHours()}`
-                : date.getHours()
-            }:${
-              String(date.getMinutes()).length == 1
-                ? `0${date.getMinutes()}`
-                : date.getMinutes()
-            }`,
-          })
-        );
+        setTableOrder([...tableOrder, newOrder])
+
         setLoading(false);
       } else {
         const newData = [];
-        dataTable?.map((itemOrder) => {
+        tableOrder?.map((itemOrder) => {
           if (itemOrder.id == newSaveOrder.id) {
             newData.push({
               ...itemOrder,
@@ -167,12 +139,8 @@ const Orders = () => {
           }
         });
         setLoading(true);
-        await dispatch(
-          addOrderTable({
-            data: newData,
-            id_table: id,
-          })
-        );
+        setTableOrder(newData)
+
       }
       setLoading(false);
     }
@@ -190,7 +158,34 @@ const Orders = () => {
   // show menu width<1024
   const [openCart, setOpenCart] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  // const onConfirmRefresh = async function (event) {
+  //   event.preventDefault();
+  //   // if (JSON.stringify(tableOrder) !== JSON.stringify(table?.orders)) {
+  //   //   await dispatch(
+  //   //     addOrderTable({
+  //   //       data: tableOrder,
+  //   //       id_table: id,
+  //   //       time_start: `${String(date.getHours()).length == 1
+  //   //         ? `0${date.getHours()}`
+  //   //         : date.getHours()
+  //   //         }:${String(date.getMinutes()).length == 1
+  //   //           ? `0${date.getMinutes()}`
+  //   //           : date.getMinutes()
+  //   //         }`,
+  //   //     })
+  //   //   );
+  //   // }
+  //   return event.returnValue = "12wqsaxz12ewqdsxz?";
+  // }
 
+  // window.addEventListener("beforeunload", onConfirmRefresh, { capture: true });
+  // window.onbeforeunload = function () {
+  //   return "Dude, are you sure you want to refresh? Think of the kittens!";
+  // }
+  window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+  });
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>
       {/* reponsive  */}
@@ -248,7 +243,7 @@ const Orders = () => {
                     alignItems: "center",
                   }}
                 >
-                  {dataTable == null ? 0 : dataTable?.length}
+                  {tableOrder == null ? 0 : tableOrder?.length}
                 </span>
               </React.Fragment>
             )}
@@ -328,10 +323,27 @@ const Orders = () => {
                   alignItems: "center",
                 }}
               >
-                <Link to="/tables">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#fff', cursor: 'pointer' }} onClick={async () => {
+                  navigate("../", <LayoutWeb data={33121232} />);
+                  if (JSON.stringify(tableOrder) !== JSON.stringify(table?.orders)) {
+                    await dispatch(
+                      addOrderTable({
+                        data: tableOrder,
+                        id_table: id,
+                        time_start: `${String(date.getHours()).length == 1
+                          ? `0${date.getHours()}`
+                          : date.getHours()
+                          }:${String(date.getMinutes()).length == 1
+                            ? `0${date.getMinutes()}`
+                            : date.getMinutes()
+                          }`,
+                      })
+                    );
+                  }
+                }}>
                   {" "}
                   <DoubleLeftOutlined className="icon" /> Quay lại{" "}
-                </Link>
+                </div>
                 <MenuFoldOutlined
                   className="icon"
                   onClick={() => setIsModalOpen(true)}
@@ -397,10 +409,10 @@ const Orders = () => {
                                       ? 150
                                       : 190
                                     : sizes.width == 1024
-                                    ? isModalOpen == true
-                                      ? 170
-                                      : 160
-                                    : 180,
+                                      ? isModalOpen == true
+                                        ? 170
+                                        : 160
+                                      : 180,
                               }}
                             >
                               <img src={item_pro.photo} alt="" />
@@ -434,6 +446,7 @@ const Orders = () => {
                 tableOrder={tableOrder}
                 isModalOpen={isModalOpen}
                 callBack={(e) => setLoading(e)}
+                uploadDataTableOrder={(e) => setTableOrder(e)}
               />
             </Col>
           </Row>

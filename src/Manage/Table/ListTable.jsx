@@ -1,4 +1,4 @@
-import { Button, message, Space,Table } from "antd";
+import { Button, message, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,6 +34,16 @@ const ListTable = () => {
       title: "Ngày tạo",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (createdAt) => {
+        const time = new Date(createdAt)
+        return `${time.getFullYear()}-${String(time.getMonth() + 1).length == 1
+          ? `0${time.getMonth() + 1}`
+          : time.getMonth() + 1
+          }-${String(time.getDate()).length == 1
+            ? `0${time.getDate()}`
+            : time.getDate()
+          }`
+      },
     },
     {
       title: "Thao tác",

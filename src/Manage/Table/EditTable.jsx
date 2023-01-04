@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { editTable, getAllTable } from "../../features/TableSlice/TableSlice";
 import styles from "../../css/LayoutAdmin.module.css";
 import { Button, Form, Input, message,Spin } from "antd";
+import { setOnllyNumber } from "../../components/Utils";
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -27,7 +28,7 @@ const EditTable = () => {
   }, []);
   const uploadTable = async (value) => {
     const newData = {
-      name: value.name == undefined ? table.name : value.name,
+      name: value.name == undefined ? table.name : setOnllyNumber(value.name),
     };
     setLoading(true);
     await dispatch(editTable({ id: id, data: newData }));

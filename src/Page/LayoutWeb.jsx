@@ -33,9 +33,11 @@ import { Size } from "../components/size";
 import { uploadLogin } from "../API/Users";
 import { getUser } from "../features/User/UserSlice";
 import { validatePhone } from "./../components/Validate";
+import { setOnllyNumber } from "../components/Utils";
 const { Header, Content, Sider } = Layout;
 
-const LayoutWeb = () => {
+const LayoutWeb = (props) => {
+  console.log(props, 'asdasdasd')
   const sizes = Size();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +45,7 @@ const LayoutWeb = () => {
   useEffect(() => {
     dispatch(getUser());
   }, []);
+
   const [checkBookTable, setCheckBookTable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusTable, setStatusTable] = useState();
@@ -86,17 +89,15 @@ const LayoutWeb = () => {
         editBookTable({
           id: values.id,
           nameUser: values.nameUser,
-          timeBookTable: `${
-            String(time.getHours()).length == 1
-              ? `0${time.getHours()}`
-              : `${time.getHours()}`
-          }:${
-            String(time.getMinutes()).length == 1
+          timeBookTable: `${String(time.getHours()).length == 1
+            ? `0${time.getHours()}`
+            : `${time.getHours()}`
+            }:${String(time.getMinutes()).length == 1
               ? `0${time.getMinutes()}`
               : `${time.getMinutes()}`
-          }`,
-          amount: values.amount,
-          phone: values.phone,
+            }`,
+          amount: setOnllyNumber(values.amount),
+          phone: setOnllyNumber(values.phone),
         })
       );
       setLoading(false);
@@ -244,13 +245,12 @@ const LayoutWeb = () => {
   return (
     <div
       style={{
-        backgroundColor: "rgb(243, 243, 243)",
         position: "relative",
+        height:'100%'
       }}
-      className="layout-body"
     >
-      <Layout>
-        <Layout className="site-layout">
+      <Layout style={{height:'100%'}}>
+        <Layout className="site-layout" >
           <Header className={styles.header}>
             <div
               style={{
@@ -271,8 +271,8 @@ const LayoutWeb = () => {
                 }}
               >
                 {String(user.nameRestaurant).length <= 0 &&
-                (String(user.avatarRestaurant).length <= 0 ||
-                  user.avatarRestaurant == null) ? (
+                  (String(user.avatarRestaurant).length <= 0 ||
+                    user.avatarRestaurant == null) ? (
                   <span
                     style={{ padding: 10, color: "red", fontWeight: "500" }}
                   >
@@ -281,7 +281,7 @@ const LayoutWeb = () => {
                 ) : (
                   <React.Fragment>
                     {String(user.avatarRestaurant).length <= 0 ||
-                    user.avatarRestaurant == null ? (
+                      user.avatarRestaurant == null ? (
                       <Avatar
                         src={user?.avatarRestaurant}
                         style={{ margin: "10px" }}
@@ -334,11 +334,14 @@ const LayoutWeb = () => {
       </Layout>
 
       {/* book table */}
-      <div
-        className={styles.book_table}
-        style={
-          checkBookTable == true
-            ? {
+      {
+        checkBookTable == true
+        &&
+        <div
+          className={styles.book_table}
+          style={
+            checkBookTable == true
+              ? {
                 transform: `scale(1,1)`,
                 visibility: "visible",
                 opacity: 1,
@@ -346,349 +349,345 @@ const LayoutWeb = () => {
                 overflow: "scroll",
                 height: "100%",
               }
-            : {}
-        }
-      >
-        <div
-          onClick={() => setCheckBookTable(false)}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1,
-          }}
-        ></div>
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: 2,
-            zIndex: 10,
-            width: sizes.width < 786 ? "100%" : 500,
-          }}
-          className={styles.table_book_table}
+              : {}
+          }
         >
-          <h3
+          <div
+            onClick={() => setCheckBookTable(false)}
             style={{
-              textAlign: "center",
-              margin: "10px 0",
-              paddingBottom: 10,
-              borderBottom: "1px solid rgb(219,219,219)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1,
             }}
+          ></div>
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 2,
+              zIndex: 10,
+              width: sizes.width < 786 ? "100%" : 500,
+            }}
+            className={styles.table_book_table}
           >
-            Đặt bàn
-          </h3>
+            <h3
+              style={{
+                textAlign: "center",
+                margin: "10px 0",
+                paddingBottom: 10,
+                borderBottom: "1px solid rgb(219,219,219)",
+              }}
+            >
+              Đặt bàn
+            </h3>
 
-          <Form
-            name="basic"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            form={form}
-            onFinish={onFinish}
-            autoComplete="off"
-          >
-            <Form.Item
-              labelAlign="left"
-              label="Tên khách hàng"
-              name="nameUser"
-              rules={[
-                {
-                  required: true,
-                  message: "Chưa nhập tên khách hàng !",
-                },
-              ]}
+            <Form
+              name="basic"
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              form={form}
+              onFinish={onFinish}
+              autoComplete="off"
             >
-              <Input placeholder="Tên khách hàng" />
-            </Form.Item>
-
-            <Form.Item
-              labelAlign="left"
-              label="Số điện thoại"
-              name="phone"
-              rules={[
-                {
-                  required: true,
-                  message: "Chưa nhập số điện thoại!",
-                },
-              ]}
-            >
-              <Input placeholder="Số điện thoại" type="number" />
-            </Form.Item>
-
-            <Form.Item
-              labelAlign="left"
-              label="Thời gian đến"
-              name="timeBookTable"
-              rules={[
-                {
-                  required: true,
-                  message: "Chưa chọn giờ!",
-                },
-              ]}
-            >
-              <TimePicker format={"HH:mm"} placeholder="Thời gian đến" />
-            </Form.Item>
-
-            <Form.Item
-              labelAlign="left"
-              label="Số lượng người"
-              name="amount"
-              rules={[
-                {
-                  required: true,
-                  message: "Chưa nhập số lượng người!",
-                },
-              ]}
-            >
-              <Input placeholder="Số lượng" type="number" />
-            </Form.Item>
-            <Form.Item
-              labelAlign="left"
-              label="Bàn muốn đặt"
-              name="id"
-              rules={[
-                {
-                  required: true,
-                  message: "Chưa chọn bàn đặt!",
-                },
-              ]}
-            >
-              <Select placeholder="Bàn muốn đặt" allowClear>
-                {dataTable?.map((item, index) => {
-                  return (
-                    <Select.Option key={item} value={item._id}>
-                      {item.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item
-            // wrapperCol={{
-            //   offset: 8,
-            //   span: 16,
-            // }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: 20,
-                }}
+              <Form.Item
+                labelAlign="left"
+                label="Tên khách hàng"
+                name="nameUser"
+                rules={[
+                  {
+                    required: true,
+                    message: "Chưa nhập tên khách hàng !",
+                  },
+                ]}
               >
-                <Button
-                  onClick={() => (setCheckBookTable(false), form.resetFields())}
-                  type="primary"
-                  style={{ background: "red", border: 0, marginRight: 10 }}
-                >
-                  Hủy
-                </Button>
-                {loading == true ? (
-                  <Spin size="large" />
-                ) : (
-                  <Button type="primary" htmlType="submit">
-                    Đặt bàn
-                  </Button>
-                )}
-              </div>
-            </Form.Item>
-          </Form>
-        </div>
-        <Drawer
-          title={
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-              }}
-            >
-              {String(user.avatarRestaurant).length <= 0 ||
-              user.avatarRestaurant == null ? (
-                <Avatar src={user?.avatarRestaurant} size={30} alt="" />
-              ) : (
-                <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
-              )}
+                <Input placeholder="Tên khách hàng" />
+              </Form.Item>
 
-              <span style={{ fontSize: 18, fontWeight: "500" }}>
-                {user?.nameRestaurant}
-              </span>
-            </div>
-          }
-          placement="right"
-          onClose={() => setCheckResponsive(false)}
-          open={checkResponsive}
-          style={{
-            padding: 0,
-            margin: 0,
-          }}
-          width={
-            sizes.width > 1024 ? "100%" : sizes.width < 768 ? "100%" : "100%"
-          }
-        >
-          <div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <Avatar size={44} src={user?.avatar} />
-                <span style={{ marginLeft: 10 }}>{user?.name}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <Form.Item
+                labelAlign="left"
+                label="Số điện thoại"
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: "Chưa nhập số điện thoại!",
+                  },
+                ]}
+              >
+                <Input placeholder="Số điện thoại" />
+              </Form.Item>
+
+              <Form.Item
+                labelAlign="left"
+                label="Thời gian đến"
+                name="timeBookTable"
+                rules={[
+                  {
+                    required: true,
+                    message: "Chưa chọn giờ!",
+                  },
+                ]}
+              >
+                <TimePicker format={"HH:mm"} placeholder="Thời gian đến" />
+              </Form.Item>
+
+              <Form.Item
+                labelAlign="left"
+                label="Số lượng người"
+                name="amount"
+                rules={[
+                  {
+                    required: true,
+                    message: "Chưa nhập số lượng người!",
+                  },
+                ]}
+              >
+                <Input placeholder="Số lượng" type="number" />
+              </Form.Item>
+              <Form.Item
+                labelAlign="left"
+                label="Bàn muốn đặt"
+                name="id"
+                rules={[
+                  {
+                    required: true,
+                    message: "Chưa chọn bàn đặt!",
+                  },
+                ]}
+              >
+                <Select placeholder="Bàn muốn đặt" allowClear>
+                  {dataTable?.map((item, index) => {
+                    return (
+                      <Select.Option key={item} value={item._id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item>
                 <div
                   style={{
+                    width: "100%",
                     display: "flex",
-                    alignItems: "center",
-                    border: "1px solid #d9d9d9",
-                    borderRadius: 4,
-                    padding: "5px 10px",
-                    background: "hsl(214, 89%, 52%)",
-                    color: "#fff",
+                    justifyContent: "flex-end",
+                    marginTop: 20,
                   }}
-                  onClick={() => signOut()}
                 >
-                  <LogoutOutlined
-                    style={{
-                      fontSize: 14,
-                      marginRight: sizes.width > 450 ? 5 : 0,
-                      marginTop: 2,
-                    }}
-                  />
-                  {sizes.width > 450 && (
-                    <span style={{ fontSize: 12, fontWeight: "400" }}>
-                      Đăng xuất
-                    </span>
+                  <Button
+                    onClick={() => (setCheckBookTable(false), form.resetFields())}
+                    type="primary"
+                    style={{ background: "red", border: 0, marginRight: 10 }}
+                  >
+                    Hủy
+                  </Button>
+                  {loading == true ? (
+                    <Spin size="large" />
+                  ) : (
+                    <Button type="primary" htmlType="submit">
+                      Đặt bàn
+                    </Button>
                   )}
                 </div>
-                <SettingOutlined
-                  onClick={() => navigate("/manager/statistical")}
-                  style={{
-                    fontSize: sizes.width < 768 ? 20 : 30,
-                    marginLeft: 10,
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-            </div>
-            <div style={{ position: "relative" }}>
-              <Select
+              </Form.Item>
+            </Form>
+          </div>
+          <Drawer
+            title={
+              <div
                 style={{
-                  width: "100%",
-                  margin: "10px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
                 }}
-                value={statusTable == undefined ? undefined : statusTable}
-                placeholder="Lọc bàn"
-                onChange={handleChange}
               >
-                <Select.Option key={1} value="1">
-                  Có khách
-                </Select.Option>
-                <Select.Option key={2} value="2">
-                  Bàn đặt
-                </Select.Option>
-                <Select.Option key={3} value="3">
-                  Trống
-                </Select.Option>
-              </Select>
-              {statusTable !== undefined && (
-                <CloseCircleOutlined
-                  onClick={() => setStatusTable()}
-                  style={{
-                    position: "absolute",
-                    right: 5,
-                    bottom: 15,
-                    cursor: "pointer",
-                    color: "red",
-                    fontSize: 22,
-                  }}
-                />
-              )}
-            </div>
+                {String(user.avatarRestaurant).length <= 0 ||
+                  user.avatarRestaurant == null ? (
+                  <Avatar src={user?.avatarRestaurant} size={30} alt="" />
+                ) : (
+                  <UserOutlined style={{ fontSize: 25, marginRight: 10 }} />
+                )}
 
-            <div
-              style={
-                sizes.width > 768
-                  ? {
+                <span style={{ fontSize: 18, fontWeight: "500" }}>
+                  {user?.nameRestaurant}
+                </span>
+              </div>
+            }
+            placement="right"
+            onClose={() => setCheckResponsive(false)}
+            open={checkResponsive}
+            style={{
+              padding: 0,
+              margin: 0,
+            }}
+            width={
+              sizes.width > 1024 ? "100%" : sizes.width < 768 ? "100%" : "100%"
+            }
+          >
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <Avatar size={44} src={user?.avatar} />
+                  <span style={{ marginLeft: 10 }}>{user?.name}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      border: "1px solid #d9d9d9",
+                      borderRadius: 4,
+                      padding: "5px 10px",
+                      background: "hsl(214, 89%, 52%)",
+                      color: "#fff",
+                    }}
+                    onClick={() => signOut()}
+                  >
+                    <LogoutOutlined
+                      style={{
+                        fontSize: 14,
+                        marginRight: sizes.width > 450 ? 5 : 0,
+                        marginTop: 2,
+                      }}
+                    />
+                    {sizes.width > 450 && (
+                      <span style={{ fontSize: 12, fontWeight: "400" }}>
+                        Đăng xuất
+                      </span>
+                    )}
+                  </div>
+                  <SettingOutlined
+                    onClick={() => navigate("/manager/statistical")}
+                    style={{
+                      fontSize: sizes.width < 768 ? 20 : 30,
+                      marginLeft: 10,
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ position: "relative" }}>
+                <Select
+                  style={{
+                    width: "100%",
+                    margin: "10px 0",
+                  }}
+                  value={statusTable == undefined ? undefined : statusTable}
+                  placeholder="Lọc bàn"
+                  onChange={handleChange}
+                >
+                  <Select.Option key={1} value="1">
+                    Có khách
+                  </Select.Option>
+                  <Select.Option key={2} value="2">
+                    Bàn đặt
+                  </Select.Option>
+                  <Select.Option key={3} value="3">
+                    Trống
+                  </Select.Option>
+                </Select>
+                {statusTable !== undefined && (
+                  <CloseCircleOutlined
+                    onClick={() => setStatusTable()}
+                    style={{
+                      position: "absolute",
+                      right: 5,
+                      bottom: 15,
+                      cursor: "pointer",
+                      color: "red",
+                      fontSize: 22,
+                    }}
+                  />
+                )}
+              </div>
+
+              <div
+                style={
+                  sizes.width > 768
+                    ? {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
                     }
-                  : {}
-              }
-            >
-              <Button
-                onClick={() => (
-                  setCheckBookTable(true), setCheckResponsive(false)
-                )}
-                style={{
-                  backgroundColor: "red",
-                  border: 0,
-                  marginRight: 10,
-                  borderRadius: 5,
-                }}
-                type="primary"
+                    : {}
+                }
               >
-                Đặt bàn
-              </Button>
-              <div
-                style={{ display: "flex", alignItems: "center", marginTop: 10 }}
-              >
-                (
-                <span
-                  style={{ marginRight: 10, fontSize: 13, fontWeight: "500" }}
+                <Button
+                  onClick={() => (
+                    setCheckBookTable(true), setCheckResponsive(false)
+                  )}
+                  style={{
+                    backgroundColor: "red",
+                    border: 0,
+                    marginRight: 10,
+                    borderRadius: 5,
+                  }}
+                  type="primary"
                 >
-                  {" "}
-                  Chú ý :{" "}
-                </span>
-                <div
-                  className={styles.not}
-                  style={{ fontSize: 11, marginRight: 15, fontWeight: "500" }}
-                >
-                  <div
-                    style={{
-                      backgroundColor: "#FF7F00",
-                      width: 10,
-                      height: 10,
-                      borderRadius: 100,
-                      marginRight: 5,
-                    }}
-                  ></div>
                   Đặt bàn
-                </div>
+                </Button>
                 <div
-                  className={styles.not}
-                  style={{ fontSize: 11, fontWeight: "500" }}
+                  style={{ display: "flex", alignItems: "center", marginTop: 10 }}
                 >
+                  (
+                  <span
+                    style={{ marginRight: 10, fontSize: 13, fontWeight: "500" }}
+                  >
+                    {" "}
+                    Chú ý :{" "}
+                  </span>
                   <div
-                    style={{
-                      backgroundColor: "yellowgreen",
-                      width: 10,
-                      height: 10,
-                      borderRadius: 100,
-                      marginRight: 5,
-                    }}
-                  ></div>
-                  Đang có khách
+                    className={styles.not}
+                    style={{ fontSize: 11, marginRight: 15, fontWeight: "500" }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: "#FF7F00",
+                        width: 10,
+                        height: 10,
+                        borderRadius: 100,
+                        marginRight: 5,
+                      }}
+                    ></div>
+                    Đặt bàn
+                  </div>
+                  <div
+                    className={styles.not}
+                    style={{ fontSize: 11, fontWeight: "500" }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: "yellowgreen",
+                        width: 10,
+                        height: 10,
+                        borderRadius: 100,
+                        marginRight: 5,
+                      }}
+                    ></div>
+                    Đang có khách
+                  </div>
+                  )
                 </div>
-                )
               </div>
             </div>
-          </div>
-        </Drawer>
-      </div>
+          </Drawer>
+        </div>
+      }
 
       {/* hiện menu chọn khi bàn có khách */}
       {showMenu == true && (

@@ -4,6 +4,7 @@ import styles from "../../css/LayoutAdmin.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addCategori } from "../../features/Categoris/CategoriSlice";
+import { setOnllyNumber } from "../../components/Utils";
 const AddCate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const AddCate = () => {
   const addCate = async (values) => {
     setLoading(true);
 
-    await dispatch(addCategori({ name: values.name, user_id: user._id }));
+    await dispatch(addCategori({ name: setOnllyNumber(values.name), user_id: user._id }));
     setLoading(false);
 
     message.success("Thêm thành công");

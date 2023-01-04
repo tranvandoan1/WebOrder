@@ -4,6 +4,7 @@ import styles from "../../css/LayoutAdmin.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTable } from "./../../features/TableSlice/TableSlice";
+import { setOnllyNumber } from "../../components/Utils";
 const AddTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const AddTable = () => {
 
   const addCate = async (values) => {
     const newData = {
-      name: values.name,
+      name: setOnllyNumber(values.name),
       user_id: user._id,
       nameUser: "",
       amount: 0,
