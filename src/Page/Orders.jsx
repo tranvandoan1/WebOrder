@@ -158,34 +158,7 @@ const Orders = ({ navigation }) => {
   // show menu width<1024
   const [openCart, setOpenCart] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  // const onConfirmRefresh = async function (event) {
-  //   event.preventDefault();
-  //   // if (JSON.stringify(tableOrder) !== JSON.stringify(table?.orders)) {
-  //   //   await dispatch(
-  //   //     addOrderTable({
-  //   //       data: tableOrder,
-  //   //       id_table: id,
-  //   //       time_start: `${String(date.getHours()).length == 1
-  //   //         ? `0${date.getHours()}`
-  //   //         : date.getHours()
-  //   //         }:${String(date.getMinutes()).length == 1
-  //   //           ? `0${date.getMinutes()}`
-  //   //           : date.getMinutes()
-  //   //         }`,
-  //   //     })
-  //   //   );
-  //   // }
-  //   return event.returnValue = "12wqsaxz12ewqdsxz?";
-  // }
 
-  // window.addEventListener("beforeunload", onConfirmRefresh, { capture: true });
-  // window.onbeforeunload = function () {
-  //   return "Dude, are you sure you want to refresh? Think of the kittens!";
-  // }
-  window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-  });
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>
       {/* reponsive  */}
