@@ -28,6 +28,7 @@ const List = () => {
   const date = moment().date();
   const month = moment().month();
   const year = moment().year();
+  console.log(check, 'check')
   const list = () => {
     let order = [];
 
@@ -37,21 +38,22 @@ const List = () => {
         if (
           check == "today"
             ? date == time.getDate() &&
-              month + 1 == time.getMonth() + 1 &&
-              year == time.getFullYear()
+            month + 1 == time.getMonth() + 1 &&
+            year == time.getFullYear()
             : check == "thisMonth"
-            ? month + 1 == time.getMonth() + 1 && year == time.getFullYear()
-            : check == "thisYear"
-            ? year == time.getFullYear()
-            : check == "yesterDay"
-            ? date == time.getDate() - 1 &&
-              month + 1 == time.getMonth() + 1 &&
-              year == time.getFullYear()
-            : check == "lastMonth"
-            ? month == time.getMonth() + 1 && year == time.getFullYear()
-            : year - 1 == time.getFullYear()
+              ? month + 1 == time.getMonth() + 1 && year == time.getFullYear()
+              : check == "thisYear"
+                ? year == time.getFullYear()
+                : check == "yesterDay"
+                  ? date - 1 == time.getDate() &&
+                  month + 1 == time.getMonth() + 1 &&
+                  year == time.getFullYear()
+                  : check == "lastMonth"
+                    ? month == time.getMonth() + 1 && year == time.getFullYear()
+                    : year - 1 == time.getFullYear()
         ) {
           order.push(item);
+          console.log(order, '3e2wds')
         }
       }
     });
@@ -67,16 +69,16 @@ const List = () => {
           check == "today"
             ? "Hôm nay"
             : check == "thisMonth"
-            ? "Tháng này"
-            : check == "thisYear"
-            ? "Năm nay"
-            : check == "yesterDay"
-            ? "Hôm qua"
-            : check == "lastMonth"
-            ? "Tháng trước"
-            : check == "lastYear"
-            ? "Năm trước"
-            : " ",
+              ? "Tháng này"
+              : check == "thisYear"
+                ? "Năm nay"
+                : check == "yesterDay"
+                  ? "Hôm qua"
+                  : check == "lastMonth"
+                    ? "Tháng trước"
+                    : check == "lastYear"
+                      ? "Năm trước"
+                      : " ",
         price: sum,
       },
     ];
@@ -168,43 +170,38 @@ const List = () => {
                   {check == "today"
                     ? "Hôm nay"
                     : check == "thisMonth"
-                    ? "Tháng này"
-                    : check == "thisYear"
-                    ? "Năm nay"
-                    : check == "yesterDay"
-                    ? "Hôm qua"
-                    : check == "lastMonth"
-                    ? "Tháng trước"
-                    : check == "lastYear"
-                    ? "Năm trước"
-                    : " "}
+                      ? "Tháng này"
+                      : check == "thisYear"
+                        ? "Năm nay"
+                        : check == "yesterDay"
+                          ? "Hôm qua"
+                          : check == "lastMonth"
+                            ? "Tháng trước"
+                            : check == "lastYear"
+                              ? "Năm trước"
+                              : " "}
                 </span>
               }
-              value={`${
-                check == "lastYear"
+              value={`${check == "lastYear"
                   ? `${moment().year() - 1} `
                   : `${moment().year()}${check !== "thisYear" ? "-" : " "}`
-              }${
-                check == "today" || check == "thisMonth" || check == "yesterDay"
-                  ? `${
-                      String(moment().month() + 1).length == 1
-                        ? `0${moment().month() + 1}`
-                        : moment().month() + 1
-                    }${check !== "thisMonth" ? "-" : ""}`
+                }${check == "today" || check == "thisMonth" || check == "yesterDay"
+                  ? `${String(moment().month() + 1).length == 1
+                    ? `0${moment().month() + 1}`
+                    : moment().month() + 1
+                  }${check !== "thisMonth" ? "-" : ""}`
                   : ""
-              }${
-                check == "today"
+                }${check == "today"
                   ? `${moment().date()}`
                   : check == "yesterDay"
-                  ? `${moment().date() - 1}`
-                  : check == "lastMonth"
-                  ? `${
-                      String(moment().month()).length == 1
+                    ? `${moment().date() - 1}`
+                    : check == "lastMonth"
+                      ? `${String(moment().month()).length == 1
                         ? `0${moment().month()}`
                         : moment().month()
-                    }`
-                  : ""
-              }`}
+                      }`
+                      : ""
+                }`}
             />
             <Statistic
               title={
@@ -223,21 +220,21 @@ const List = () => {
             check == "thisYear" ||
             check == "lastMonth" ||
             check == "lastYear") && (
-            <div className="detail">
-              <Statistic
-                title="Xem chi tiết"
-                value=""
-                suffix={
-                  <span style={{ cursor: "pointer" }}>
-                    <EyeOutlined
-                      style={{ color: "yellowgreen" }}
-                      onClick={() => setDetailStatistic(true)}
-                    />
-                  </span>
-                }
-              />
-            </div>
-          )}
+              <div className="detail">
+                <Statistic
+                  title="Xem chi tiết"
+                  value=""
+                  suffix={
+                    <span style={{ cursor: "pointer" }}>
+                      <EyeOutlined
+                        style={{ color: "yellowgreen" }}
+                        onClick={() => setDetailStatistic(true)}
+                      />
+                    </span>
+                  }
+                />
+              </div>
+            )}
         </Row>
 
         <br />
@@ -285,11 +282,11 @@ const List = () => {
         <hr style={{ background: "rgb(161, 161, 161)", height: 0.5 }} />
 
         {check == "today" ||
-        check == "thisMonth" ||
-        check == "thisYear" ||
-        check == "yesterDay" ||
-        check == "lastMonth" ||
-        check == "lastYear" ? (
+          check == "thisMonth" ||
+          check == "thisYear" ||
+          check == "yesterDay" ||
+          check == "lastMonth" ||
+          check == "lastYear" ? (
           list()
         ) : check == "selectDay" ? (
           <SelectTime />
@@ -303,11 +300,11 @@ const List = () => {
         style={
           detailStatistic == true
             ? {
-                transform: `scale(1,1)`,
-                visibility: "visible",
-                opacity: 1,
-                zIndex: 1000,
-              }
+              transform: `scale(1,1)`,
+              visibility: "visible",
+              opacity: 1,
+              zIndex: 1000,
+            }
             : {}
         }
       >

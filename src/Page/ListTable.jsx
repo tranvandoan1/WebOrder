@@ -18,7 +18,11 @@ const ListTable = (props) => {
   useEffect(() => {
     dispatch(getAllTable());
   }, []);
-
+  const data = [1, 2, 3, 4]
+  const ko = data.filter((item) => {
+    return
+  })
+  console.log(ko, '3e2wd')
   // lọc theo trạng thái của bàn
   const statusTable = [];
   tables?.value.map((item) => {
