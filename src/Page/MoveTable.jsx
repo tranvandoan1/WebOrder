@@ -19,8 +19,8 @@ const MoveTable = (props) => {
       message.warning("Bạn chưa chọn bàn để chuyển !");
     } else {
       const uploadTable = {
-        table1: props?.bookTable,
-        table2: selectTransferTable,
+        table_moved: props?.bookTable,
+        table_received: selectTransferTable,
       };
       setLoading(true);
       await dispatch(changeTables(uploadTable));

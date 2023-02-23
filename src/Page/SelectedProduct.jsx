@@ -102,7 +102,7 @@ const SelectedProduct = (props) => {
       //     id_table: id,
       //   })
       // );
-      props?.uploadDataTableOrder(newData)
+      props?.uploadDataTableOrder(newData);
 
       props?.callBack(false);
     };
@@ -117,7 +117,7 @@ const SelectedProduct = (props) => {
         //     id_table: id,
         //   })
         // );
-        props?.uploadDataTableOrder(newDataOrder)
+        props?.uploadDataTableOrder(newDataOrder);
 
         props?.callBack(false);
       } else {
@@ -148,13 +148,15 @@ const SelectedProduct = (props) => {
       sumPrice: sum,
       table_id: id,
       start_time: tableFind?.time_start,
-      end_time: `${String(moment().hours()).length == 1
+      end_time: `${
+        String(moment().hours()).length == 1
           ? `0${moment().hours()}`
           : moment().hours()
-        }:${String(moment().minutes()).length == 1
+      }:${
+        String(moment().minutes()).length == 1
           ? `0${moment().minutes()}`
           : moment().minutes()
-        }`,
+      }`,
     };
     setLoading(true);
     await dispatch(addOrder(data));
@@ -168,10 +170,10 @@ const SelectedProduct = (props) => {
 
   // áp mã
   const applySale = () => {
-    if (value > 0) {
+    if (String(value).length > 0) {
       setValueSale(value);
     } else {
-      message.warning('Bạn chưa nhập mã !')
+      message.warning("Bạn chưa nhập mã !");
     }
   };
   // hủy mã
@@ -238,7 +240,7 @@ const SelectedProduct = (props) => {
         //     id_table: id,
         //   })
         // );
-        props?.uploadDataTableOrder(newDataOrder)
+        props?.uploadDataTableOrder(newDataOrder);
 
         props?.callBack(false);
       } else {
@@ -263,7 +265,7 @@ const SelectedProduct = (props) => {
         //     id_table: id,
         //   })
         // );
-        props?.uploadDataTableOrder(newData)
+        props?.uploadDataTableOrder(newData);
         props?.callBack(false);
       }
     } else {
@@ -319,8 +321,8 @@ const SelectedProduct = (props) => {
                   sizes.width < 1024
                     ? sizes.height - 150
                     : sizes.width == 1024
-                      ? sizes.height - 203
-                      : sizes.height - 203,
+                    ? sizes.height - 203
+                    : sizes.height - 203,
                 position: "relative",
               }}
             >
@@ -341,8 +343,8 @@ const SelectedProduct = (props) => {
                             sizes.width < 1024
                               ? 20
                               : sizes.width == 1024
-                                ? 11
-                                : 19,
+                              ? 11
+                              : 19,
                         }}
                       >
                         {index + 1}
@@ -357,13 +359,13 @@ const SelectedProduct = (props) => {
                           ? sizes.width < 1024
                             ? 14
                             : sizes.width == 1024
-                              ? 14
-                              : 14
-                          : sizes.width < 1024
                             ? 14
-                            : sizes.width == 1024
-                              ? 14
-                              : 14
+                            : 14
+                          : sizes.width < 1024
+                          ? 14
+                          : sizes.width == 1024
+                          ? 14
+                          : 14
                       }
                       xl={13}
                     >
@@ -376,8 +378,8 @@ const SelectedProduct = (props) => {
                                 ? 15
                                 : 16
                               : sizes.width == 1024
-                                ? 14
-                                : 16,
+                              ? 14
+                              : 16,
                         }}
                       >
                         {item.name}
@@ -391,8 +393,8 @@ const SelectedProduct = (props) => {
                                   ? 15
                                   : 20
                                 : sizes.width == 1024
-                                  ? 11
-                                  : 19,
+                                ? 11
+                                : 19,
                           }}
                         >
                           {item.weight && item.weight + "kg"}
@@ -414,15 +416,15 @@ const SelectedProduct = (props) => {
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                  ? 5
-                                  : 10,
+                                ? 5
+                                : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                  ? 5
-                                  : 10,
+                                ? 5
+                                : 10,
 
                             textAlign: "center",
                             fontWeight: "600",
@@ -439,8 +441,8 @@ const SelectedProduct = (props) => {
                             valueAmount?.amount == undefined
                               ? item.amount
                               : item.id == valueAmount?.id
-                                ? valueAmount?.amount
-                                : item.amount
+                              ? valueAmount?.amount
+                              : item.amount
                           }
                           style={{
                             textAlign: "center",
@@ -467,15 +469,15 @@ const SelectedProduct = (props) => {
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                  ? 5
-                                  : 10,
+                                ? 5
+                                : 10,
 
                             paddingLeft:
                               sizes.width < 1024
                                 ? 10
                                 : sizes.width == 1024
-                                  ? 5
-                                  : 10,
+                                ? 5
+                                : 10,
                             textAlign: "center",
                             fontWeight: "600",
                             marginLeft: 2,
@@ -660,8 +662,8 @@ const SelectedProduct = (props) => {
                           sizes.width < 1024
                             ? 20
                             : sizes.width == 1024
-                              ? 20
-                              : 19,
+                            ? 20
+                            : 19,
                       }}
                     >
                       {Math.ceil(sum * ((100 - valueSale) / 100))
