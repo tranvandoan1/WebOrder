@@ -30,7 +30,7 @@ import { Size } from "../components/size";
 import Loading from "../components/Loading";
 import LayoutWeb from "./LayoutWeb";
 const Orders = ({ navigation }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
   const sizes = Size();
   const dispatch = useDispatch();
@@ -52,10 +52,10 @@ const Orders = ({ navigation }) => {
     dispatch(getCategori());
     dispatch(getAllTable());
   }, []);
-  const [tableOrder, setTableOrder] = useState([])
+  const [tableOrder, setTableOrder] = useState([]);
   useEffect(() => {
-    setTableOrder(table?.orders == null ? [] : table?.orders)
-  }, [id])
+    setTableOrder(table?.orders == null ? [] : table?.orders);
+  }, [id]);
 
   const apply = async (values) => {
     if (Number.isFinite(Number(values.weight)) == false) {
@@ -81,7 +81,7 @@ const Orders = ({ navigation }) => {
             newData.push(itemOrder);
           }
         });
-        setTableOrder(newData)
+        setTableOrder(newData);
       } else {
         const newOrder = {
           amount: 1,
@@ -93,7 +93,7 @@ const Orders = ({ navigation }) => {
           dvt: productOrder.dvt,
           id: Math.random().toString(36).substring(0, 20),
         };
-        setTableOrder([...tableOrder, newOrder])
+        setTableOrder([...tableOrder, newOrder]);
       }
 
       setLoading(false);
@@ -123,7 +123,7 @@ const Orders = ({ navigation }) => {
           id: Math.random().toString(36).substring(0, 20),
         };
         setLoading(true);
-        setTableOrder([...tableOrder, newOrder])
+        setTableOrder([...tableOrder, newOrder]);
 
         setLoading(false);
       } else {
@@ -139,8 +139,7 @@ const Orders = ({ navigation }) => {
           }
         });
         setLoading(true);
-        setTableOrder(newData)
-
+        setTableOrder(newData);
       }
       setLoading(false);
     }
@@ -296,24 +295,38 @@ const Orders = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#fff', cursor: 'pointer' }} onClick={async () => {
-                  navigate("../", <LayoutWeb data={33121232} />);
-                  if (JSON.stringify(tableOrder) !== JSON.stringify(table?.orders)) {
-                    await dispatch(
-                      addOrderTable({
-                        data: tableOrder,
-                        id_table: id,
-                        time_start: `${String(date.getHours()).length == 1
-                          ? `0${date.getHours()}`
-                          : date.getHours()
-                          }:${String(date.getMinutes()).length == 1
-                            ? `0${date.getMinutes()}`
-                            : date.getMinutes()
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                  onClick={async () => {
+                    navigate("../", <LayoutWeb data={33121232} />);
+                    if (
+                      JSON.stringify(tableOrder) !==
+                      JSON.stringify(table?.orders)
+                    ) {
+                      await dispatch(
+                        addOrderTable({
+                          data: tableOrder,
+                          id_table: id,
+                          time_start: `${
+                            String(date.getHours()).length == 1
+                              ? `0${date.getHours()}`
+                              : date.getHours()
+                          }:${
+                            String(date.getMinutes()).length == 1
+                              ? `0${date.getMinutes()}`
+                              : date.getMinutes()
                           }`,
-                      })
-                    );
-                  }
-                }}>
+                        })
+                      );
+                    }
+                  }}
+                >
                   {" "}
                   <DoubleLeftOutlined className="icon" /> Quay lại{" "}
                 </div>
@@ -382,10 +395,10 @@ const Orders = ({ navigation }) => {
                                       ? 150
                                       : 190
                                     : sizes.width == 1024
-                                      ? isModalOpen == true
-                                        ? 170
-                                        : 160
-                                      : 180,
+                                    ? isModalOpen == true
+                                      ? 170
+                                      : 160
+                                    : 180,
                               }}
                             >
                               <img src={item_pro.photo} alt="" />

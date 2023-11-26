@@ -355,17 +355,18 @@ const SelectedProduct = (props) => {
                       sm={18}
                       md={props?.isModalOpen == true ? 12 : 13}
                       lg={
-                        props?.isModalOpen == true
-                          ? sizes.width < 1024
-                            ? 14
-                            : sizes.width == 1024
-                            ? 14
-                            : 14
-                          : sizes.width < 1024
-                          ? 14
-                          : sizes.width == 1024
-                          ? 14
-                          : 14
+                        // props?.isModalOpen == true
+                        //   ? sizes.width < 1024
+                        //     ? 14
+                        //     : sizes.width == 1024
+                        //     ? 14
+                        //     : 14
+                        //   : sizes.width < 1024
+                        //   ? 14
+                        //   : sizes.width == 1024
+                        //   ? 14
+                        //   : 14
+                        11
                       }
                       xl={13}
                     >

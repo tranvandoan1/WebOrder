@@ -233,13 +233,13 @@ const LayoutWeb = (props) => {
   // hủy bàn
   const onclickCancelTable = async () => {
     if (confirm("Bạn có muốn hủy bàn này không ?")) {
-      message.warning("Đang tiến hàng chuyển bàn, xin chờ đợi !");
+      message.warning("Đang tiến hàng hủy bàn, xin chờ đợi !");
 
       await dispatch(cancelTable({ id: bookTable._id }));
-      setShowMenu(false); //hiện menu chuyển bàn, xóa bàn, order
+      setShowMenu(false); //hiện menu hủy bàn, xóa bàn, order
       setMoveTable(false);
       setBookTable(); //bàn chọn
-      message.success("Chuyển bàn thành công");
+      message.success("Hủy bàn thành công");
     }
   };
   return (
@@ -335,8 +335,7 @@ const LayoutWeb = (props) => {
 
       {/* book table */}
       {
-        checkBookTable == true
-        &&
+       
         <div
           className={styles.book_table}
           style={
